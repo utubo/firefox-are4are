@@ -1,0 +1,76 @@
+{
+	"extensionName": {
+		"message": "アレを見やすくするアレ",
+		"description": "Name of the extension."
+	},
+	"extensionDescription": {
+		"message": "ふたばっぽいページを見やすくします",
+		"description": "Description of the extension."
+	},
+
+	"back": {
+		"message": "戻る",
+		"description": "toolbar back button"
+	},
+	"write": {
+		"message": "書き込む",
+		"description": "toolbar write button"
+	},
+	"reload": {
+		"message": "リロード",
+		"description": "toolbar reload button"
+	},
+	"pagedown": {
+		"message": "半画面進む",
+		"description": "toolbar pagedown button"
+	},
+	"bottom": {
+		"message": "最下",
+		"description": "toolbar go to bottom button"
+	},
+
+	"threadNotFound": {
+		"message": "スレッドが無いよ",
+		"description": "404 error"
+	},
+	"notModified": {
+		"message": "更新なし",
+		"description": "304 error"
+	},
+	"networkError": {
+		"message": "なんかエラー",
+		"description": "other network error"
+	},
+
+	"writeError": {
+		"message": "書き込み失敗",
+		"description": ""
+	},
+
+	"uriRegexWrong": {
+		"message": "外部板の正規表現が間違ってるよ<br>{0}<br>{1}",
+		"description": ""
+	},
+
+	"options": {
+		"message": "設定",
+		"description": ""
+	},
+	"save": {
+		"message": "保存",
+		"description": ""
+	},
+	"targetUriLabel": {
+		"message": "外部板",
+		"description": ""
+	},
+	"targetUriNote": {
+		"message": "(正規表現で指定, 改行で複数指定)",
+		"description": ""
+	},
+	"addFromTabs": {
+		"message": "開いてるタブから追加",
+		"description": ""
+	}
+}
+

@@ -1,0 +1,76 @@
+{
+	"extensionName": {
+		"message": "Are4Are",
+		"description": "Name of the extension."
+	},
+	"extensionDescription": {
+		"message": "modifi fuaba pages.",
+		"description": "Description of the extension."
+	},
+
+	"back": {
+		"message": "back",
+		"description": "toolbar back button"
+	},
+	"write": {
+		"message": "Write",
+		"description": "toolbar write button"
+	},
+	"reload": {
+		"message": "Reload",
+		"description": "toolbar reload button"
+	},
+	"pagedown": {
+		"message": "PageDown",
+		"description": "toolbar pagedown button"
+	},
+	"bottom": {
+		"message": "Bottom",
+		"description": "toolbar go to bottom button"
+	},
+
+	"threadNotFound": {
+		"message": "thread not found.",
+		"description": "404 error"
+	},
+	"notModified": {
+		"message": "not midified.",
+		"description": "304 error"
+	},
+	"networkError": {
+		"message": "network error.",
+		"description": "other network error"
+	},
+
+	"writeError": {
+		"message": "write error.",
+		"description": ""
+	},
+
+	"uriRegexWrong": {
+		"message": "target-uri-regex is worong.<br>{0}<br>{1}",
+		"description": ""
+	},
+
+	"options": {
+		"message": "Options",
+		"description": ""
+	},
+	"save": {
+		"message": "Save",
+		"description": ""
+	},
+	"targetUriLabel": {
+		"message": "Target-URI",
+		"description": ""
+	},
+	"targetUriNote": {
+		"message": "(regex)",
+		"description": ""
+	},
+	"addFromTabs": {
+		"message": "add from opened tabs",
+		"description": ""
+	}
+}
+

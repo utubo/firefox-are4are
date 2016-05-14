@@ -1,0 +1,73 @@
+body {
+	margin-bottom: 30pt;
+}
+#are_toolbar {
+	background: #ffe;
+	border-top: 1pt solid #fa8;
+	bottom:0;
+	font-size: 12pt;
+	line-height: 26pt;
+	left:0;
+	max-width:100%;
+	overflow:scroll;
+	position:fixed;
+	text-align:center;
+	transition: 1s ease-in;
+	white-space: nowrap;
+	width:100%;
+	z-index:10;
+}
+#are_toolbar.active {
+	border-color:#8cf;
+	transition-timing-function:step-start;
+}
+.are_toast {
+	background: #800;
+	bottom: 10%;
+	border-radius: 4px;
+	box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+	color: #ffe;
+	display: inline-block;
+	font-size: 10pt;
+	margin: 5%;
+	padding: .5em 1em;
+	position: fixed;
+	width: 80%;
+	z-index: 100;
+}
+
+.catalog-mode {
+	font-weight:normal;
+	margin:0 5pt;
+}
+.catalog-mode:active {
+	color:#00e !important;
+}
+#catalog-mode-current {
+	font-weight:bold !important;
+	color:#e00;
+}
+.catalog-table {
+	transition:opacity .5s;
+	font-size:70%;
+}
+.catalog-table a {
+	outline: 1px dashed #fee;
+}
+a:visited {
+	outline-color: #800;
+}
+.res-count {
+	display: inline-block;
+	width: 100%;
+	position: relative;
+}
+.res-count-delta {
+	color:#fa8;
+	position: absolute;
+	right: 1pt;
+}
+#tit {
+	font-size:100%;
+}
+
