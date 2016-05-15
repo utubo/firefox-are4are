@@ -8,6 +8,9 @@ AndroidのFirefoxのアドオンです
 また、スレ立てやレスをするのには向いてません  
 フレームにも対応してません
 
+
+[https://addons.mozilla/android/addon/アレを見やすくするアレ](https://addons.mozilla.org/ja/android/addon/%E3%82%A2%E3%83%AC%E3%82%92%E8%A6%8B%E3%82%84%E3%81%99%E3%81%8F%E3%81%99%E3%82%8B%E3%82%A2%E3%83%AC/)
+
 ##注意
 *バージョン4未満をインストールしている人へ*
   * **アンインストールして設定を削除してください**
