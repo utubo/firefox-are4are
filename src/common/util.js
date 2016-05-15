@@ -62,8 +62,11 @@ Are4AreUtil.prototype = {
 	scrollToNoMargin: function(y, func) {
 		y = Math.min(y, document.body.clientHeight - window.innerHeight);
 		var _func = (function() {
-			func && func();
-			this.$win.trigger('scrollend');
+			try {
+				func && func();
+			} finally {
+				this.$win.trigger('scrollend');
+			}
 		}).bind(this);
 		this.$('html,body').animate({scrollTop: y}, 'normal', 'easeOutCubic', _func);
 		return y;

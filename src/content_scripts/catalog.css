@@ -6,8 +6,8 @@ body {
 	border-top: 1pt solid #fa8;
 	bottom:0;
 	font-size: 12pt;
-	line-height: 26pt;
 	left:0;
+	line-height: 26pt;
 	max-width:100%;
 	overflow:scroll;
 	position:fixed;
@@ -23,9 +23,9 @@ body {
 }
 .are_toast {
 	background: #800;
-	bottom: 10%;
 	border-radius: 4px;
-	box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+	bottom: 20%;
+	box-shadow: 0 0 5px rgba(255, 220, 220, .6);
 	color: #ffe;
 	display: inline-block;
 	font-size: 10pt;
@@ -44,23 +44,26 @@ body {
 	color:#00e !important;
 }
 #catalog-mode-current {
-	font-weight:bold !important;
 	color:#e00;
+	font-weight:bold !important;
 }
 .catalog-table {
-	transition:opacity .5s;
 	font-size:70%;
+	transition:opacity .5s;
+}
+.catalog-table td {
+	padding: 3px;
 }
 .catalog-table a {
-	outline: 1px dashed #fee;
+	outline: 3px solid #ffe;
 }
 a:visited {
 	outline-color: #800;
 }
 .res-count {
 	display: inline-block;
-	width: 100%;
 	position: relative;
+	width: 100%;
 }
 .res-count-delta {
 	color:#fa8;

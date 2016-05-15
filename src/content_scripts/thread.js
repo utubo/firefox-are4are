@@ -87,10 +87,9 @@ var _pageDownTimeout = null;
 function pageDownBtnOnTouchstart(e) {
 	e && e.preventDefault();
 	$pageDownBtn.focus();
-	util.activateToolBar();
 	util.scrollTo($win.scrollTop() + Math.round(window.innerHeight / 2));
 	_pageDownTimeout && window.clearTimeout(_pageDownTimeout);
-	_pageDownTimeout = window.setTimeout(pageDownBtnOnTouchstart, 1000);
+	_pageDownTimeout = window.setTimeout(function() { pageDownBtnOnTouchstart(); }, 1000);
 }
 function pageDownBtnOnTouchend(e) {
 	window.clearTimeout(_pageDownTimeout);
@@ -328,13 +327,13 @@ function modifiTablesFromPageLeftTop() {
 // Modify Form //////////////////////////////////////////////
 function onSubmit(e) {
 	var $contents = $(e.target).contents();
-	if ($contents[0].URL === 'about:blank') return;
+	if ($contents[0].URL.indexOf('http') !== 0) return;
 	if ($contents.find('meta[http-equiv="refresh"]')[0]) {
 		$contents[0].defaultView.stop();
 		document.getElementById('ftxa').value = '';
 		$writeBtn.removeClass('active');
 		$ftbl.fadeOut();
-		window.setTimeout(reloadBtnOnClick, 2000);
+		window.setTimeout(function() { reloadBtnOnClick(); }, 2000);
 	} else {
 		var msg = $contents.find('div')[0] || $contents.find('body')[0];
 		util.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
@@ -350,14 +349,21 @@ function modifyForm() {
 	if (!$ftbl[0]) {
 		return;
 	}
+	// change id
+	$ftbl.attr('id', 'ftbl_fixed');
 	$ftbl.attr('style', '');
 	$ftbl.hide();
+	var $dummy = $('<div>');
+	$dummy.attr('id', 'ftbl');
+	$('body').append($dummy);
+	// toolbtn
 	$writeBtn.removeClass('disable');
 	$writeBtn.on('click', function() {
 		if ($ftbl.is(':hidden')) {
 			$writeBtn.addClass('active');
-			$ftbl.fadeIn();
-			document.getElementById('ftxa').focus();
+			$ftbl.fadeIn('normal', function() {
+				document.getElementById('ftxa').focus();
+			});
 		} else {
 			$writeBtn.removeClass('active');
 			$ftbl.fadeOut();
