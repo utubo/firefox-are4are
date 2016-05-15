@@ -68,7 +68,7 @@ Are4AreUtil.prototype = {
 				this.$win.trigger('scrollend');
 			}
 		}).bind(this);
-		this.$('html,body').animate({scrollTop: y}, 'normal', 'easeOutCubic', _func);
+		this.$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
 		return y;
 	},
 
