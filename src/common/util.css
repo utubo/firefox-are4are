@@ -1,0 +1,75 @@
+/* toolbar */
+body {
+	padding-bottom: 30pt;
+}
+#are_toolbar {
+	background: #ffe;
+	border-top: 1pt solid #fa8;
+	bottom:0;
+	font-size: 12pt;
+	left:0;
+	line-height: 26pt;
+	max-width:100%;
+	overflow:scroll;
+	position:fixed;
+	text-align:center;
+	transition: 1s ease-in;
+	white-space: nowrap;
+	width:100%;
+	z-index:10;
+}
+#are_toolbar.active {
+	border-color:#8cf;
+	transition-timing-function: step-start;
+}
+.are_toolbtn,
+.are_toolbtn:active,
+.are_toolbtn:focus,
+.are_toolbtn:visited {
+	background: #ffe;
+	border-radius: 4px;
+	color: #00e;
+	display: inline-block;
+	margin: 2pt;
+	outline: none;
+	padding: 0 2pt;
+	transition: .3s;
+}
+.are_toolbtn.active,
+#are_toolbar.active .are_toolbtn:focus {
+	background: #fa8;
+	color: #ffe;
+	transition-timing-function:step-start;
+}
+.are_toolbtn.disable {
+	color: #aaa;
+}
+
+/* util */
+.slide-out-h {
+	background: transparent !important;
+	color: transparent !important;
+	margin: 0 !important;
+	max-width: 0 !important;
+	padding: 0 !important;
+}
+
+/* others */
+.are_toast {
+	background: #800;
+	border-radius: 4px;
+	bottom: 20%;
+	box-shadow: 0 0 5px rgba(255, 220, 220, .6);
+	color: #ffe;
+	display: inline-block;
+	font-size: 10pt;
+	left: 0;
+	margin-left: 5%;
+	margin-right: 5%;
+	padding: .5em 1em;
+	position: fixed;
+	right: 0;
+	width: 80%;
+	z-index: 100;
+}
+

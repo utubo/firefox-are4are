@@ -47,29 +47,39 @@ Are4AreUtil.prototype = {
 		document.getElementsByTagName('head')[0].appendChild(cssLink);
 	},
 
+	clearTimeout: function(id) {
+		if (id) window.clearTimeout(id);
+		return null;
+	},
+
 	_scrollendTimer: null,
 	_scrollendEventTrigger: null,
 	scrollendEventTrigger: function() {
-		if (this._scrollendTimer)
-			window.clearTimeout(this._scrollendTimer);
+		this.clearTimeout(this._scrollendTimer);
 		this._scrollendTimer = window.setTimeout((function() {
 			this.trigger('scrollend');
 		}).bind(this.$win), 50);
 	},
 	scrollTo: function(y, func) {
-		return this.scrollToNoMargin(Math.max(y - 2, 0), func);
+		this.scrollToNoMargin(Math.max(y - 2, 0), func);
 	},
-	scrollToNoMargin: function(y, func) {
-		y = Math.min(y, document.body.clientHeight - window.innerHeight);
+	scrollToNoMargin: function(targetY, func) {
+		y = Math.min(targetY, document.body.clientHeight - window.innerHeight);
 		var _func = (function() {
 			try {
 				func && func();
 			} finally {
-				this.$win.trigger('scrollend');
+				this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
+				this.$win.trigger('scrollend', [targetY, y]);
 			}
 		}).bind(this);
-		this.$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
-		return y;
+		this.$win.off('scroll.scrollendTrigger');
+		this.clearTimeout(this._scrollendTimer);
+		if (this.$win.scrollTop() != y) {
+			this.$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
+		} else {
+			_func();
+		}
 	},
 
 	// init /////////////////////////////////////////////////////
@@ -89,7 +99,7 @@ Are4AreUtil.prototype = {
 		});
 		new this.$.Event('scrollend');
 		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
-		this.$win.on('scroll', this._scrollendEventTrigger);
+		this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
 		this.$('body').on('touchmove', this._scrollendEventTrigger);
 
 		// ViewPort
@@ -98,6 +108,9 @@ Are4AreUtil.prototype = {
 		viewPort.name = 'viewport';
 		viewPort.content = 'width=device-width';
 		head.insertBefore(viewPort, head.firstChild);
+
+		// CSS
+		this.addCssFile('common/util.css');
 
 		// ToolBar
 		this.toolbar = document.createElement('div');
@@ -110,12 +123,11 @@ Are4AreUtil.prototype = {
 	addToolButton: function(label, onclick) {
 		var btn = this.toolbar.appendChild(document.createElement('a'), this.toolbar.firstChild);
 		btn.textContent = chrome.i18n.getMessage(label);
-		btn.href = 'javascript:void(0);';
 		btn.id = 'are_toolbtn_' + label;
+		btn.href = 'javascript:void(0);';
+		btn.classList.add('are_toolbtn');
 		if (onclick) {
 			btn.onclick = onclick.bind(this._owner);
-		} else {
-			btn.classList.add('disable');
 		}
 		return btn;
 	},

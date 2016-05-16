@@ -11,6 +11,7 @@ var
 	$backBtn,
 	backY = 0,
 	$ftbl,
+	initialScrollTop,
 	$minThumbnail,
 	minThumbnailClassList,
 	MINTHUMBNAIL_SIZE = 60,
@@ -18,12 +19,18 @@ var
 ;
 
 // MinThumbnail //////////////////////
-function showMinTumbnail() {
-	if ($win.scrollTop() <= MINTHUMBNAIL_HIDE_SCROLLTOP) {
+function showMinTumbnail(e, targetY) {
+	var t = $win.scrollTop();
+	if (
+		t < MINTHUMBNAIL_HIDE_SCROLLTOP ||
+		targetY && targetY - t < MINTHUMBNAIL_SIZE
+	) {
+		// show
 		if (!minThumbnailClassList.contains('fadeout')) {
 			minThumbnailClassList.toggle('fadeout');
 		}
 	} else {
+		// hide
 		if (minThumbnailClassList.contains('fadeout')) {
 			minThumbnailClassList.toggle('fadeout');
 		}
@@ -50,7 +57,7 @@ function appendMinThumbnail() {
 	}
 	if (!threadImage) return;
 	threadImage.align = '';
-	threadImage.id = 'threadImage';
+	threadImage.className = 'thread-image';
 	var $img = $('<img>');
 	$img.attr('src', threadImage.src);
 	$img.attr(threadImage.width > threadImage.height ? 'width' : 'height', MINTHUMBNAIL_SIZE);
@@ -86,15 +93,14 @@ function hideNewerBorder() {
 var _pageDownTimeout = null;
 function pageDownBtnOnTouchstart(e) {
 	e && e.preventDefault();
-	$pageDownBtn.focus();
+	$pageDownBtn.addClass('active');
 	util.scrollTo($win.scrollTop() + Math.round(window.innerHeight / 2));
-	_pageDownTimeout && window.clearTimeout(_pageDownTimeout);
+	util.clearTimeout(_pageDownTimeout);
 	_pageDownTimeout = window.setTimeout(function() { pageDownBtnOnTouchstart(); }, 1000);
 }
 function pageDownBtnOnTouchend(e) {
-	window.clearTimeout(_pageDownTimeout);
-	_pageDownTimeout = null;
-	$pageDownBtn.blur();
+	_pageDownTimeout = util.clearTimeout(_pageDownTimeout);
+	$pageDownBtn.removeClass('active');
 }
 
 function reloadBtnOnClick(e) {
@@ -139,10 +145,7 @@ function reloadBtnOnClick(e) {
 			p.insertBefore(this, m);
 		});
 		$newerBorder.css('top', newerBorderY + 'px');
-		var scrollTop = util.scrollTo(newerBorderY, showNewerBorder);
-		if (newerBorderY - scrollTop < MINTHUMBNAIL_SIZE && $minThumbnail) {
-			$minThumbnail.fadeOut();
-		}
+		util.scrollTo(newerBorderY, showNewerBorder);
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
@@ -209,14 +212,13 @@ function quotedResOnClick(e) {
 	if ($target[0].tagName === 'A') return;
 	var $found = findRes($.trim($target.text().replace('>', '')), $target);
 	if (!$found) return;
-	showBackBtn();
+	var y = 0;
 	if ($found[0].tagName === 'TABLE') {
-		$found.find('blockquote').addClass('found');
-		util.scrollTo($found.offset().top);
-	} else {
-		$found.addClass('found');
-		util.scrollTo(0);
+		y = $found.offset().top;
+		$found = $found.find('blockquote');
 	}
+	showBackBtn();
+	util.scrollTo(y, function() { $found.addClass('found'); });
 }
 
 // Modifi Blockquote (visible) ///////
@@ -243,6 +245,18 @@ function norefOnClick(e) {
 	var html = util.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
 	window.open('data:text/html; charset=utf-8,' + encodeURIComponent(html));
 }
+function autoLinkTextNode($elm) {
+	$($elm.contents().filter(function() { return this.nodeType == 3; })).each(function() {
+		var a = this.nodeValue;
+		var b = a.replace(autoLinkRegex, autoLinkFunc);
+		if (a != b) {
+			var $b = $('<span>');
+			$b.html(b);
+			this.nodeValue = '';
+			$(this).after($b);
+		}
+	});
+}
 function modifiBq($bq) {
 	if ($bq.attr('data-are4are')) return;
 	$bq.attr('data-are4are', '1');
@@ -253,17 +267,8 @@ function modifiBq($bq) {
 		$bq.css('margin-left', '0');
 	}
 	// auto link
-	//$bq.html($bq.html().replace(autoLinkRegex, autoLinkFunc.bind(this)));
-	$($bq.contents().filter(function() { return this.nodeType == 3; })).each(function() {
-		var a = this.nodeValue;
-		var b = a.replace(autoLinkRegex, autoLinkFunc);
-		if (a != b) {
-			var $b = $('<span>');
-			$b.html(b);
-			this.nodeValue = '';
-			$(this).after($b);
-		}
-	});
+	autoLinkTextNode($bq);
+	$bq.find('font').each(function() { autoLinkTextNode($(this)); });
 	$bq.find('.noref').on('click', norefOnClick);
 	// Mail and del
 	var $a = $bq.prev();
@@ -324,7 +329,7 @@ function modifiTablesFromPageLeftTop() {
 	}
 }
 
-// Modify Form //////////////////////////////////////////////
+// Modify Form ///////////////////////
 function onSubmit(e) {
 	var $contents = $(e.target).contents();
 	if ($contents[0].URL.indexOf('http') !== 0) return;
@@ -343,10 +348,12 @@ function onSubmit(e) {
 function modifyForm() {
 	var ftxa = document.getElementById('ftxa');
 	if (!ftxa) {
+		$writeBtn.addClass('disable');
 		return;
 	}
 	$ftbl = $('#ftbl');
 	if (!$ftbl[0]) {
+		$writeBtn.addClass('disable');
 		return;
 	}
 	// change id
@@ -357,7 +364,6 @@ function modifyForm() {
 	$dummy.attr('id', 'ftbl');
 	$('body').append($dummy);
 	// toolbtn
-	$writeBtn.removeClass('disable');
 	$writeBtn.on('click', function() {
 		if ($ftbl.is(':hidden')) {
 			$writeBtn.addClass('active');
@@ -383,6 +389,15 @@ function modifyForm() {
 	$iframe[0].onload = onSubmit;
 }
 
+// Others ////////////////////////////
+function scrollToThreadImage() {
+	var $a = $('.thread-image').parent().prevAll('a') || $('input[value="delete"]:first');
+	if ($a) {
+		util.scrollTo($a.offset().top);
+		return;
+	}
+}
+
 // Main //////////////////////////////
 // StyleSheet
 util.addCssFile('content_scripts/thread.css');
@@ -406,7 +421,7 @@ $backBtn = $(util.addToolButton('back', backBtnOnClick));
 $backBtn.addClass('slide-out-h');
 $writeBtn = $(util.addToolButton('write'));
 util.addToolButton('reload', reloadBtnOnClick);
-$pageDownBtn = $(util.addToolButton('pagedown', function() { }));
+$pageDownBtn = $(util.addToolButton('pagedown'));
 $pageDownBtn.on('touchstart mousedown', pageDownBtnOnTouchstart);
 $pageDownBtn.on('touchend mouseup', pageDownBtnOnTouchend);
 util.addToolButton('bottom', bottomBtnOnClick);
@@ -419,21 +434,28 @@ $win.on('scrollend', showMinTumbnail);
 modifiBq($('blockquote:first'));
 modifiTables($('table[border="0"]:first'));
 $win.on('scrollend', modifiTablesFromPageLeftTop);
-window.setTimeout(modifiTablesFromPageLeftTop.bind(this), 100);
 
 // Modifi Form
 modifyForm();
 
+// On repainted all //////////////////
+window.setTimeout(function() {
+	// Modifi Blockquote (visible)
+	modifiTablesFromPageLeftTop();
+	// scroll to Thread-Image
+	scrollToThreadImage();
+}, 500);
+
 } // end of are4areExecute
 
 // url check ///////////////////////////
-// default
+// default target URL
 var href = document.location.href;
 if (href.match(/http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/) && href.indexOf('mode=cat') == -1) {
 	are4areExecute();
 	return;
 }
-// addtional
+// addtional URL
 chrome.storage.local.get('are4are_targetUrls', function(res) {
 	var targetUrls = res.are4are_targetUrls;
 	if (!targetUrls) return false;

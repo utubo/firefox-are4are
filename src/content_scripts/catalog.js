@@ -99,7 +99,7 @@ $('a[href *= "mode=cat"]').each(function() {
 		this.id = 'catalog-mode-current';
 	}
 	this.onclick = onclickCatalogMode;
-	this.classList.add('catalog-mode');
+	this.classList.add('are_toolbtn');
 	util.toolbar.appendChild(this);
 });
 window.scrollTo(0, $('table')[0].offsetTop);

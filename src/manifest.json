@@ -32,6 +32,7 @@
 	"web_accessible_resources": [
 		"content_scripts/thread.css",
 		"content_scripts/catalog.css",
+		"common/util.css",
 		"common/options.html"
 	],
 
