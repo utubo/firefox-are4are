@@ -394,9 +394,9 @@ modifyForm: function() {
 // Others ////////////////////////////
 scrollToThreadImage: function() {
 	var $ = this.$;
-	var $a = $('.thread-image').parent().prevAll('a') || $('input[value="delete"]:first');
-	if ($a) {
-		this.util.scrollTo($a.offset().top);
+	var img = ($('.thread-image').parent().prevAll('a'))[0] || $('input[value="delete"]:first')[0];
+	if (img) {
+		this.util.scrollTo($(img).offset().top);
 		return;
 	}
 },
