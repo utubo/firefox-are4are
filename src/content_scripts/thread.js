@@ -12,11 +12,11 @@ showMinTumbnail: function(e, targetY) {
 		t < $$.MINTHUMBNAIL_HIDE_SCROLLTOP ||
 		targetY && targetY - t < $$.MINTHUMBNAIL_SIZE
 	) {
-		// show
-		$$.$minThumbnail.removeClass('fadeout');
-	} else {
 		// hide
 		$$.$minThumbnail.addClass('fadeout');
+	} else {
+		// show
+		$$.$minThumbnail.removeClass('fadeout');
 	}
 },
 appendMinThumbnail: function() {
