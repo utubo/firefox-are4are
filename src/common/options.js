@@ -1,8 +1,39 @@
-// save and load /////////////////////
+// validator /////////////////////////
+function isValidTargetUri() {
+	var t = document.getElementById('targetUri');
+	var targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
+	if (!targetUrls) return true;
+	try {
+		targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
+		if (targetUrls.match(/^\|*$/)) return true;
+		reg = new RegExp(targetUrls);
+		return true;
+	} catch (e) {
+	}
+	return false;
+}
+function validateTarget(id, func) {
+	if (func()) {
+		document.getElementById(id).classList.remove('invalid');
+	} else {
+		document.getElementById(id).classList.add('invalid');
+	}
+}
+function validate() {
+	validateTarget('targetUri', isValidTargetUri);
+	if (document.querySelector('.invalid')) {
+		document.getElementById('save').setAttribute('disabled', 'true');
+	} else {
+		document.getElementById('save').removeAttribute('disabled');
+	}
+}
+
+// util //////////////////////////////
 function correctValues() {
 	var t = document.getElementById('targetUri');
 	t.value = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 }
+// save and load /////////////////////
 function saveOptions(e) {
 	correctValues();
 	chrome.storage.local.set({
@@ -73,4 +104,6 @@ document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('form').addEventListener('submit', saveOptions);
 document.getElementById('tabsBtn').addEventListener('click', tabsBtnOnClick);
 document.getElementById('tabs').addEventListener('change', tabsOnChange);
+document.getElementById('targetUri').addEventListener('change', validate);
+document.getElementById('targetUri').addEventListener('keyup', validate);
 

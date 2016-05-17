@@ -478,18 +478,15 @@ if (href.match(/http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)
 // addtional URL
 chrome.storage.local.get('are4are_targetUrls', function(res) {
 	var targetUrls = res.are4are_targetUrls;
-	if (!targetUrls) return false;
-	var reg;
-	try {
-		targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
-		if (targetUrls.match(/^\|*$/)) return false;
-		reg = new RegExp(targetUrls);
-	} catch (e) {
-		jQuery.noConflict();
-		new Are4AreUtil().init(window, jQuery).toast('uriRegexWrong', targetUrls, '' + e);
+	if (!targetUrls) {
 		return false;
 	}
-	if (reg && href.replace(/[#\?].*$/, '').match(reg)) {
+	targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
+	if (targetUrls.match(/^\|*$/)) {
+		return false;
+	}
+	var reg = new RegExp(targetUrls);
+	if (href.replace(/[#\?].*$/, '').match(reg)) {
 		jQuery.noConflict();
 		var myExt = new Are4AreThread();
 		myExt.exec(window, jQuery);

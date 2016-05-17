@@ -6,6 +6,10 @@
 	.note {
 		font-size: 80%;
 	}
+	.invalid {
+		border: 2px solid #f55;
+		border-radius: 4px;
+	}
 	</style>
 </head>
 <body>
@@ -13,7 +17,7 @@
 		<fieldset>
 			<legend data-message-id="options">設定</legend>
 			<div>
-				<button type="submit" data-message-id="save">保存</button>
+				<button id="save" type="submit" data-message-id="save">保存</button>
 			</div>
 			<div>
 				<label for="targetUri" data-message-id="targetUriLabel">外部板</label>
