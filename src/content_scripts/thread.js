@@ -133,7 +133,7 @@ reloadBtnOnClick: function(e) {
 			p.insertBefore(this, m);
 		});
 		$$.$newerBorder.css('top', newerBorderY + 'px');
-		util.scrollTo(newerBorderY, $$.showNewerBorder);
+		util.scrollTo(newerBorderY, $$.showNewerBorder.bind($$));
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
