@@ -245,7 +245,7 @@ autoLinkTextNode: function($elm) {
 	var $$ = this, $ = this.$;
 	$($elm.contents().filter(function() { return this.nodeType == 3; })).each(function() {
 		var a = this.nodeValue;
-		var b = a.replace($$.autoLinkRegex, $$.autoLinkFunc);
+		var b = a.replace($$.autoLinkRegex, $$.autoLinkFunc.bind($$));
 		if (a != b) {
 			var $b = $('<span>');
 			$b.html(b);
