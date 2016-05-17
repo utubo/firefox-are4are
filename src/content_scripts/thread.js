@@ -457,12 +457,12 @@ exec: function(window, $) {
 	$$.modifyForm();
 
 	// On repainted all //////////////////
-	$$.win.setTimeout(function() {
+	$$.$win.load(function() {
 		// Modifi Blockquote (visible)
 		$$.modifiTablesFromPageLeftTop();
 		// scroll to Thread-Image
 		$$.scrollToThreadImage();
-	}, 500);
+	});
 }
 }; // end of my extension
 
