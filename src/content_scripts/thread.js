@@ -45,14 +45,14 @@ appendMinThumbnail: function() {
 	var $img = $('<img>');
 	$img.attr({
 		src: threadImage.src,
-		className: 'min-thumbnail-img'
+		'class': 'min-thumbnail-img'
 	});
 	$$.$minThumbnail = $('<a>');
 	$$.$minThumbnail.attr({
 		href: href,
 		target: '_blank',
 		id: 'minThumbnail',
-		className: 'fadeout'
+		'class': 'fadeout'
 	});
 	$$.$minThumbnail.append($img);
 	$('body').append($$.$minThumbnail);
@@ -497,7 +497,3 @@ chrome.storage.local.get('are4are_targetUrls', function(res) {
 });
 })();
 
-/*
-
-
-*/
