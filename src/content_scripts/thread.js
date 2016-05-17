@@ -173,7 +173,7 @@ showBackBtn: function() {
 	if ($$.backY) return;
 	$$.backY = $$.$win.scrollTop();
 	$$.$backBtn.removeClass('slide-out-h');
-	$$.$win.on('scrollend.hideBackBtn', $$.hideBackBtn);
+	$$.$win.on('scrollend.hideBackBtn', $$.hideBackBtn.bind($$));
 },
 findRes: function(target, $from) {
 	var $ = this.$;
