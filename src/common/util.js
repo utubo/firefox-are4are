@@ -2,14 +2,15 @@ function Are4AreUtil() {
 }
 
 Are4AreUtil.prototype = {
-	// Field //////////////////////////////////////////////////
-	_owner: null,
+	// Field ///////////////////////////////
+	win: null,
+	doc: null,
 	$: null,
 	$win: null,
 	$toast: null,
 	toolbar: null,
 
-	// Util ///////////////////////////////////////////////////
+	// Util ////////////////////////////////
 	format: function() {
 		var args = arguments;
 		var str = args[0].replace(/__MSG_([^_]+)__/g, function(m, c) { return chrome.i18n.getMessage(c); });
@@ -36,98 +37,64 @@ Are4AreUtil.prototype = {
 		this.$toast.html(text);
 		this.$toast.fadeIn();
 		var t = this.$toast;
-		window.setTimeout((function() { t.fadeOut('slow'); t = null;}), 3000);
+		this.win.setTimeout((function() { t.fadeOut('slow'); t = null;}), 3000);
 	},
-	// DOM & HTML Util ////////////////////////////////////////
+
+	// DOM & HTML Util /////////////////////
 	addCssFile: function(cssFile) {
-		var cssLink = document.createElement('link');
+		var cssLink = this.doc.createElement('link');
 		cssLink.rel = 'stylesheet';
 		cssLink.type = 'text/css';
 		cssLink.href = chrome.extension.getURL(cssFile);
-		document.getElementsByTagName('head')[0].appendChild(cssLink);
+		this.doc.getElementsByTagName('head')[0].appendChild(cssLink);
 	},
 
 	clearTimeout: function(id) {
-		if (id) window.clearTimeout(id);
+		if (id) this.win.clearTimeout(id);
 		return null;
 	},
 
 	_scrollendTimer: null,
 	_scrollendEventTrigger: null,
 	scrollendEventTrigger: function() {
-		this.clearTimeout(this._scrollendTimer);
-		this._scrollendTimer = window.setTimeout((function() {
+		var $$ = this;
+		$$.clearTimeout($$._scrollendTimer);
+		$$._scrollendTimer = $$.win.setTimeout((function() {
 			this.trigger('scrollend');
-		}).bind(this.$win), 50);
+		}).bind($$.$win), 50);
 	},
 	scrollTo: function(y, func) {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func);
 	},
 	scrollToNoMargin: function(targetY, func) {
-		y = Math.min(targetY, document.body.clientHeight - window.innerHeight);
+		var $$ = this, $ = this.$;
+		var y = Math.min(targetY, $$.doc.body.clientHeight - $$.win.innerHeight);
 		var _func = (function() {
 			try {
 				func && func();
 			} finally {
-				this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
-				this.$win.trigger('scrollend', [targetY, y]);
+				$$.$win.on('scroll.scrollendTrigger', $$._scrollendEventTrigger);
+				$$.$win.trigger('scrollend', [targetY, y]);
 			}
-		}).bind(this);
-		this.$win.off('scroll.scrollendTrigger');
-		this.clearTimeout(this._scrollendTimer);
-		if (this.$win.scrollTop() != y) {
-			this.$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
+		}).bind($$);
+		$$.$win.off('scroll.scrollendTrigger');
+		$$.clearTimeout($$._scrollendTimer);
+		if ($$.$win.scrollTop() != y) {
+			$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
 		} else {
 			_func();
 		}
 	},
 
-	// init /////////////////////////////////////////////////////
-	init: function(owner, jQuery) {
-		// setup fields
-		this._owner = owner;
-		this.$ = jQuery;
-		this.$win = jQuery(window);
-		this.$win.unload(function() { this.$ = this.$win = null; });
-
-		// jQuery extend
-		jQuery.extend(jQuery.easing, {
-			def: 'easeOutCubic',
-			easeOutCubic: function (x, t, b, c, d) {
-				return c*((t=t/d-1)*t*t + 1) + b;
-			}
-		});
-		new this.$.Event('scrollend');
-		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
-		this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
-		this.$('body').on('touchmove', this._scrollendEventTrigger);
-
-		// ViewPort
-		var head = document.getElementsByTagName('head')[0];
-		var viewPort = document.createElement('meta');
-		viewPort.name = 'viewport';
-		viewPort.content = 'width=device-width';
-		head.insertBefore(viewPort, head.firstChild);
-
-		// CSS
-		this.addCssFile('common/util.css');
-
-		// ToolBar
-		this.toolbar = document.createElement('div');
-		this.toolbar.id = 'are_toolbar';
-		document.body.appendChild(this.toolbar);
-		return this;
-	},
-
-	// ToolBar //////////////////////////////////////////////////
+	// ToolBar /////////////////////////////
 	addToolButton: function(label, onclick) {
-		var btn = this.toolbar.appendChild(document.createElement('a'), this.toolbar.firstChild);
+		var btn = this.toolbar.appendChild(this.doc.createElement('a'), this.toolbar.firstChild);
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.id = 'are_toolbtn_' + label;
 		btn.href = 'javascript:void(0);';
 		btn.classList.add('are_toolbtn');
 		if (onclick) {
-			btn.onclick = onclick.bind(this._owner);
+			btn.onclick = onclick;
 		}
 		return btn;
 	},
@@ -136,7 +103,44 @@ Are4AreUtil.prototype = {
 	},
 	noactivateToolBar: function() {
 		this.toolbar.classList.remove('active');
-	}
+	},
 
+	// init ////////////////////////////////
+	init: function(window, $) {
+		// setup fields
+		this.win = window;
+		this.doc = window.document;
+		this.$ = $;
+		this.$win = $(window);
+		this.$win.unload(function() { this.$ = this.$win = this.doc = this.win = null; });
+
+		// jQuery extend
+		$.extend($.easing, {
+			def: 'easeOutCubic',
+			easeOutCubic: function (x, t, b, c, d) {
+				return c*((t=t/d-1)*t*t + 1) + b;
+			}
+		});
+		new this.$.Event('scrollend');
+		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
+		this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
+		$('body').on('touchmove', this._scrollendEventTrigger);
+
+		// ViewPort
+		var head = this.doc.getElementsByTagName('head')[0];
+		var viewPort = this.doc.createElement('meta');
+		viewPort.name = 'viewport';
+		viewPort.content = 'width=device-width';
+		head.insertBefore(viewPort, head.firstChild);
+
+		// CSS
+		this.addCssFile('common/util.css');
+
+		// ToolBar
+		this.toolbar = this.doc.createElement('div');
+		this.toolbar.id = 'are_toolbar';
+		this.doc.body.appendChild(this.toolbar);
+		return this;
+	}
 };
 

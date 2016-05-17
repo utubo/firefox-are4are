@@ -1,46 +1,28 @@
 (function() {
-function are4areExecute() {
-// init ////////////////////////////////
-jQuery.noConflict();
-var
-	$ = jQuery,
-	$win = $(window),
-	util = new Are4AreUtil().init(this, $),
-	$writeBtn,
-	$pageDownBtn,
-	$backBtn,
-	backY = 0,
-	$ftbl,
-	initialScrollTop,
-	$minThumbnail,
-	minThumbnailClassList,
-	MINTHUMBNAIL_SIZE = 60,
-	MINTHUMBNAIL_HIDE_SCROLLTOP = 300
-;
+function Are4AreThread() {}
+Are4AreThread.prototype = {
 
 // MinThumbnail //////////////////////
-function showMinTumbnail(e, targetY) {
-	var t = $win.scrollTop();
+MINTHUMBNAIL_SIZE: 60,
+MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
+showMinTumbnail: function(e, targetY) {
+	var $$ = this;
+	var t = $$.$win.scrollTop();
 	if (
-		t < MINTHUMBNAIL_HIDE_SCROLLTOP ||
-		targetY && targetY - t < MINTHUMBNAIL_SIZE
+		t < $$.MINTHUMBNAIL_HIDE_SCROLLTOP ||
+		targetY && targetY - t < $$.MINTHUMBNAIL_SIZE
 	) {
 		// show
-		if (!minThumbnailClassList.contains('fadeout')) {
-			minThumbnailClassList.toggle('fadeout');
-		}
+		$$.$minThumbnail.removeClass('fadeout');
 	} else {
 		// hide
-		if (minThumbnailClassList.contains('fadeout')) {
-			minThumbnailClassList.toggle('fadeout');
-		}
+		$$.$minThumbnail.addClass('fadeout');
 	}
-}
-function appendMinThumbnail() {
-	var
-		href,
-		threadImage = $('blockquote:first')[0]
-	;
+},
+appendMinThumbnail: function() {
+	var $$ = this, $ = this.$;
+	// find thread-image
+	var threadImage = $('blockquote:first')[0], href;
 	if (!threadImage) return;
 	while (threadImage = threadImage.previousSibling) {
 		if (
@@ -58,57 +40,63 @@ function appendMinThumbnail() {
 	if (!threadImage) return;
 	threadImage.align = '';
 	threadImage.className = 'thread-image';
+
+	// make minThumbnail
 	var $img = $('<img>');
-	$img.attr('src', threadImage.src);
-	$img.attr(threadImage.width > threadImage.height ? 'width' : 'height', MINTHUMBNAIL_SIZE);
-	$minThumbnail = $('<a>');
-	$minThumbnail.attr({
+	$img.attr({
+		src: threadImage.src,
+		className: 'min-thumbnail-img'
+	});
+	$$.$minThumbnail = $('<a>');
+	$$.$minThumbnail.attr({
 		href: href,
 		target: '_blank',
 		id: 'minThumbnail',
 		className: 'fadeout'
 	});
-	$minThumbnail.append($img);
-	$('body').append($minThumbnail);
-	minThumbnailClassList = $minThumbnail[0].classList;
+	$$.$minThumbnail.append($img);
+	$('body').append($$.$minThumbnail);
+
 	// favicon
 	var $faviconLink = $('<link>');
 	$faviconLink.attr({rel:'shortcut icon', href: threadImage.src});
 	$('head').append($faviconLink);
-}
+},
 
 // Newer Border ///////////////////////
-$('body').append('<div id="newer_border"></div>');
-var $newerBorder = $('#newer_border');
-function showNewerBorder() {
-	$newerBorder.css('opacity', '1');
-	$newerBorder.css('width', '100%');
-}
-function hideNewerBorder() {
-	$newerBorder.css('opacity', '0');
-	$newerBorder.css('width', '0');
-}
+showNewerBorder: function() {
+	var $$ = this;
+	$$.$newerBorder.css('opacity', '1');
+	$$.$newerBorder.css('width', '100%');
+},
+hideNewerBorder: function() {
+	var $$ = this;
+	$$.$newerBorder.css('opacity', '0');
+	$$.$newerBorder.css('width', '0');
+},
 
 // ToolButtons ///////////////////////
-var _pageDownTimeout = null;
-function pageDownBtnOnTouchstart(e) {
+_pageDownTimeout: null,
+pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
-	$pageDownBtn.addClass('active');
-	util.scrollTo($win.scrollTop() + Math.round(window.innerHeight / 2));
-	util.clearTimeout(_pageDownTimeout);
-	_pageDownTimeout = window.setTimeout(function() { pageDownBtnOnTouchstart(); }, 1000);
-}
-function pageDownBtnOnTouchend(e) {
-	_pageDownTimeout = util.clearTimeout(_pageDownTimeout);
-	$pageDownBtn.removeClass('active');
-}
-
-function reloadBtnOnClick(e) {
+	var $$ = this, util = this.util;
+	$$.$pageDownBtn.addClass('active');
+	util.scrollTo($$.$win.scrollTop() + Math.round($$.win.innerHeight / 2));
+	util.clearTimeout($$._pageDownTimeout);
+	$$._pageDownTimeout = $$.win.setTimeout(function() { $$.pageDownBtnOnTouchstart(); }, 1000);
+},
+pageDownBtnOnTouchend: function(e) {
+	var $$ = this, util = this.util;
+	$$._pageDownTimeout = util.clearTimeout($$._pageDownTimeout);
+	$$.$pageDownBtn.removeClass('active');
+},
+reloadBtnOnClick: function(e) {
+	var $$ = this, $ = this.$, util = this.util;
 	util.activateToolBar();
-	hideNewerBorder();
+	$$.hideNewerBorder();
 	$.ajax({
 		type: 'GET',
-		url: document.location.href.replace(/#.*$/, ''),
+		url: $$.doc.location.href.replace(/#.*$/, ''),
 		ifModified: true,
 		dataType: 'text'
 	})
@@ -122,7 +110,7 @@ function reloadBtnOnClick(e) {
 		data = data.substring(data.indexOf('<input type=checkbox name="' + lastResNumber + '"'));
 		data = data.substring(data.indexOf('</table>') + 8);
 		// update contdisp
-		var contdisp = document.getElementById('contdisp');
+		var contdisp = $$.doc.getElementById('contdisp');
 		if (contdisp && data.match(/<span id="contdisp">([^<]*)</))
 			contdisp.textContent = RegExp.$1;
 		// delete after reses
@@ -139,13 +127,13 @@ function reloadBtnOnClick(e) {
 		// add new res tables
 		var p = $lastResMarker.parent().get(0);
 		var m = $lastResMarker[0];
-		var $work = $(document.createDocumentFragment());
+		var $work = $($$.doc.createDocumentFragment());
 		$work.html('<div'> + data + '</div>');
 		$('<div>').html(data).find('table').each(function() {
 			p.insertBefore(this, m);
 		});
-		$newerBorder.css('top', newerBorderY + 'px');
-		util.scrollTo(newerBorderY, showNewerBorder);
+		$$.$newerBorder.css('top', newerBorderY + 'px');
+		util.scrollTo(newerBorderY, $$.showNewerBorder);
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
@@ -157,35 +145,38 @@ function reloadBtnOnClick(e) {
 	.complete(function() {
 		util.noactivateToolBar();
 	});
-}
-
-function bottomBtnOnClick(e) {
+},
+bottomBtnOnClick: function(e) {
+	var $$ = this, util = this.util;
 	util.activateToolBar();
-	window.scrollTo(0, document.body.clientHeight - window.innerHeight);
-	$win.trigger('scrollend');
+	$$.win.scrollTo(0, $$.doc.body.clientHeight - $$.win.innerHeight);
+	$$.$win.trigger('scrollend');
 	util.noactivateToolBar();
-}
-
-function backBtnOnClick() {
-	util.scrollTo(backY);
-	hideBackBtn({force: true});
-}
+},
+backBtnOnClick: function() {
+	var $$ = this, util = this.util;
+	util.scrollTo($$.backY);
+	$$.hideBackBtn({force: true});
+},
 
 // FindRes ///////////////////////////
-function hideBackBtn(e) {
-	if (e.force || backY && backY <= $win.scrollTop()) {
-		backY = 0;
-		$win.off('scrollend.hideBackBtn');
-		$backBtn.addClass('slide-out-h');
+hideBackBtn: function(e) {
+	var $$ = this;
+	if (e.force || $$.backY && $$.backY <= $$.$win.scrollTop()) {
+		$$.backY = 0;
+		$$.$win.off('scrollend.hideBackBtn');
+		$$.$backBtn.addClass('slide-out-h');
 	}
-}
-function showBackBtn() {
-	if (backY) return;
-	backY = $win.scrollTop();
-	$backBtn.removeClass('slide-out-h');
-	$win.on('scrollend.hideBackBtn', hideBackBtn);
-}
-function findRes(target, $from) {
+},
+showBackBtn: function() {
+	var $$ = this;
+	if ($$.backY) return;
+	$$.backY = $$.$win.scrollTop();
+	$$.$backBtn.removeClass('slide-out-h');
+	$$.$win.on('scrollend.hideBackBtn', $$.hideBackBtn);
+},
+findRes: function(target, $from) {
+	var $ = this.$;
 	$('.found').removeClass('found');
 	while ($from[0]) {
 		if ($from.prop('tagName') === 'TABLE') {
@@ -206,23 +197,26 @@ function findRes(target, $from) {
 		return $bq;
 	}
 	return false;
-}
-function quotedResOnClick(e) {
+},
+quotedResOnClick: function(e) {
+	var $$ = this, $ = this.$, util = this.util;
 	var $target = $(e.target);
 	if ($target[0].tagName === 'A') return;
-	var $found = findRes($.trim($target.text().replace('>', '')), $target);
+	var $found = $$.findRes($.trim($target.text().replace('>', '')), $target);
 	if (!$found) return;
 	var y = 0;
 	if ($found[0].tagName === 'TABLE') {
 		y = $found.offset().top;
 		$found = $found.find('blockquote');
 	}
-	showBackBtn();
-	util.scrollTo(y, function() { $found.addClass('found'); });
-}
+	$$.showBackBtn(); // TODO:
+	util.scrollTo(y, function() {
+		$found.addClass('found');
+	});
+},
 
-// Modifi Blockquote (visible) ///////
-var SIO_PREFIX = {
+// Modifi Blockquotes ////////////////
+SIO_PREFIX: {
 	su: 'http://www.nijibox5.com/futabafiles/tubu/src/',
 	ss: 'http://www.nijibox5.com/futabafiles/kobin/src/',
 	sa: 'http://www.nijibox6.com/futabafiles/001/src/',
@@ -230,25 +224,28 @@ var SIO_PREFIX = {
 	sq: 'http://www.nijibox6.com/futabafiles/mid/src/',
 	f:  'http://dec.2chan.net/up/src/',
 	fu: 'http://dec.2chan.net/up2/src/'
-};
-var autoLinkRegex = /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi;
-var autoLinkFunc = function(all, url, filename, pref, filenum, ext) {
+},
+autoLinkRegex: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi,
+autoLinkFunc: function(all, url, filename, pref, filenum, ext) {
+	var $$ = this, util = this.util;
 	if (url) {
 		return util.format('<a href="{0}" target="_blank" class="noref">{1}</a>', util.html(url), util.escapeWithoutAmp(url));
 	} else {
-		return util.format('<a href="{0}{1}" target="_blank">{1}</a>', SIO_PREFIX[pref], filename);
+		return util.format('<a href="{0}{1}" target="_blank">{1}</a>', $$.SIO_PREFIX[pref], filename);
 	}
-};
-function norefOnClick(e) {
+},
+norefOnClick: function(e) {
+	var $$ = this, util = this.util;
 	e.preventDefault();
 	var href = e.target.href;
 	var html = util.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
-	window.open('data:text/html; charset=utf-8,' + encodeURIComponent(html));
-}
-function autoLinkTextNode($elm) {
+	$$.win.open('data:text/html; charset=utf-8,' + encodeURIComponent(html));
+},
+autoLinkTextNode: function($elm) {
+	var $$ = this, $ = this.$;
 	$($elm.contents().filter(function() { return this.nodeType == 3; })).each(function() {
 		var a = this.nodeValue;
-		var b = a.replace(autoLinkRegex, autoLinkFunc);
+		var b = a.replace($$.autoLinkRegex, $$.autoLinkFunc);
 		if (a != b) {
 			var $b = $('<span>');
 			$b.html(b);
@@ -256,8 +253,9 @@ function autoLinkTextNode($elm) {
 			$(this).after($b);
 		}
 	});
-}
-function modifiBq($bq) {
+},
+modifiBq: function($bq) {
+	var $$ = this, $ = this.$;
 	if ($bq.attr('data-are4are')) return;
 	$bq.attr('data-are4are', '1');
 	// image res
@@ -267,9 +265,9 @@ function modifiBq($bq) {
 		$bq.css('margin-left', '0');
 	}
 	// auto link
-	autoLinkTextNode($bq);
-	$bq.find('font').each(function() { autoLinkTextNode($(this)); });
-	$bq.find('.noref').on('click', norefOnClick);
+	$$.autoLinkTextNode($bq);
+	$bq.find('font').each(function() { $$.autoLinkTextNode($(this)); });
+	$bq.find('.noref').on('click', $$.norefOnClick.bind($$));
 	// Mail and del
 	var $a = $bq.prev();
 	for (var i = 0; i < 5; i ++) { // when over 5, it's may be HOKANKO...
@@ -296,83 +294,87 @@ function modifiBq($bq) {
 		}
 	}
 	// find Qutoted Res
-	$bq.find('font[color="#789922"]').on('click', quotedResOnClick);
-}
-function modifiTables($table) {
+	$bq.find('font[color="#789922"]').on('click', $$.quotedResOnClick.bind($$));
+},
+modifiTables: function($table) {
+	var $$ = this;
 	for (var i = 0; i < 20; i ++) {
 		var $bq = $table.find('.rtd').find('blockquote');
 		if ($bq[0]) {
-			modifiBq($bq);
+			$$.modifiBq($bq);
 		}
 		$table = $table.next('table[border="0"]');
 		if (!$table[0]) {
 			break;
 		}
 	}
-}
-function modifiTablesFromPageLeftTop() {
+},
+modifiTablesFromPageLeftTop: function() {
+	var $$ = this, $ = this.$;
 	// find left-top TABLE and modifi.
 	var x = 0, y = 0;
 	for (var i = 0; i < 10; i ++) {
-		var table = document.elementFromPoint(x, y);
+		var table = $$.doc.elementFromPoint(x, y);
 		if (table.tagName === 'A') table = table.parentNode;
 		if (table.tagName === 'BLOCKQUOTE') table = table.parentNode;
 		if (table.tagName === 'TD') table = table.parentNode;
 		if (table.tagName === 'TR') table = table.parentNode;
 		if (table.tagName === 'TBODY') table = table.parentNode;
 		if (table.tagName === 'TABLE' && table.border === '0') {
-			modifiTables($(table));
+			$$.modifiTables($(table));
 			return;
 		}
 		x += 3;
 		y += 3;
 	}
-}
+},
 
 // Modify Form ///////////////////////
-function onSubmit(e) {
+onSubmit: function(e) {
+	var $$ = this, $ = this.$, util = this.util;
 	var $contents = $(e.target).contents();
 	if ($contents[0].URL.indexOf('http') !== 0) return;
 	if ($contents.find('meta[http-equiv="refresh"]')[0]) {
 		$contents[0].defaultView.stop();
-		document.getElementById('ftxa').value = '';
-		$writeBtn.removeClass('active');
-		$ftbl.fadeOut();
-		window.setTimeout(function() { reloadBtnOnClick(); }, 2000);
+		$$.doc.getElementById('ftxa').value = '';
+		$$.$writeBtn.removeClass('active');
+		$$.$ftbl.fadeOut();
+		$$.win.setTimeout(function() { $$.reloadBtnOnClick(); }, 2000);
 	} else {
 		var msg = $contents.find('div')[0] || $contents.find('body')[0];
 		util.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
 	}
 	$contents.find('html').html('');
-}
-function modifyForm() {
-	var ftxa = document.getElementById('ftxa');
+},
+modifyForm: function() {
+	var $$ = this, $ = this.$;
+	var ftxa = $$.doc.getElementById('ftxa');
 	if (!ftxa) {
-		$writeBtn.addClass('disable');
+		$$.$writeBtn.addClass('disable');
 		return;
 	}
-	$ftbl = $('#ftbl');
-	if (!$ftbl[0]) {
-		$writeBtn.addClass('disable');
+	$$.$ftbl = $('#ftbl');
+	if (!$$.$ftbl[0]) {
+		$$.$writeBtn.addClass('disable');
 		return;
 	}
 	// change id
-	$ftbl.attr('id', 'ftbl_fixed');
-	$ftbl.attr('style', '');
-	$ftbl.hide();
+	$$.$ftbl.attr('id', 'ftbl_fixed');
+	$$.$ftbl.attr('style', '');
+	$$.$ftbl.hide();
 	var $dummy = $('<div>');
 	$dummy.attr('id', 'ftbl');
 	$('body').append($dummy);
 	// toolbtn
-	$writeBtn.on('click', function() {
-		if ($ftbl.is(':hidden')) {
-			$writeBtn.addClass('active');
-			$ftbl.fadeIn('normal', function() {
-				document.getElementById('ftxa').focus();
+	$$.$writeBtn.on('click', function() {
+		if ($$.$ftbl.is(':hidden')) {
+			$$.$writeBtn.addClass('active');
+			$$.$ftbl.fadeIn('normal', function() {
+				$$.doc.getElementById('ftxa').focus();
 			});
 		} else {
-			$writeBtn.removeClass('active');
-			$ftbl.fadeOut();
+			$$.$writeBtn.removeClass('active');
+			$$.$ftbl.fadeOut();
 		}
 	});
 	// Post with iFrame
@@ -386,73 +388,91 @@ function modifyForm() {
 		src: 'about:blank'
 	});
 	$('body').append($iframe);
-	$iframe[0].onload = onSubmit;
-}
+	$iframe[0].onload = $$.onSubmit.bind($$);
+},
 
 // Others ////////////////////////////
-function scrollToThreadImage() {
+scrollToThreadImage: function() {
+	var $ = this.$;
 	var $a = $('.thread-image').parent().prevAll('a') || $('input[value="delete"]:first');
 	if ($a) {
-		util.scrollTo($a.offset().top);
+		this.util.scrollTo($a.offset().top);
 		return;
 	}
-}
+},
 
-// Main //////////////////////////////
-// StyleSheet
-util.addCssFile('content_scripts/thread.css');
+// Main ////////////////////////////////
+exec: function(window, $) {
+	// setup fields
+	this.win = window;
+	this.doc = window.document;
+	this.$ = $;
+	this.$win = $(window);
+	this.util = new Are4AreUtil().init(window, $);
+	this.$win.unload(function() { this.$ = this.$win = this.doc = this.win = null; });
 
-// Resize AD
-$('div[class="tue"], div[style="width:468px;height:60px;margin:2px"], div[style^="width:728px;height:90px;"]').each(function() {
-	this.setAttribute('style', 'width:234px;height:30px;margin:auto;max-width:234px;max-height:30px;overflow:auto;');
-	var child = this.firstChild;
-	while (child) {
-		if (child.width == '468') {
-			child.width = '234';
-			child.height = '30';
+	var $$ = this, util = this.util;
+
+	// StyleSheet
+	util.addCssFile('content_scripts/thread.css');
+
+	// Resize AD
+	$('div[class="tue"], div[style="width:468px;height:60px;margin:2px"], div[style^="width:728px;height:90px;"]').each(function() {
+		this.setAttribute('style', 'width:234px;height:30px;margin:auto;max-width:234px;max-height:30px;overflow:auto;');
+		var child = this.firstChild;
+		while (child) {
+			if (child.width == '468') {
+				child.width = '234';
+				child.height = '30';
+			}
+			child = child.firstChild;
 		}
-		child = child.firstChild;
-	}
-});
-$('#rightad').find('div').attr('style', '');
+	});
+	$('#rightad').find('div').attr('style', '');
 
-// ToolButtons
-$backBtn = $(util.addToolButton('back', backBtnOnClick));
-$backBtn.addClass('slide-out-h');
-$writeBtn = $(util.addToolButton('write'));
-util.addToolButton('reload', reloadBtnOnClick);
-$pageDownBtn = $(util.addToolButton('pagedown'));
-$pageDownBtn.on('touchstart mousedown', pageDownBtnOnTouchstart);
-$pageDownBtn.on('touchend mouseup', pageDownBtnOnTouchend);
-util.addToolButton('bottom', bottomBtnOnClick);
+	// ToolButtons
+	$$.$backBtn = $(util.addToolButton('back', $$.backBtnOnClick.bind($$)));
+	$$.$backBtn.addClass('slide-out-h');
+	$$.$writeBtn = $(util.addToolButton('write'));
+	util.addToolButton('reload', $$.reloadBtnOnClick.bind($$));
+	$$.$pageDownBtn = $(util.addToolButton('pagedown'));
+	$$.$pageDownBtn.on('touchstart mousedown', $$.pageDownBtnOnTouchstart.bind($$));
+	$$.$pageDownBtn.on('touchend mouseup', $$.pageDownBtnOnTouchend.bind($$));
+	util.addToolButton('bottom', $$.bottomBtnOnClick.bind($$));
 
-// MinThumbnail
-appendMinThumbnail();
-$win.on('scrollend', showMinTumbnail);
+	// MinThumbnail
+	$$.appendMinThumbnail();
+	$$.$win.on('scrollend', $$.showMinTumbnail.bind($$));
 
-// Modifi Blockquote (visible)
-modifiBq($('blockquote:first'));
-modifiTables($('table[border="0"]:first'));
-$win.on('scrollend', modifiTablesFromPageLeftTop);
-
-// Modifi Form
-modifyForm();
-
-// On repainted all //////////////////
-window.setTimeout(function() {
 	// Modifi Blockquote (visible)
-	modifiTablesFromPageLeftTop();
-	// scroll to Thread-Image
-	scrollToThreadImage();
-}, 500);
+	$$.modifiBq($('blockquote:first'));
+	$$.modifiTables($('table[border="0"]:first'));
+	$$.$win.on('scrollend', $$.modifiTablesFromPageLeftTop.bind($$));
 
-} // end of are4areExecute
+	// Newer Border
+	$('body').append('<div id="newer_border"></div>');
+	$$.$newerBorder = $('#newer_border');
+
+	// Modifi Form
+	$$.modifyForm();
+
+	// On repainted all //////////////////
+	$$.win.setTimeout(function() {
+		// Modifi Blockquote (visible)
+		$$.modifiTablesFromPageLeftTop();
+		// scroll to Thread-Image
+		$$.scrollToThreadImage();
+	}, 500);
+}
+}; // end of my extension
 
 // url check ///////////////////////////
 // default target URL
 var href = document.location.href;
 if (href.match(/http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/) && href.indexOf('mode=cat') == -1) {
-	are4areExecute();
+	jQuery.noConflict();
+	var myExt = new Are4AreThread();
+	myExt.exec(window, jQuery);
 	return;
 }
 // addtional URL
@@ -466,12 +486,18 @@ chrome.storage.local.get('are4are_targetUrls', function(res) {
 		reg = new RegExp(targetUrls);
 	} catch (e) {
 		jQuery.noConflict();
-		new Are4AreUtil(this, jQuery).toast('uriRegexWrong', targetUrls, '' + e);
+		new Are4AreUtil().init(window, jQuery).toast('uriRegexWrong', targetUrls, '' + e);
 		return false;
 	}
 	if (reg && href.replace(/[#\?].*$/, '').match(reg)) {
-		are4areExecute();
+		jQuery.noConflict();
+		var myExt = new Are4AreThread();
+		myExt.exec(window, jQuery);
 	}
 });
 })();
 
+/*
+
+
+*/

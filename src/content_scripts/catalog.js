@@ -1,31 +1,31 @@
-jQuery.noConflict();
-(function($) {
-var
-	util = new Are4AreUtil().init(this, $),
-	catalogTable = $('table[border="1"][align="center"]')[0],
-	catalogData = [],
-	CATALOG_DATA_SIZE = 1000
-;
+(function() {
+function Are4AreCatalog() {}
+Are4AreCatalog.prototype = {
+// Field ///////////////////////////////
+CATALOG_DATA_SIZE: 1000,
 
-// Event //////////////////////////////////////////////////
-function onclickCatalogMode(e) {
+// Event ///////////////////////////////
+onclickCatalogMode: function(e) {
+	var $$ = this, $ = this.$;
 	e.preventDefault();
-	var current = document.getElementById('catalog-mode-current');
+	var current = $$.doc.getElementById('catalog-mode-current');
 	if (current.href != e.target.href) {
 		current.id = '';
 		e.target.id = 'catalog-mode-current';
-		window.scrollTo(0, $('table')[0].offsetTop);
+		$$.win.scrollTo(0, $('table')[0].offsetTop);
 	}
-	refreshCatalog(e.target.href);
+	$$.refreshCatalog(e.target.href);
 	return false;
-}
+},
 
-function appendCatalogCountDelta(tablePalent) {
+// RefreshCatalog ///////////////////////
+appendCatalogCountDelta: function(tablePalent) {
+	var $$ = this, $ = this.$;
 	var $work = $(tablePalent).find('table[border="1"][align="center"]');
 	$work.addClass('catalog-table');
 	// add count delta
 	var searchMin = 0;
-	var searchMax = catalogData.length;
+	var searchMax = $$.catalogData.length;
 	var doAppend = searchMax !== 0;
 	$work.find('td').each(function() { try {
 		var $td = $(this);
@@ -36,12 +36,12 @@ function appendCatalogCountDelta(tablePalent) {
 		if (doAppend) {
 			var delta = '?';
 			for (var i = searchMin; i < searchMax; i ++) {
-				var old = catalogData[i];
+				var old = $$.catalogData[i];
 				if (old.href != href) {
 					continue;
 				}
 				delta = count - old.count;
-				catalogData.splice(i, 1);
+				$$.catalogData.splice(i, 1);
 				searchMax --;
 				break;
 			}
@@ -49,18 +49,18 @@ function appendCatalogCountDelta(tablePalent) {
 				$countElm.append('<span class="res-count-delta">+' + delta + '</span>');
 			}
 		}
-		catalogData.unshift({href:href, count:count});
+		$$.catalogData.unshift({href:href, count:count});
 		searchMin ++;
 		searchMax ++;
 	} catch (e) { /*nop*/ } });
-	catalogData.splice(CATALOG_DATA_SIZE);
+	$$.catalogData.splice($$.CATALOG_DATA_SIZE);
 	if (doAppend) {
-		catalogTable.parentNode.replaceChild($work[0], catalogTable);
-		catalogTable = $('table[border="1"][align="center"]')[0];
+		$$.catalogTable.parentNode.replaceChild($work[0], $$.catalogTable);
+		$$.catalogTable = $('table[border="1"][align="center"]')[0];
 	}
-}
-
-function refreshCatalog(href) {
+},
+refreshCatalog: function(href) {
+	var $$ = this, $ = this.$, util = this.util;
 	util.activateToolBar();
 	$.ajax({
 		type: 'GET',
@@ -69,12 +69,12 @@ function refreshCatalog(href) {
 	})
 	.done(function(data) {
 		if (data && data.length === 0) {
-			util.toast( '__MSG_networkError__ (0byte)'); return;
+			util.toast( '__MSG_networkError__ (0byte)');
 			return;
 		}
 		var $frag = $(document.createDocumentFragment());
 		$frag.html(data);
-		appendCatalogCountDelta($frag);
+		$$.appendCatalogCountDelta($frag);
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
@@ -85,25 +85,46 @@ function refreshCatalog(href) {
 	.complete(function() {
 		util.noactivateToolBar();
 	});
+},
+
+// Main ////////////////////////////////
+exec: function(window, $) {
+	// setup fields
+	// TODO: matome raresou...
+	// ----------------------
+	this.win = window;
+	this.doc = window.document;
+	this.$ = $;
+	this.util = new Are4AreUtil().init(window, $);
+	$(this.win).unload(function() { this.$ = this.$win = this.doc = this.win = null; });
+	// ----------------------
+	var $$ = this;
+	var util = this.util;
+	$$.catalogTable = $('table[border="1"][align="center"]')[0];
+	$$.catalogData = [];
+	// main
+	$$.catalogTable.classList.add('catalog-table');
+	util.addCssFile('content_scripts/catalog.css');
+	// tool bar
+	$('a[href *= "mode=cat"]').each(function() {
+		if (this.href.indexOf('catset') != -1) {
+			return;
+		}
+		if (this.parentNode.tagName == 'B') {
+			this.id = 'catalog-mode-current';
+		}
+		this.onclick = $$.onclickCatalogMode.bind($$);
+		this.classList.add('are_toolbtn');
+		util.toolbar.appendChild(this);
+	});
+	$$.win.scrollTo(0, $('table')[0].offsetTop);
+	$$.appendCatalogCountDelta($$.doc.body);
 }
+}; // end of my extension
 
-// Main ///////////////////////////////////////////////////
-catalogTable.classList.add('catalog-table');
-util.addCssFile('content_scripts/catalog.css');
-// tool bar
-$('a[href *= "mode=cat"]').each(function() {
-	if (this.href.indexOf('catset') != -1) {
-		return;
-	}
-	if (this.parentNode.tagName == 'B') {
-		this.id = 'catalog-mode-current';
-	}
-	this.onclick = onclickCatalogMode;
-	this.classList.add('are_toolbtn');
-	util.toolbar.appendChild(this);
-});
-window.scrollTo(0, $('table')[0].offsetTop);
-appendCatalogCountDelta(document.body);
+jQuery.noConflict();
+var myExt = new Are4AreCatalog();
+myExt.exec(window, jQuery);
 
-})(jQuery);
+})();
 
