@@ -71,6 +71,10 @@
 	"addFromTabs": {
 		"message": "開いてるタブから追加",
 		"description": ""
+	},
+	"selectTargetUriTab": {
+		"message": "追加するタブを選択...",
+		"description": ""
 	}
 }
 

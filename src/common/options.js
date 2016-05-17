@@ -57,6 +57,9 @@ function tabsOnChange(e) {
 		.replace(/\\/, '\\\\')
 		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1')
 	;
+	if (urlReg === '') {
+		return;
+	}
 	if (urlReg.match(/(html?|\/)$/)) {
 		urlReg = urlReg + '$';
 	}
@@ -81,6 +84,12 @@ function tabsOnChange(e) {
 	document.getElementById('targetUri').value += "\n" + urlReg;
 	correctValues();
 }
+function addOption(sel, value, label) {
+	var o = document.createElement('option');
+	o.appendChild(document.createTextNode(label));
+	o.setAttribute('value', value);
+	sel.appendChild(o);
+}
 function tabsBtnOnClick(e) {
 	e.preventDefault();
 	var sel = document.getElementById('tabs');
@@ -88,14 +97,12 @@ function tabsBtnOnClick(e) {
 	while(sel.firstChild) {
 		sel.removeChild(sel.firstChild);
 	}
+	addOption(sel, '', chrome.i18n.getMessage('selectTargetUriTab'));
 	chrome.tabs.query({
 		"url": ["http://*/*", "https://*/*"]
 	}, function(tabs) {
 		for(var tab of tabs) {
-			var o = document.createElement('option');
-			o.appendChild(document.createTextNode(tab.title + ' ' + tab.url));
-			o.setAttribute('value', tab.url);
-			sel.appendChild(o);
+			addOption(sel, tab.url, tab.title + ' ' + tab.url);
 		}
 	});
 }

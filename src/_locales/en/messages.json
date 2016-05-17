@@ -71,6 +71,10 @@
 	"addFromTabs": {
 		"message": "add from opened tabs",
 		"description": ""
+	},
+	"selectTargetUriTab": {
+		"message": "select tab ...",
+		"description": ""
 	}
 }
 
