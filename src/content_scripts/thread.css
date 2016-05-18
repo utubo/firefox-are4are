@@ -83,7 +83,7 @@ hr {
 }
 blockquote {
 	color: #800000;
-	margin: .9em 2pt;
+	margin: .9em 2pt !important;
 }
 .sod {
 	color: #B66;
@@ -98,7 +98,7 @@ blockquote {
 	opacity: 0;
 	overflow: hidden;
 }
-td input[value="delete"] {
+td > input[value="delete"] {
 	display: none;
 	height: 7pt;
 	margin: 0;
@@ -117,13 +117,13 @@ td input[value="delete"] {
 }
 
 /* del:hover */
-td:hover .del {
+td:hover > .del {
 	max-width: 3em;
 	opacity: 1;
 	transition: all .5s;
 }
-td input:checked,
-td:hover input[value="delete"] {
+td > input:checked,
+td:hover > input[value="delete"] {
 	display: unset;
 	opacity: 1;
 	width: 7pt !important;
