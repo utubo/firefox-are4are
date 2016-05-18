@@ -75,8 +75,8 @@ function restoreOptions() {
 }
 
 // urls //////////////////////////////
-function addUrl(urlReg) {
-	urlReg = urlReg.replace(/^\s+|\s+$/g, '');
+function addUrl(url) {
+	var urlReg = url.replace(/^\s+|\s+$/g, '');
 	if (!urlReg) return;
 	urlReg = urlReg
 		.replace(/\\/, '\\\\')
@@ -108,7 +108,7 @@ function addUrl(urlReg) {
 }
 function urlsOnPaste(e) {
 	var text = e.clipboardData.getData('text');
-	if (text.indexOf('\\') === -1 && text.indexOf('http://') === 0) {
+	if (text.indexOf('\\') === -1 && text.indexOf('http') === 0) {
 		e.preventDefault();
 		addUrl(e.clipboardData.getData('text'));
 	}
