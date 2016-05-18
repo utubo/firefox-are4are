@@ -8,13 +8,17 @@ AndroidのFirefoxのアドオンです
 でもフレームには対応してませんごめん
 
 ##インストール(現状)
-<about:config>を開いて
+1. 以下URLからAurora(青いFirefox)をインストール  
+<https://www.mozilla.org/ja/firefox/channel/>
+1. Auroraを起動する
+1. about:configを開いて
 `xpinstall.signatures.required`を
 `false`に設定
-
+1. 以下URLからバージョン4.0をインストール  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
-バージョン4.0をインストール
 
+作りかけはこちら（githubに上がってるのとか上げる前の）  
+<http://utb.dip.jp:8001/~utb/temp/are.xpi>
 
 <!--
 ####古いバージョン
@@ -28,7 +32,7 @@ AndroidのFirefoxのアドオンです
 ##外部URLの登録
 ### 手順
 カタログ設定画面からアドオンの設定画面にいけるので  
-「外部板」の欄にURLを貼り付けて再読み込みスレばOK
+「外部板」の欄にURLを貼り付けて開き直せばOK
 
 ### 詳細な手順
 1. 外部スレッドを開いてURLをコピーしておく
