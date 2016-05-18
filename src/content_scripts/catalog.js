@@ -118,10 +118,17 @@ exec: function(window, $) {
 		addedHref.push(this.href);
 	});
 	// setting page
-	if (this.doc.location.href.indexOf('mode=catset') !== -1) {
+	if ($$.doc.location.href.indexOf('mode=catset') !== -1) {
 		$('input[name="mode"]').each(function() {
 			this.form.action += "?mode=" + this.value;
 		});
+		var $a = $('<a>', {
+			href: chrome.extension.getURL('common/options.html'),
+			'class': 'options-page-link'
+
+		});
+		$a.text(util.format('__MSG_extensionName__ - __MSG_options__'));
+		$($$.doc.body).append($a);
 		return;
 	}
 	// main
