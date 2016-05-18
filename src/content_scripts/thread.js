@@ -58,8 +58,7 @@ appendMinThumbnail: function() {
 	$('body').append($$.$minThumbnail);
 
 	// favicon
-	var $faviconLink = $('<link>');
-	$faviconLink.attr({rel:'shortcut icon', href: threadImage.src});
+	var $faviconLink = $('<link>', {rel:'shortcut icon', href: threadImage.src});
 	$('head').append($faviconLink);
 },
 
