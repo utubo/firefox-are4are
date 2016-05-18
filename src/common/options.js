@@ -1,3 +1,26 @@
+// with new tab //////////////////////
+function setupAsNewTab() {
+	var head = document.getElementsByTagName('head')[0];
+	// ViewPort
+	var viewPort = document.createElement('meta');
+	viewPort.name = 'viewport';
+	viewPort.content = 'width=device-width';
+	head.insertBefore(viewPort, head.firstChild);
+	// CSS
+	var cssLink = document.createElement('link');
+	cssLink.rel = 'stylesheet';
+	cssLink.type = 'text/css';
+	cssLink.href = chrome.extension.getURL('common/options.css');
+	head.appendChild(cssLink);
+	// Title
+	var extensionName = chrome.i18n.getMessage('extensionName');
+	var title = document.createElement('title');
+	title.textContent = extensionName;
+	head.appendChild(title);
+	var h1 = document.createElement('h1');
+	h1.textContent = extensionName;
+	document.body.insertBefore(h1, document.body.firstChild);
+}
 // validator /////////////////////////
 function isValidUrls() {
 	var t = document.getElementById('urls');
@@ -51,15 +74,14 @@ function restoreOptions() {
 	]);
 }
 
-// tabs //////////////////////////////
-function tabsOnChange(e) {
-	var urlReg = e.target.value
+// urls //////////////////////////////
+function addUrl(urlReg) {
+	urlReg = urlReg.replace(/^\s+|\s+$/g, '');
+	if (!urlReg) return;
+	urlReg = urlReg
 		.replace(/\\/, '\\\\')
 		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1')
 	;
-	if (urlReg === '') {
-		return;
-	}
 	if (urlReg.match(/(html?|\/)$/)) {
 		urlReg = urlReg + '$';
 	}
@@ -83,6 +105,18 @@ function tabsOnChange(e) {
 	urlReg = '^' + urlReg;
 	document.getElementById('urls').value += "\n" + urlReg;
 	correctValues();
+}
+function urlsOnPaste(e) {
+	var text = e.clipboardData.getData('text');
+	if (text.indexOf('\\') === -1 && text.indexOf('http://') === 0) {
+		e.preventDefault();
+		addUrl(e.clipboardData.getData('text'));
+	}
+}
+
+// tabs selectbox ////////////////////
+function tabsOnChange(e) {
+	addUrl(e.target.value);
 }
 function addOption(sel, value, label) {
 	var o = document.createElement('option');
@@ -113,4 +147,11 @@ document.getElementById('tabsBtn').addEventListener('click', tabsBtnOnClick);
 document.getElementById('tabs').addEventListener('change', tabsOnChange);
 document.getElementById('urls').addEventListener('change', validate);
 document.getElementById('urls').addEventListener('keyup', validate);
+document.getElementById('urls').addEventListener('paste', urlsOnPaste);
+if (document.location.href.indexOf('options.html') !== -1) {
+	setupAsNewTab();
+}
+if (!chrome.tabs) {
+	document.getElementById('tabsBtn').setAttribute('disabled', 'disabled');
+}
 

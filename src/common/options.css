@@ -1,0 +1,27 @@
+body {
+	background: #ffe;
+	color: #800;
+}
+
+h1 {
+	font-size: 16pt;
+}
+
+fieldset {
+	border: none;
+	border-top: solid;
+}
+
+button {
+	margin: .5em 0;
+	padding: .5em;
+}
+
+select {
+	padding: .5em 0;
+}
+
+#save {
+	margin: 1em 0;
+	padding: .5em 2em;
+}
