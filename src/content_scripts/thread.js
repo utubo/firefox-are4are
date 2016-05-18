@@ -465,31 +465,21 @@ exec: function(window, $) {
 }
 }; // end of my extension
 
-// url check ///////////////////////////
-// default target URL
-var href = document.location.href;
-if (href.match(/http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/) && href.indexOf('mode=cat') == -1) {
+// start ///////////////////////////////
+chrome.storage.local.get('urls', function(r) {
+	var href = document.location.href;
+	if (href.indexOf('mode=cat') === -1 && href.match(/^http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/)) {
+		// default URL
+	} else {
+		// addtional URL
+		if (!(r.urls)) return;
+		var reg = new RegExp(r.urls.replace(/\n/g, '|'));
+		if (!href.replace(/[#\?].*$/, '').match(reg)) return;
+	}
+	// url matched
 	jQuery.noConflict();
 	var myExt = new Are4AreThread();
 	myExt.exec(window, jQuery);
-	return;
-}
-// addtional URL
-chrome.storage.local.get('are4are_targetUrls', function(res) {
-	var targetUrls = res.are4are_targetUrls;
-	if (!targetUrls) {
-		return false;
-	}
-	targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
-	if (targetUrls.match(/^\|*$/)) {
-		return false;
-	}
-	var reg = new RegExp(targetUrls);
-	if (href.replace(/[#\?].*$/, '').match(reg)) {
-		jQuery.noConflict();
-		var myExt = new Are4AreThread();
-		myExt.exec(window, jQuery);
-	}
 });
 })();
 

@@ -1,6 +1,6 @@
 // validator /////////////////////////
-function isValidTargetUri() {
-	var t = document.getElementById('targetUri');
+function isValidUrls() {
+	var t = document.getElementById('urls');
 	var targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 	if (!targetUrls) return true;
 	try {
@@ -20,7 +20,7 @@ function validateTarget(id, func) {
 	}
 }
 function validate() {
-	validateTarget('targetUri', isValidTargetUri);
+	validateTarget('urls', isValidUrls);
 	if (document.querySelector('.invalid')) {
 		document.getElementById('save').setAttribute('disabled', 'true');
 	} else {
@@ -30,19 +30,19 @@ function validate() {
 
 // util //////////////////////////////
 function correctValues() {
-	var t = document.getElementById('targetUri');
+	var t = document.getElementById('urls');
 	t.value = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 }
 // save and load /////////////////////
 function saveOptions(e) {
 	correctValues();
 	chrome.storage.local.set({
-		are4are_targetUrls: document.getElementById('targetUri').value
+		urls: document.getElementById('urls').value
 	});
 }
 function restoreOptions() {
-	chrome.storage.local.get('are4are_targetUrls', function(res) {
-		document.getElementById('targetUri').value = res.are4are_targetUrls || '';
+	chrome.storage.local.get('urls', function(res) {
+		document.getElementById('urls').value = res.urls || '';
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
 		function (e, i, a) {
@@ -81,7 +81,7 @@ function tabsOnChange(e) {
 		);
 	}
 	urlReg = '^' + urlReg;
-	document.getElementById('targetUri').value += "\n" + urlReg;
+	document.getElementById('urls').value += "\n" + urlReg;
 	correctValues();
 }
 function addOption(sel, value, label) {
@@ -97,7 +97,7 @@ function tabsBtnOnClick(e) {
 	while(sel.firstChild) {
 		sel.removeChild(sel.firstChild);
 	}
-	addOption(sel, '', chrome.i18n.getMessage('selectTargetUriTab'));
+	addOption(sel, '', chrome.i18n.getMessage('selectTargetUrlTab'));
 	chrome.tabs.query({
 		"url": ["http://*/*", "https://*/*"]
 	}, function(tabs) {
@@ -111,6 +111,6 @@ document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('form').addEventListener('submit', saveOptions);
 document.getElementById('tabsBtn').addEventListener('click', tabsBtnOnClick);
 document.getElementById('tabs').addEventListener('change', tabsOnChange);
-document.getElementById('targetUri').addEventListener('change', validate);
-document.getElementById('targetUri').addEventListener('keyup', validate);
+document.getElementById('urls').addEventListener('change', validate);
+document.getElementById('urls').addEventListener('keyup', validate);
 

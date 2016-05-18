@@ -60,11 +60,11 @@
 		"message": "保存",
 		"description": ""
 	},
-	"targetUriLabel": {
+	"urlsTextAreaLabel": {
 		"message": "外部板",
 		"description": ""
 	},
-	"targetUriNote": {
+	"urlsTextAreaNote": {
 		"message": "(正規表現で指定, 改行で複数指定)",
 		"description": ""
 	},
@@ -72,7 +72,7 @@
 		"message": "開いてるタブから追加",
 		"description": ""
 	},
-	"selectTargetUriTab": {
+	"selectTargetUrlTab": {
 		"message": "追加するタブを選択...",
 		"description": ""
 	}

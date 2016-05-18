@@ -60,11 +60,11 @@
 		"message": "Save",
 		"description": ""
 	},
-	"targetUriLabel": {
+	"urlsTextAreaLabel": {
 		"message": "Target-URI",
 		"description": ""
 	},
-	"targetUriNote": {
+	"urlsTextAreaNote": {
 		"message": "(regex)",
 		"description": ""
 	},
@@ -72,7 +72,7 @@
 		"message": "add from opened tabs",
 		"description": ""
 	},
-	"selectTargetUriTab": {
+	"selectTargetUrlTab": {
 		"message": "select tab ...",
 		"description": ""
 	}
