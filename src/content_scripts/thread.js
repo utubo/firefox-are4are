@@ -22,7 +22,7 @@ showMinTumbnail: function(e, targetY) {
 appendMinThumbnail: function() {
 	var $$ = this, $ = this.$;
 	// find thread-image
-	var threadImage = $('blockquote:first')[0], href;
+	var threadImage = $('blockquote')[0], href;
 	if (!threadImage) return;
 	while (threadImage = threadImage.previousSibling) {
 		if (
@@ -55,7 +55,7 @@ appendMinThumbnail: function() {
 		'class': 'fadeout'
 	});
 	$$.$minThumbnail.append($img);
-	$('body').append($$.$minThumbnail);
+	$$.$body.append($$.$minThumbnail);
 
 	// favicon
 	var $faviconLink = $('<link>', {rel:'shortcut icon', href: threadImage.src});
@@ -65,13 +65,11 @@ appendMinThumbnail: function() {
 // Newer Border ///////////////////////
 showNewerBorder: function() {
 	var $$ = this;
-	$$.$newerBorder.css('opacity', '1');
-	$$.$newerBorder.css('width', '100%');
+	$$.$newerBorder.css({opacity: '1', width: '100%'});
 },
 hideNewerBorder: function() {
 	var $$ = this;
-	$$.$newerBorder.css('opacity', '0');
-	$$.$newerBorder.css('width', '0');
+	$$.$newerBorder.css({opacity: '0', width: '0'});
 },
 
 // ToolButtons ///////////////////////
@@ -191,13 +189,13 @@ findRes: function(target, $from) {
 		}
 		$table = $table.prev('table');
 	}
-	var $bq = $('blockquote:first');
+	var $bq = $('blockquote').first();
 	if ($bq.text.indexOf(target) !== -1) {
 		return $bq;
 	}
 	return false;
 },
-quotedResOnClick: function(e) {
+quoteTextOnClick: function(e) {
 	var $$ = this, $ = this.$, util = this.util;
 	var $target = $(e.target);
 	if ($target[0].tagName === 'A') return;
@@ -266,7 +264,6 @@ modifiBq: function($bq) {
 	// auto link
 	$$.autoLinkTextNode($bq);
 	$bq.find('font').each(function() { $$.autoLinkTextNode($(this)); });
-	$bq.find('.noref').on('click', $$.norefOnClick.bind($$));
 	// Mail and del
 	var $a = $bq.prev();
 	for (var i = 0; i < 5; i ++) { // when over 5, it's may be HOKANKO...
@@ -293,7 +290,7 @@ modifiBq: function($bq) {
 		}
 	}
 	// find Qutoted Res
-	$bq.find('font[color="#789922"]').on('click', $$.quotedResOnClick.bind($$));
+	$bq.find('font[color="#789922"]').each(function() { $(this).addClass('quote-text'); });
 },
 modifiTables: function($table) {
 	var $$ = this;
@@ -363,7 +360,7 @@ modifyForm: function() {
 	$$.$ftbl.hide();
 	var $dummy = $('<div>');
 	$dummy.attr('id', 'ftbl');
-	$('body').append($dummy);
+	$$.$body.append($dummy);
 	// toolbtn
 	$$.$writeBtn.on('click', function() {
 		if ($$.$ftbl.is(':hidden')) {
@@ -386,14 +383,14 @@ modifyForm: function() {
 		style: 'display:none',
 		src: 'about:blank'
 	});
-	$('body').append($iframe);
+	$$.$body.append($iframe);
 	$iframe[0].onload = $$.onSubmit.bind($$);
 },
 
 // Others ////////////////////////////
 scrollToThreadImage: function() {
 	var $ = this.$;
-	var img = ($('.thread-image').parent().prevAll('a'))[0] || $('input[value="delete"]:first')[0];
+	var img = ($('.thread-image').parent().prevAll('a'))[0] || $('input[value="delete"]')[0];
 	if (img) {
 		this.util.scrollTo($(img).offset().top);
 		return;
@@ -407,8 +404,9 @@ exec: function(window, $) {
 	this.doc = window.document;
 	this.$ = $;
 	this.$win = $(window);
+	this.$body = $(window.document.body);
 	this.util = new Are4AreUtil().init(window, $);
-	this.$win.unload(function() { this.$ = this.$win = this.doc = this.win = null; });
+	this.$win.unload(function() { this.$ = this.$win = this.$body = this.doc = this.win = null; });
 
 	var $$ = this, util = this.util;
 
@@ -444,18 +442,22 @@ exec: function(window, $) {
 	$$.$win.on('scrollend', $$.showMinTumbnail.bind($$));
 
 	// Modifi Blockquote (visible)
-	$$.modifiBq($('blockquote:first'));
-	$$.modifiTables($('table[border="0"]:first'));
+	$$.modifiBq($('blockquote').first());
+	$$.modifiTables($('table[border="0"]').first());
 	$$.$win.on('scrollend', $$.modifiTablesFromPageLeftTop.bind($$));
 
 	// Newer Border
-	$('body').append('<div id="newer_border"></div>');
+	$$.$body.append('<div id="newer_border"></div>');
 	$$.$newerBorder = $('#newer_border');
 
 	// Modifi Form
 	$$.modifyForm();
 
-	// On repainted all //////////////////
+	// Click Events
+	$$.$body.on('click', '.noref', $$.norefOnClick.bind($$));
+	$$.$body.on('click', '.quote-text', $$.quoteTextOnClick.bind($$));
+
+	// after repainted
 	$$.$win.load(function() {
 		// Modifi Blockquote (visible)
 		$$.modifiTablesFromPageLeftTop();

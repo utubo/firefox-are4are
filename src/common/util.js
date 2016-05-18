@@ -32,7 +32,7 @@ Are4AreUtil.prototype = {
 			this.$toast = this.$('<div>');
 			this.$toast.addClass('are_toast');
 			this.$toast.hide();
-			this.$('body').append(this.$toast);
+			this.$body.append(this.$toast);
 		}
 		this.$toast.html(text);
 		this.$toast.fadeIn();
@@ -112,7 +112,8 @@ Are4AreUtil.prototype = {
 		this.doc = window.document;
 		this.$ = $;
 		this.$win = $(window);
-		this.$win.unload(function() { this.$ = this.$win = this.doc = this.win = null; });
+		this.$body = $(window.document.body);
+		this.$win.unload(function() { this.$ = this.$win = this.$body = this.doc = this.win = null; });
 
 		// jQuery extend
 		$.extend($.easing, {
@@ -121,10 +122,10 @@ Are4AreUtil.prototype = {
 				return c*((t=t/d-1)*t*t + 1) + b;
 			}
 		});
-		new this.$.Event('scrollend');
+		new $.Event('scrollend');
 		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
 		this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
-		$('body').on('touchmove', this._scrollendEventTrigger);
+		this.$body.on('touchmove', this._scrollendEventTrigger);
 
 		// ViewPort
 		var head = this.doc.getElementsByTagName('head')[0];
