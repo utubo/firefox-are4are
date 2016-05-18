@@ -8,12 +8,14 @@ AndroidのFirefoxのアドオンです
 でもフレームには対応してませんごめん
 
 ##インストール(現状)
-<about:config>を開いて
+1. 以下URLからAurora(青いFirefox)をインストール  
+<https://www.mozilla.org/ja/firefox/channel/>
+1. Auroraを起動する
+1. about:configを開いて
 `xpinstall.signatures.required`を
 `false`に設定
-
+1. 以下URLからバージョン4.0をインストール  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
-バージョン4.0をインストール
 
 
 <!--
