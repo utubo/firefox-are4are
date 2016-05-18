@@ -17,6 +17,8 @@ AndroidのFirefoxのアドオンです
 1. 以下URLからバージョン4.0をインストール  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
 
+作りかけはこちら（githubに上がってるのとか上げる前の）  
+<http://utb.dip.jp:8001/~utb/temp/are.xpi>
 
 <!--
 ####古いバージョン
