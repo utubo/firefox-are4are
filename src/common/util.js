@@ -80,7 +80,7 @@ Are4AreUtil.prototype = {
 		$$.$win.off('scroll.scrollendTrigger');
 		$$.clearTimeout($$._scrollendTimer);
 		if ($$.$win.scrollTop() != y) {
-			$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic', _func);
+			$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic').promise().then(_func);
 		} else {
 			_func();
 		}

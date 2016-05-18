@@ -102,21 +102,32 @@ exec: function(window, $) {
 	var util = this.util;
 	$$.catalogTable = $('table[border="1"][align="center"]')[0];
 	$$.catalogData = [];
-	// main
-	$$.catalogTable.classList.add('catalog-table');
-	util.addCssFile('content_scripts/catalog.css');
 	// tool bar
+	var addedHref = [];
 	$('a[href *= "mode=cat"]').each(function() {
-		if (this.href.indexOf('catset') != -1) {
-			return;
-		}
+		if (this.href.indexOf('catset') !== -1) return;
+		if (addedHref.indexOf(this.href) !== -1) return;
 		if (this.parentNode.tagName == 'B') {
 			this.id = 'catalog-mode-current';
 		}
-		this.onclick = $$.onclickCatalogMode.bind($$);
+		if ($$.catalogTable) {
+			this.onclick = $$.onclickCatalogMode.bind($$);
+		}
 		this.classList.add('are_toolbtn');
 		util.toolbar.appendChild(this);
+		addedHref.push(this.href);
 	});
+	// setting page
+	if (this.doc.location.href.indexOf('mode=catset') !== -1) {
+		$('input[name="mode"]').each(function() {
+			this.form.action += "?mode=" + this.value;
+		});
+		return;
+	}
+	// main
+	if (! $$.catalogTable) return;
+	$$.catalogTable.classList.add('catalog-table');
+	util.addCssFile('content_scripts/catalog.css');
 	$$.win.scrollTo(0, $('table')[0].offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
 }
