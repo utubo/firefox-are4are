@@ -84,6 +84,7 @@ hr {
 blockquote {
 	color: #800000;
 	margin: .9em 2pt !important;
+	position: relative;
 }
 .sod {
 	color: #B66;
@@ -107,13 +108,25 @@ td > input[value="delete"] {
 	transition: all .5s;
 	width: 0pt;
 }
-.found {
-	animation: foundAnimation 5s ease-in 0s 1 normal;
+.bookmark:before {
+	animation: fadeInAnime 1s;
+	border-color: #b66 transparent #b66 #b66;
+	border-style: solid;
+	border-width: 5pt 3pt 5pt 8pt;
+	content: "";
+	display: block;
+	height: 0pt;
+	left: -5pt;
+	position: absolute;
+	top: -1em;
+	width: 0pt;
 }
-@keyframes foundAnimation {
-	0% { background: #bea; }
-	90% { background: #bea; }
-	100% { background: transparent; }
+@keyframes fadeInAnime {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+.found:before {
+	border-color: #789922 transparent #789922 #789922;
 }
 
 /* del:hover */

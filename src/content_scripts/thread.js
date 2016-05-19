@@ -175,7 +175,6 @@ showBackBtn: function() {
 },
 findRes: function(target, $from) {
 	var $ = this.$;
-	$('.found').removeClass('found');
 	while ($from[0]) {
 		if ($from.prop('tagName') === 'TABLE') {
 			break;
@@ -207,10 +206,19 @@ quoteTextOnClick: function(e) {
 		y = $found.offset().top;
 		$found = $found.find('blockquote');
 	}
-	$$.showBackBtn(); // TODO:
-	$$.scrollTo(y, function() {
-		$found.addClass('found');
-	});
+	// bookmark
+	if ($$.$found) {
+		$$.$found.removeClass('bookmark found');
+	}
+	$$.$found = $found;
+	if (!$$.backY) {
+		$$.$foundFrom && $$.$foundFrom.removeClass('bookmark');
+		$$.$foundFrom = $target.parent('blockquote');
+		$$.$foundFrom.addClass('bookmark');
+	}
+	// scroll
+	$$.showBackBtn();
+	$$.scrollTo(y, function() { $found.addClass('bookmark found'); });
 },
 
 // Modifi Blockquotes ////////////////
