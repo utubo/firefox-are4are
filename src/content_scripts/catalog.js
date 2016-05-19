@@ -1,6 +1,8 @@
 (function() {
 function Are4AreCatalog() {}
 Are4AreCatalog.prototype = {
+__proto__ : Are4Are.prototype,
+
 // Field ///////////////////////////////
 CATALOG_DATA_SIZE: 1000,
 
@@ -60,8 +62,8 @@ appendCatalogCountDelta: function(tablePalent) {
 	}
 },
 refreshCatalog: function(href) {
-	var $$ = this, $ = this.$, util = this.util;
-	util.activateToolBar();
+	var $$ = this, $ = this.$;
+	$$.activateToolBar();
 	$.ajax({
 		type: 'GET',
 		url: href,
@@ -69,7 +71,7 @@ refreshCatalog: function(href) {
 	})
 	.done(function(data) {
 		if (data && data.length === 0) {
-			util.toast( '__MSG_networkError__ (0byte)');
+			$$.toast( '__MSG_networkError__ (0byte)');
 			return;
 		}
 		var $frag = $(document.createDocumentFragment());
@@ -78,28 +80,20 @@ refreshCatalog: function(href) {
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
-			case 304: util.toast( '__MSG_notModified__'); return;
-			default:  util.toast( '__MSG_networkError__ (' + xhr.status + ')'); return;
+			case 304: $$.toast( '__MSG_notModified__'); return;
+			default:  $$.toast( '__MSG_networkError__ (' + xhr.status + ')'); return;
 		}
 	})
 	.complete(function() {
-		util.noactivateToolBar();
+		$$.noactivateToolBar();
 	});
 },
 
 // Main ////////////////////////////////
 exec: function(window, $) {
-	// setup fields
-	// TODO: matome raresou...
-	// ----------------------
-	this.win = window;
-	this.doc = window.document;
-	this.$ = $;
-	this.util = new Are4AreUtil().init(window, $);
-	$(this.win).unload(function() { this.$ = this.$win = this.doc = this.win = null; });
-	// ----------------------
 	var $$ = this;
-	var util = this.util;
+	$$.init(window, $);
+	// setup fields
 	$$.catalogTable = $('table[border="1"][align="center"]')[0];
 	$$.catalogData = [];
 	// tool bar
@@ -114,7 +108,7 @@ exec: function(window, $) {
 			this.onclick = $$.onclickCatalogMode.bind($$);
 		}
 		this.classList.add('are_toolbtn');
-		util.toolbar.appendChild(this);
+		$$.toolbar.appendChild(this);
 		addedHref.push(this.href);
 	});
 	// setting page
@@ -127,14 +121,14 @@ exec: function(window, $) {
 			'class': 'options-page-link'
 
 		});
-		$a.text(util.format('__MSG_extensionName__ - __MSG_options__'));
+		$a.text($$.format('__MSG_extensionName__ - __MSG_options__'));
 		$($$.doc.body).append($a);
 		return;
 	}
 	// main
 	if (! $$.catalogTable) return;
 	$$.catalogTable.classList.add('catalog-table');
-	util.addCssFile('content_scripts/catalog.css');
+	$$.addCssFile('content_scripts/catalog.css');
 	$$.win.scrollTo(0, $('table')[0].offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
 }

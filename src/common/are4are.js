@@ -1,7 +1,5 @@
-function Are4AreUtil() {
-}
-
-Are4AreUtil.prototype = {
+function Are4Are() { }
+Are4Are.prototype = {
 	// Field ///////////////////////////////
 	win: null,
 	doc: null,
@@ -135,7 +133,7 @@ Are4AreUtil.prototype = {
 		head.insertBefore(viewPort, head.firstChild);
 
 		// CSS
-		this.addCssFile('common/util.css');
+		this.addCssFile('common/are4are.css');
 
 		// ToolBar
 		this.toolbar = this.doc.createElement('div');

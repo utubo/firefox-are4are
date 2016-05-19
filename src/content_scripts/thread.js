@@ -1,6 +1,7 @@
 (function() {
 function Are4AreThread() {}
 Are4AreThread.prototype = {
+__proto__ : Are4Are.prototype,
 
 // MinThumbnail //////////////////////
 MINTHUMBNAIL_SIZE: 60,
@@ -76,20 +77,20 @@ hideNewerBorder: function() {
 _pageDownTimeout: null,
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
-	var $$ = this, util = this.util;
+	var $$ = this;
 	$$.$pageDownBtn.addClass('active');
-	util.scrollTo($$.$win.scrollTop() + Math.round($$.win.innerHeight / 2));
-	util.clearTimeout($$._pageDownTimeout);
+	$$.scrollTo($$.$win.scrollTop() + Math.round($$.win.innerHeight / 2));
+	$$.clearTimeout($$._pageDownTimeout);
 	$$._pageDownTimeout = $$.win.setTimeout(function() { $$.pageDownBtnOnTouchstart(); }, 1000);
 },
 pageDownBtnOnTouchend: function(e) {
-	var $$ = this, util = this.util;
-	$$._pageDownTimeout = util.clearTimeout($$._pageDownTimeout);
+	var $$ = this;
+	$$._pageDownTimeout = $$.clearTimeout($$._pageDownTimeout);
 	$$.$pageDownBtn.removeClass('active');
 },
 reloadBtnOnClick: function(e) {
-	var $$ = this, $ = this.$, util = this.util;
-	util.activateToolBar();
+	var $$ = this, $ = this.$;
+	$$.activateToolBar();
 	$$.hideNewerBorder();
 	$.ajax({
 		type: 'GET',
@@ -99,7 +100,7 @@ reloadBtnOnClick: function(e) {
 	})
 	.done(function(data) {
 		if (!data || data.length === 0) {
-			util.toast( '__MSG_notModified__');
+			$$.toast( '__MSG_notModified__');
 			return;
 		}
 		// delete old reses
@@ -114,7 +115,7 @@ reloadBtnOnClick: function(e) {
 		var endOfRes = '</blockquote></td></tr></table>';
 		var lastIndex = data.lastIndexOf(endOfRes);
 		if (lastIndex < 0) {
-			util.toast( '__MSG_notModified__');
+			$$.toast( '__MSG_notModified__');
 			return;
 		}
 		data = data.substring(0, lastIndex + endOfRes.length);
@@ -130,29 +131,29 @@ reloadBtnOnClick: function(e) {
 			p.insertBefore(this, m);
 		});
 		$$.$newerBorder.css('top', newerBorderY + 'px');
-		util.scrollTo(newerBorderY, $$.showNewerBorder.bind($$));
+		$$.scrollTo(newerBorderY, $$.showNewerBorder.bind($$));
 	})
 	.fail(function(xhr) {
 		switch (xhr.status) {
-			case 304: util.toast( '__MSG_notModified__'); return;
-			case 404: util.toast( '__MSG_threadNotFound__'); return;
-			default:  util.toast( '__MSG_networkError__ (' + xhr.status + ')'); return;
+			case 304: $$.toast( '__MSG_notModified__'); return;
+			case 404: $$.toast( '__MSG_threadNotFound__'); return;
+			default:  $$.toast( '__MSG_networkError__ (' + xhr.status + ')'); return;
 		}
 	})
 	.complete(function() {
-		util.noactivateToolBar();
+		$$.noactivateToolBar();
 	});
 },
 bottomBtnOnClick: function(e) {
-	var $$ = this, util = this.util;
-	util.activateToolBar();
+	var $$ = this;
+	$$.activateToolBar();
 	$$.win.scrollTo(0, $$.doc.body.clientHeight - $$.win.innerHeight);
 	$$.$win.trigger('scrollend');
-	util.noactivateToolBar();
+	$$.noactivateToolBar();
 },
 backBtnOnClick: function() {
-	var $$ = this, util = this.util;
-	util.scrollTo($$.backY);
+	var $$ = this;
+	$$.scrollTo($$.backY);
 	$$.hideBackBtn({force: true});
 },
 
@@ -196,7 +197,7 @@ findRes: function(target, $from) {
 	return false;
 },
 quoteTextOnClick: function(e) {
-	var $$ = this, $ = this.$, util = this.util;
+	var $$ = this, $ = this.$;
 	var $target = $(e.target);
 	if ($target[0].tagName === 'A') return;
 	var $found = $$.findRes($.trim($target.text().replace('>', '')), $target);
@@ -207,7 +208,7 @@ quoteTextOnClick: function(e) {
 		$found = $found.find('blockquote');
 	}
 	$$.showBackBtn(); // TODO:
-	util.scrollTo(y, function() {
+	$$.scrollTo(y, function() {
 		$found.addClass('found');
 	});
 },
@@ -224,18 +225,18 @@ SIO_PREFIX: {
 },
 autoLinkRegex: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi,
 autoLinkFunc: function(all, url, filename, pref, filenum, ext) {
-	var $$ = this, util = this.util;
+	var $$ = this;
 	if (url) {
-		return util.format('<a href="{0}" target="_blank" class="noref">{1}</a>', util.html(url), util.escapeWithoutAmp(url));
+		return $$.format('<a href="{0}" target="_blank" class="noref">{1}</a>', $$.html(url), $$.escapeWithoutAmp(url));
 	} else {
-		return util.format('<a href="{0}{1}" target="_blank">{1}</a>', $$.SIO_PREFIX[pref], filename);
+		return $$.format('<a href="{0}{1}" target="_blank">{1}</a>', $$.SIO_PREFIX[pref], filename);
 	}
 },
 norefOnClick: function(e) {
-	var $$ = this, util = this.util;
+	var $$ = this;
 	e.preventDefault();
 	var href = e.target.href;
-	var html = util.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
+	var html = $$.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
 	$$.win.open('data:text/html; charset=utf-8,' + encodeURIComponent(html));
 },
 autoLinkTextNode: function($elm) {
@@ -327,7 +328,7 @@ modifiTablesFromPageLeftTop: function() {
 
 // Modify Form ///////////////////////
 onSubmit: function(e) {
-	var $$ = this, $ = this.$, util = this.util;
+	var $$ = this, $ = this.$;
 	var $contents = $(e.target).contents();
 	if ($contents[0].URL.indexOf('http') !== 0) return;
 	if ($contents.find('meta[http-equiv="refresh"]')[0]) {
@@ -338,7 +339,7 @@ onSubmit: function(e) {
 		$$.win.setTimeout(function() { $$.reloadBtnOnClick(); }, 2000);
 	} else {
 		var msg = $contents.find('div')[0] || $contents.find('body')[0];
-		util.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
+		$$.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
 	}
 	$contents.find('html').html('');
 },
@@ -389,29 +390,21 @@ modifyForm: function() {
 
 // Others ////////////////////////////
 scrollToThreadImage: function() {
-	var $ = this.$;
+	var $$ = this, $ = this.$;
 	var img = ($('.thread-image').parent().prevAll('a'))[0] || $('input[value="delete"]')[0];
 	if (img) {
-		this.util.scrollTo($(img).offset().top);
+		$$.scrollTo($(img).offset().top);
 		return;
 	}
 },
 
 // Main ////////////////////////////////
 exec: function(window, $) {
-	// setup fields
-	this.win = window;
-	this.doc = window.document;
-	this.$ = $;
-	this.$win = $(window);
-	this.$body = $(window.document.body);
-	this.util = new Are4AreUtil().init(window, $);
-	this.$win.unload(function() { this.$ = this.$win = this.$body = this.doc = this.win = null; });
-
-	var $$ = this, util = this.util;
+	var $$ = this;
+	$$.init(window, $);
 
 	// StyleSheet
-	util.addCssFile('content_scripts/thread.css');
+	$$.addCssFile('content_scripts/thread.css');
 
 	// Resize AD
 	$('div[class="tue"], div[style="width:468px;height:60px;margin:2px"], div[style^="width:728px;height:90px;"]').each(function() {
@@ -428,14 +421,14 @@ exec: function(window, $) {
 	$('#rightad').find('div').attr('style', '');
 
 	// ToolButtons
-	$$.$backBtn = $(util.addToolButton('back', $$.backBtnOnClick.bind($$)));
+	$$.$backBtn = $($$.addToolButton('back', $$.backBtnOnClick.bind($$)));
 	$$.$backBtn.addClass('slide-out-h');
-	$$.$writeBtn = $(util.addToolButton('write'));
-	util.addToolButton('reload', $$.reloadBtnOnClick.bind($$));
-	$$.$pageDownBtn = $(util.addToolButton('pagedown'));
+	$$.$writeBtn = $($$.addToolButton('write'));
+	$$.addToolButton('reload', $$.reloadBtnOnClick.bind($$));
+	$$.$pageDownBtn = $($$.addToolButton('pagedown'));
 	$$.$pageDownBtn.on('touchstart mousedown', $$.pageDownBtnOnTouchstart.bind($$));
 	$$.$pageDownBtn.on('touchend mouseup', $$.pageDownBtnOnTouchend.bind($$));
-	util.addToolButton('bottom', $$.bottomBtnOnClick.bind($$));
+	$$.addToolButton('bottom', $$.bottomBtnOnClick.bind($$));
 
 	// MinThumbnail
 	$$.appendMinThumbnail();
@@ -458,12 +451,7 @@ exec: function(window, $) {
 	$$.$body.on('click', '.quote-text', $$.quoteTextOnClick.bind($$));
 
 	// after repainted
-	$$.$win.load(function() {
-		// Modifi Blockquote (visible)
-		$$.modifiTablesFromPageLeftTop();
-		// scroll to Thread-Image
-		$$.scrollToThreadImage();
-	});
+	$$.$win.on('load', $$.scrollToThreadImage.bind($$));
 }
 }; // end of my extension
 
