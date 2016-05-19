@@ -13,14 +13,14 @@ body {
 	overflow:scroll;
 	position:fixed;
 	text-align:center;
-	transition: 1s ease-in;
+	transition: border 1s ease-in;
 	white-space: nowrap;
 	width:100%;
 	z-index:10;
 }
 #are_toolbar.active {
 	border-color:#8cf;
-	transition-timing-function: step-start;
+	transition: none;
 }
 .are_toolbtn,
 .are_toolbtn:active,
@@ -39,7 +39,7 @@ body {
 #are_toolbar.active .are_toolbtn:focus {
 	background: #fa8;
 	color: #ffe;
-	transition-timing-function:step-start;
+	transition: none;
 }
 .are_toolbtn.disable {
 	color: #aaa;

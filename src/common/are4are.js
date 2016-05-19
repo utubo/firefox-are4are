@@ -86,7 +86,7 @@ Are4Are.prototype = {
 
 	// ToolBar /////////////////////////////
 	addToolButton: function(label, onclick) {
-		var btn = this.toolbar.appendChild(this.doc.createElement('a'), this.toolbar.firstChild);
+		var btn = this.doc.createElement('a');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.id = 'are_toolbtn_' + label;
 		btn.href = 'javascript:void(0);';
@@ -94,6 +94,7 @@ Are4Are.prototype = {
 		if (onclick) {
 			btn.onclick = onclick;
 		}
+		this.toolbar.appendChild(btn, this.toolbar.firstChild);
 		return btn;
 	},
 	activateToolBar: function() {
@@ -138,7 +139,11 @@ Are4Are.prototype = {
 		// ToolBar
 		this.toolbar = this.doc.createElement('div');
 		this.toolbar.id = 'are_toolbar';
+		this.toolbar.style.display = 'none';
 		this.doc.body.appendChild(this.toolbar);
+		this.win.setTimeout((function() {
+			this.toolbar.style.display = '';
+		}).bind(this), 10);
 		return this;
 	}
 };
