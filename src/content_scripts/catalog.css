@@ -7,10 +7,10 @@
 	transition:opacity .5s;
 }
 td {
-	padding: 3px;
+	padding: 2pt;
 }
 td > a {
-	outline: 3px solid #ffe;
+	outline: 2pt solid #ffe;
 }
 td > a:visited {
 	outline-color: #800;

@@ -27,13 +27,13 @@ body {
 .are_toolbtn:focus,
 .are_toolbtn:visited {
 	background: #ffe;
-	border-radius: 4px;
+	border-radius: 3pt;
 	color: #00e;
 	display: inline-block;
 	margin: 2pt;
 	outline: none;
 	padding: 0 2pt;
-	transition: .3s;
+	transition: all .3s ease-in;
 }
 .are_toolbtn.active,
 #are_toolbar.active .are_toolbtn:focus {
@@ -57,9 +57,9 @@ body {
 /* others */
 .are_toast {
 	background: #800;
-	border-radius: 4px;
+	border-radius: 3pt;
 	bottom: 20%;
-	box-shadow: 0 0 5px rgba(255, 220, 220, .6);
+	box-shadow: 0 0 4pt rgba(255, 255, 220, .6);
 	color: #ffe;
 	display: inline-block;
 	font-size: 10pt;

@@ -26,9 +26,9 @@ textarea {
 
 /* table */
 .ftbl {
-	border: 2px dotted #ea8;
+	border: 2pt dotted #ea8;
 	height: 1.5em;
-	margin-top: 2px;
+	margin-top: 1pt;
 	padding-top: 1.5em;
 }
 .ftbl tbody {
@@ -69,7 +69,7 @@ table[border="0"] tbody tr td[align="right"][valign="top"][nowrap=""]:first-chil
 
 /* res */
 td {
-	border-radius: 4px;
+	border-radius: 3pt;
 	color:#B66;
 }
 hr {
@@ -173,10 +173,10 @@ img {
 	background:
 		linear-gradient( 45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%),
 		linear-gradient(-45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%);
-	background-size: 9px 18px;
-	height: 6px;
+	background-size: 6pt 12pt;
+	height: 4pt;
 	left: 0;
-	margin-top:-3px;
+	margin-top:-2pt;
 	opacity: 0;
 	position: absolute;
 	top: 0;
