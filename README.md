@@ -17,7 +17,7 @@ AndroidのFirefoxのアドオンです
 1. 以下をインストール  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
 
-一応ちょっと前のバージョンを審査に出してます（バージョン4.0）
+一応ちょっと前のバージョンを審査に出してます（バージョン4.0）  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
 
 <!--
