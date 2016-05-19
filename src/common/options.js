@@ -65,7 +65,7 @@ function saveOptions(e) {
 }
 function restoreOptions() {
 	chrome.storage.local.get('urls', function(res) {
-		document.getElementById('urls').value = res.urls || '';
+		document.getElementById('urls').value = (res.urls || '') + (res.urls ? "\n" : '');
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
 		function (e, i, a) {
