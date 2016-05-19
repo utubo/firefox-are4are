@@ -14,7 +14,7 @@ AndroidのFirefoxのアドオンです
 1. about:configを開いて
 `xpinstall.signatures.required`を
 `false`に設定
-1. 以下をインストール
+1. 以下をインストール  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
 
 一応ちょっと前のバージョンを審査に出してます（バージョン4.0）
