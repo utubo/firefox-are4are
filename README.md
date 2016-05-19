@@ -14,11 +14,11 @@ AndroidのFirefoxのアドオンです
 1. about:configを開いて
 `xpinstall.signatures.required`を
 `false`に設定
-1. 以下URLからバージョン4.0をインストール  
-<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
-
-作りかけはこちら（githubに上がってるのとか上げる前の）  
+1. 以下をインストール
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
+
+一応ちょっと前のバージョンを審査に出してます（バージョン4.0）
+<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
 
 <!--
 ####古いバージョン
