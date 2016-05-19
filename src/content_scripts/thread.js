@@ -6,12 +6,12 @@ __proto__ : Are4Are.prototype,
 // MinThumbnail //////////////////////
 MINTHUMBNAIL_SIZE: 60,
 MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
-showMinTumbnail: function(e, targetY) {
+showMinTumbnail: function(e, targetY, opt) {
 	var $$ = this;
 	var t = $$.$win.scrollTop();
 	if (
 		t < $$.MINTHUMBNAIL_HIDE_SCROLLTOP ||
-		targetY && targetY - t < $$.MINTHUMBNAIL_SIZE
+		!opt && targetY && targetY - t < $$.MINTHUMBNAIL_SIZE
 	) {
 		// hide
 		$$.$minThumbnail.addClass('fadeout');
@@ -79,7 +79,7 @@ pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
 	var $$ = this;
 	$$.$pageDownBtn.addClass('active');
-	$$.scrollTo($$.$win.scrollTop() + Math.round($$.win.innerHeight / 2));
+	$$.scrollTo($$.$win.scrollTop() + Math.round($$.win.innerHeight / 2), null, "pageDownBtn");
 	$$.clearTimeout($$._pageDownTimeout);
 	$$._pageDownTimeout = $$.win.setTimeout(function() { $$.pageDownBtnOnTouchstart(); }, 1000);
 },

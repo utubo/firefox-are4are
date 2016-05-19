@@ -61,10 +61,10 @@ Are4Are.prototype = {
 			this.trigger('scrollend');
 		}).bind($$.$win), 50);
 	},
-	scrollTo: function(y, func) {
-		this.scrollToNoMargin(Math.max(y - 2, 0), func);
+	scrollTo: function(y, func, opt) {
+		this.scrollToNoMargin(Math.max(y - 2, 0), func, opt);
 	},
-	scrollToNoMargin: function(targetY, func) {
+	scrollToNoMargin: function(targetY, func, opt) {
 		var $$ = this, $ = this.$;
 		var y = Math.min(targetY, $$.doc.body.clientHeight - $$.win.innerHeight);
 		var _func = (function() {
@@ -72,7 +72,7 @@ Are4Are.prototype = {
 				func && func();
 			} finally {
 				$$.$win.on('scroll.scrollendTrigger', $$._scrollendEventTrigger);
-				$$.$win.trigger('scrollend', [targetY, y]);
+				$$.$win.trigger('scrollend', [targetY, opt]);
 			}
 		}).bind($$);
 		$$.$win.off('scroll.scrollendTrigger');
