@@ -414,19 +414,8 @@ exec: function(window, $) {
 	// StyleSheet
 	$$.addCssFile('content_scripts/thread.css');
 
-	// Resize AD
-	$('div[class="tue"], div[style="width:468px;height:60px;margin:2px"], div[style^="width:728px;height:90px;"]').each(function() {
-		this.setAttribute('style', 'width:234px;height:30px;margin:auto;max-width:234px;max-height:30px;overflow:auto;');
-		var child = this.firstChild;
-		while (child) {
-			if (child.width == '468') {
-				child.width = '234';
-				child.height = '30';
-			}
-			child = child.firstChild;
-		}
-	});
-	$('#rightad').find('div').attr('style', '');
+	// AD
+	$('#rightad').find('div').attr('style', ''); // remove `style="float:right"`
 
 	// ToolButtons
 	$$.$backBtn = $($$.addToolButton('back', $$.backBtnOnClick.bind($$)));

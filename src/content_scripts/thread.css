@@ -219,8 +219,14 @@ img {
 .tue {
 	margin: 0 auto;
 }
-div[style="width:728px; height:90px; margin:2px auto"] {
-	display: none;
+div[style^="width:728px"],
+div[style^="width:468px"],
+div[style^="width:336px"],
+div[style^="width:680px"] {
+	margin: 0 auto;
+	max-height: 2em;
+	max-width: 320px;
+	overflow: scroll;
 }
 #ufm+div[align="center"] {
 	border: 2px dotted #ea8;
