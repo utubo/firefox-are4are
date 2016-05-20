@@ -1,6 +1,11 @@
+form = {};
+for (var i of document.getElementById('myForm').elements) {
+	if (i.id) { form[i.id] = document.getElementById(i.id); }
+}
+
 // with new tab //////////////////////
 function setupAsNewTab() {
-	var head = document.getElementsByTagName('head')[0];
+	var head = document.querySelector('head');
 	// ViewPort
 	var viewPort = document.createElement('meta');
 	viewPort.name = 'viewport';
@@ -23,7 +28,7 @@ function setupAsNewTab() {
 }
 // validator /////////////////////////
 function isValidUrls() {
-	var t = document.getElementById('urls');
+	var t = form.urls;
 	var targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 	if (!targetUrls) return true;
 	try {
@@ -45,27 +50,26 @@ function validateTarget(id, func) {
 function validate() {
 	validateTarget('urls', isValidUrls);
 	if (document.querySelector('.invalid')) {
-		document.getElementById('save').setAttribute('disabled', 'true');
+		form.save.setAttribute('disabled', 'true');
 	} else {
-		document.getElementById('save').removeAttribute('disabled');
+		form.save.removeAttribute('disabled');
 	}
 }
 
 // util //////////////////////////////
 function correctValues() {
-	var t = document.getElementById('urls');
-	t.value = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
+	form.urls.value = form.urls.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 }
 // save and load /////////////////////
 function saveOptions(e) {
 	correctValues();
 	chrome.storage.local.set({
-		urls: document.getElementById('urls').value
+		urls: form.urls.value
 	});
 }
 function restoreOptions() {
 	chrome.storage.local.get('urls', function(res) {
-		document.getElementById('urls').value = (res.urls || '') + (res.urls ? "\n" : '');
+		form.urls.value = (res.urls || '') + (res.urls ? "\n" : '');
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
 		function (e, i, a) {
@@ -103,7 +107,7 @@ function addUrl(url) {
 		);
 	}
 	urlReg = '^' + urlReg;
-	document.getElementById('urls').value += "\n" + urlReg;
+	form.urls.value += "\n" + urlReg;
 	correctValues();
 }
 function urlsOnPaste(e) {
@@ -126,32 +130,31 @@ function addOption(sel, value, label) {
 }
 function tabsBtnOnClick(e) {
 	e.preventDefault();
-	var sel = document.getElementById('tabs');
-	sel.style = "width:100%;";
-	while(sel.firstChild) {
-		sel.removeChild(sel.firstChild);
+	form.tabs.style = "width:100%;";
+	while(form.tabs.firstChild) {
+		form.tabs.removeChild(form.tabs.firstChild);
 	}
-	addOption(sel, '', chrome.i18n.getMessage('selectTargetUrlTab'));
+	addOption(form.tabs, '', chrome.i18n.getMessage('selectTargetUrlTab'));
 	chrome.tabs.query({
 		"url": ["http://*/*", "https://*/*"]
 	}, function(tabs) {
 		for(var tab of tabs) {
-			addOption(sel, tab.url, tab.title + ' ' + tab.url);
+			addOption(form.tabs, tab.url, tab.title + ' ' + tab.url);
 		}
 	});
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('form').addEventListener('submit', saveOptions);
-document.getElementById('tabsBtn').addEventListener('click', tabsBtnOnClick);
-document.getElementById('tabs').addEventListener('change', tabsOnChange);
-document.getElementById('urls').addEventListener('change', validate);
-document.getElementById('urls').addEventListener('keyup', validate);
-document.getElementById('urls').addEventListener('paste', urlsOnPaste);
-if (document.location.href.indexOf('options.html') !== -1) {
+document.getElementById('myForm').addEventListener('submit', saveOptions);
+form.urls.addEventListener('change', validate);
+form.urls.addEventListener('keyup', validate);
+form.urls.addEventListener('paste', urlsOnPaste);
+form.tabsBtn.addEventListener('click', tabsBtnOnClick);
+form.tabs.addEventListener('change', tabsOnChange);
+if (document.location.hash === '#tabpage') {
 	setupAsNewTab();
 }
 if (!chrome.tabs) {
-	document.getElementById('tabsBtn').setAttribute('disabled', 'disabled');
+	form.tabsBtn.setAttribute('disabled', 'disabled');
 }
 

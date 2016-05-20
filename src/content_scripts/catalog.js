@@ -117,7 +117,7 @@ exec: function(window, $) {
 			this.form.action += "?mode=" + this.value;
 		});
 		var $a = $('<a>', {
-			href: chrome.extension.getURL('common/options.html'),
+			href: chrome.extension.getURL('common/options.html#tabpage'),
 			'class': 'options-page-link'
 
 		});
