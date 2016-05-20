@@ -128,6 +128,14 @@ td > input[value="delete"] {
 .found:before {
 	border-color: #789922 transparent #789922 #789922;
 }
+.found {
+	animation: foundAnimation 5s ease-in 0s 1 normal;
+}
+@keyframes foundAnimation {
+	0% { background: #ce9; }
+	90% { background: #ce9; }
+	100% { background: transparent; }
+}
 
 /* del:hover */
 td:hover > .del {
