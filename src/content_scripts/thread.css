@@ -217,9 +217,7 @@ img {
 #rightad:hover {
 	max-height: 800px;
 }
-.tue {
-	margin: 0 auto;
-}
+.tue,
 div[style^="width:728px"],
 div[style^="width:468px"],
 div[style^="width:336px"],
