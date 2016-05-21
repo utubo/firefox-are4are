@@ -298,7 +298,7 @@ modifyBq: function(bq) {
 		}
 		if (a.href && /^mailto:/.test(a.href)) {
 			a.parentNode.insertBefore($$.create('SPAN', null, a.textContent), a);
-			a.textContent = a.href.replace('mailto:', ' ') + ' ';
+			a.textContent = a.getAttribute('href').replace('mailto:', ' ') + ' ';
 			if (a.href.indexOf('mailto:http') === 0) {
 				a.href = a.href.replace('mailto:', '');
 			}
