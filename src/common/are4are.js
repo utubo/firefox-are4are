@@ -134,7 +134,7 @@ Are4Are.prototype = {
 			$$.toast(errorMessage);
 		}
 		xhr.onabort = xhr.onerror = xhr.ontimeout = function() {
-			$$.toast('__MSG_networkError__');
+			$$.toast('__MSG_networkError__(timeout)');
 			$$.noactivateToolBar();
 		}
 		xhr.timeout = 30 * 1000;
