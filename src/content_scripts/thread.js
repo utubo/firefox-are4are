@@ -110,7 +110,7 @@ reloadBtnOnClick: function(e) {
 			table = $$.parentNode(table, 'TABLE').nextSibling;
 			while (table) {
 				var next = table.nextSibling;
-				if (table.nodeType === 3) {
+				if (table.nodeType !== 1) {
 					// skip
 				} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
 					count ++;
@@ -283,7 +283,7 @@ modifyBq: function(bq) {
 	var a = bq;
 	for (var i = 0; i < 10; i ++) { // when over 10, it's may be HOKANKO...
 		a = a.previousSibling;
-		if (a.nodeType === 3) continue;
+		if (a.nodeType !== 1) continue;
 		if (!a || a.value === 'delete') {
 			// find Delete-Checkbox
 			break;

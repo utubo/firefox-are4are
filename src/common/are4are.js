@@ -49,7 +49,7 @@ Are4Are.prototype = {
 		while(true) {
 			e = func(e);
 			if (!e) return null;
-			if (e.nodeType === 3) continue;
+			if (e.nodeType !== 1) continue;
 			if (e.tagName === tag) return e;
 		}
 		return null;
