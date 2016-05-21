@@ -192,10 +192,11 @@ quoteTextOnClick: function(e) {
 	if (e.target.tagName === 'A') return;
 	var found = $$.findRes(e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', ''), e.target);
 	if (!found) return;
-	var y = 0;
+	var y = found.offsetTop;
 	if (found.tagName === 'TABLE') {
-		y = found.offsetTop;
 		found = $$.firstTag(found, 'BLOCKQUOTE');
+	} else {
+		y = $$.prev(found, 'INPUT').offsetTop;
 	}
 	// bookmark
 	if ($$.found) {
