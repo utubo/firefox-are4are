@@ -19,12 +19,12 @@
 	"content_scripts": [
 		{
 			"matches": ["http://*.2chan.net/*/futaba.php?mode=cat*"],
-			"js": ["common/jquery-2.2.3.min.js", "common/are4are.js", "content_scripts/catalog.js"],
+			"js": ["common/are4are.js", "content_scripts/catalog.js"],
 			"run_at": "document_end"
 		},
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"js": ["common/jquery-2.2.3.min.js", "common/are4are.js", "content_scripts/thread.js"],
+			"js": ["common/are4are.js", "content_scripts/thread.js"],
 			"run_at": "document_end"
 		}
 	],

@@ -3,9 +3,6 @@ Are4Are.prototype = {
 	// Field ///////////////////////////////
 	win: null,
 	doc: null,
-	$: null,
-	$win: null,
-	$toast: null,
 	toolbar: null,
 
 	// Util ////////////////////////////////
@@ -14,85 +11,148 @@ Are4Are.prototype = {
 		var str = args[0].replace(/__MSG_([^_]+)__/g, function(m, c) { return chrome.i18n.getMessage(c); });
 		return str.replace(/\{(\d)\}/g, function(m, c) { return args[parseInt(c) + 1]; });
 	},
-	escapeWithoutAmp: function(str) {
-		return str
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&#039;');
+	fadeOut: function(elm) {
+		elm.classList.add('fade-effect', 'transparent');
 	},
-	html: function(str) {
-		return this.escapeWithoutAmp(str.replace(/&/g, '&amp;'));
+	fadeIn: function(elm) {
+		elm.classList.add('fade-effect');
+		elm.classList.remove('transparent');
 	},
 	toast: function() {
-		var text = this.format.apply(this, arguments);
-		if (!this.$toast) {
-			this.$toast = this.$('<div>');
-			this.$toast.addClass('are_toast');
-			this.$toast.hide();
-			this.$body.append(this.$toast);
+		var $$ = this;
+		var text = $$.format.apply($$, arguments);
+		if (!$$.toastDiv) {
 		}
-		this.$toast.html(text);
-		this.$toast.fadeIn();
-		var t = this.$toast;
-		this.win.setTimeout((function() { t.fadeOut('slow'); t = null;}), 3000);
+		$$.toastDiv.textContent = text;
+		$$.fadeIn($$.toastDiv);
+		$$.win.setTimeout((function() { $$.fadeOut($$.toastDiv);}), 3000);
 	},
 
 	// DOM & HTML Util /////////////////////
-	addCssFile: function(cssFile) {
-		var cssLink = this.doc.createElement('link');
-		cssLink.rel = 'stylesheet';
-		cssLink.type = 'text/css';
-		cssLink.href = chrome.extension.getURL(cssFile);
-		this.doc.getElementsByTagName('head')[0].appendChild(cssLink);
+	id: function(_id) {
+		return this.doc.getElementById(_id);
 	},
-
+	firstTag: function(tagName) {
+		return this.doc.getElementsByTagName(tagName)[0];
+	},
+	firstClass: function(className) {
+		return this.doc.getElementsByClassName(className)[0];
+	},
+	first: function(query) {
+		return this.doc.querySelector(query);
+	},
+	all: function(query) {
+		return this.doc.querySelectorAll(query);
+	},
+	findTag: function(elm, tag, func) {
+		var e = elm;
+		while(true) {
+			e = func(e);
+			if (!e) return null;
+			if (e.tagName === tag) return e;
+		}
+		return null;
+	},
+	prev: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.previousSibling; }); },
+	next: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.nextSibling; }); },
+	parentNode: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.parentNode; }); },
+	create: function(tag, attrs, text) {
+		var elm = this.doc.createElement(tag);
+		if (attrs) {
+			for (var attr in attrs) {
+				elm.setAttribute(attr, attrs[attr]);
+			}
+		}
+		if (text) {
+			elm.textContent = text;
+		}
+		return elm;
+	},
+	addCssFile: function(cssFile) {
+		var cssLink = this.create('LINK', {
+			rel: 'stylesheet',
+			type: 'text/css',
+			href: chrome.extension.getURL(cssFile)
+		});
+		this.firstTag('HEAD').appendChild(cssLink);
+	},
+	on: function(elm, names, func) {
+		for (var name of names.split(' ')) {
+			elm.addEventListener(name, func.bind(this));
+		}
+	},
 	clearTimeout: function(id) {
 		if (id) this.win.clearTimeout(id);
 		return null;
 	},
-
-	_scrollendTimer: null,
-	_scrollendEventTrigger: null,
+	queue: function(func) {
+		this.win.setTimeout(func, 1);
+	},
+	// scrollend event
 	scrollendEventTrigger: function() {
 		var $$ = this;
 		$$.clearTimeout($$._scrollendTimer);
-		$$._scrollendTimer = $$.win.setTimeout((function() {
-			this.trigger('scrollend');
-		}).bind($$.$win), 50);
+		$$._scrollendTimer = $$.win.setTimeout(function() {
+			try {
+				$$.scrollendFunc && $$.scrollendFunc();
+				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
+			} finally {
+				$$.scrollendFunc = null;
+				$$.scrollendDetail = null;
+			}
+		}, 200);
 	},
 	scrollTo: function(y, func, opt) {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func, opt);
 	},
-	scrollToNoMargin: function(targetY, func, opt) {
-		var $$ = this, $ = this.$;
+	scrollToNoMargin: function(targetY, func, triggerSrc) {
+		var $$ = this;
 		var y = Math.min(targetY, $$.doc.body.clientHeight - $$.win.innerHeight);
-		var _func = (function() {
-			try {
-				func && func();
-			} finally {
-				$$.$win.on('scroll.scrollendTrigger', $$._scrollendEventTrigger);
-				$$.$win.trigger('scrollend', [targetY, opt]);
-			}
-		}).bind($$);
-		$$.$win.off('scroll.scrollendTrigger');
-		$$.clearTimeout($$._scrollendTimer);
-		if ($$.$win.scrollTop() != y) {
-			$('html,body').animate({scrollTop: y}, 'slow', 'easeOutCubic').promise().then(_func);
+		$$.scrollendFunc = func;
+		$$.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
+		if ($$.win.scrollY == y) {
+			func();
 		} else {
-			_func();
+			$$.win.scrollTo(0, y);
+		}
+	},
+
+	// Ajax ////////////////////////////////
+	getDoc: function(href, func, errorMessages) {
+		var $$ = this;
+		$$.activateToolBar();
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (this.readyState !== 4) return;
+			if (this.status == 200 && this.responseXML) {
+				func(xhr.responseXML);
+				return;
+			}
+			var errorMessage = errorMessages[this.status] || '__MSG_networkError__(' + this.status + ')';
+			$$.toast(errorMessage);
+		}
+		xhr.onabort = xhr.onerror = function() {
+		}
+		try {
+			xhr.open("GET", href);
+			xhr.responseType = 'document';
+			xhr.send();
+		} catch (e) {
+			$$.toast('__MSG_networkError__');
+		} finally {
+			$$.noactivateToolBar();
 		}
 	},
 
 	// ToolBar /////////////////////////////
 	addToolButton: function(label, onclick) {
-		var btn = this.doc.createElement('a');
+		var btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.id = 'are_toolbtn_' + label;
 		btn.href = 'javascript:void(0);';
 		btn.classList.add('are_toolbtn');
 		if (onclick) {
-			btn.onclick = onclick;
+			btn.onclick = onclick.bind(this);
 		}
 		this.toolbar.appendChild(btn, this.toolbar.firstChild);
 		return btn;
@@ -105,46 +165,39 @@ Are4Are.prototype = {
 	},
 
 	// init ////////////////////////////////
-	init: function(window, $) {
+	init: function(window) {
+		var $$ = this;
 		// setup fields
-		this.win = window;
-		this.doc = window.document;
-		this.$ = $;
-		this.$win = $(window);
-		this.$body = $(window.document.body);
-		this.$win.unload(function() { this.$ = this.$win = this.$body = this.doc = this.win = null; });
-
-		// jQuery extend
-		$.extend($.easing, {
-			def: 'easeOutCubic',
-			easeOutCubic: function (x, t, b, c, d) {
-				return c*((t=t/d-1)*t*t + 1) + b;
-			}
-		});
-		new $.Event('scrollend');
-		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
-		this.$win.on('scroll.scrollendTrigger', this._scrollendEventTrigger);
-		this.$body.on('touchmove', this._scrollendEventTrigger);
+		$$.win = window;
+		$$.doc = window.document;
 
 		// ViewPort
-		var head = this.doc.getElementsByTagName('head')[0];
-		var viewPort = this.doc.createElement('meta');
-		viewPort.name = 'viewport';
-		viewPort.content = 'width=device-width';
+		var head = $$.doc.getElementsByTagName('HEAD')[0];
+		var viewPort = $$.create('META', {
+			name: 'viewport',
+			content: 'width=device-width'
+		});
 		head.insertBefore(viewPort, head.firstChild);
 
 		// CSS
-		this.addCssFile('common/are4are.css');
+		$$.addCssFile('common/are4are.css');
+
+		// Scrollend Event
+		$$._scrollendEventTrigger = $$.scrollendEventTrigger.bind($$);
+		$$.win.addEventListener('scroll', $$._scrollendEventTrigger);
+		$$.doc.body.addEventListener('touchmove', $$._scrollendEventTrigger);
+
+		// Toast
+		$$.toastDiv = $$.create('DIV', {'class': 'are_toast transparent'});
+		$$.doc.body.appendChild($$.toastDiv);
 
 		// ToolBar
-		this.toolbar = this.doc.createElement('div');
-		this.toolbar.id = 'are_toolbar';
-		this.toolbar.style.display = 'none';
-		this.doc.body.appendChild(this.toolbar);
-		this.win.setTimeout((function() {
-			this.toolbar.style.display = '';
-		}).bind(this), 10);
-		return this;
+		$$.toolbar = $$.create('DIV', {
+			id: 'are_toolbar',
+			style: 'display:none'
+		});
+		$$.doc.body.appendChild($$.toolbar);
+		$$.queue(function() { $$.toolbar.style = ''; });
 	}
 };
 

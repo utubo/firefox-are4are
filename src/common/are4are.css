@@ -1,6 +1,7 @@
 /* toolbar */
 body {
 	padding-bottom: 55pt;
+	scroll-behavior: smooth;
 }
 #are_toolbar {
 	background: #ffe;
@@ -30,7 +31,6 @@ body {
 	border-radius: 3pt;
 	color: #00e;
 	display: inline-block;
-	margin: 2pt;
 	outline: none;
 	padding: 0 2pt;
 	transition: all .3s ease-in;
@@ -46,12 +46,19 @@ body {
 }
 
 /* util */
+.fade-effect {
+	transition: opacity .3s;
+}
+.transparent {
+	opacity: 0 !important;
+	pointer-events: none;
+}
 .slide-out-h {
 	background: transparent !important;
 	color: transparent !important;
-	margin: 0 !important;
 	max-width: 0 !important;
 	padding: 0 !important;
+	width: 0 !important;
 }
 
 /* others */
@@ -71,6 +78,9 @@ body {
 	right: 0;
 	width: 80%;
 	z-index: 100;
+}
+.are_toast.fade-effect {
+	transition: opacity 1s;
 }
 .are_toast::before {
 	background-image: url(../icons/are4are-32.png);
