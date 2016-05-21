@@ -275,7 +275,7 @@ modifiBq: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
 	// image res
-	var imgLink = $$.prev(bq, 'a'), img = imgLink && $$.firstTag(imgLink, 'IMG');
+	var imgLink = $$.prev(bq, 'A'), img = imgLink && $$.firstTag(imgLink, 'IMG');
 	if (img) {
 		img.align = '';
 		bq.style.marginLeft = '0';
