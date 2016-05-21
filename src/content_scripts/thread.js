@@ -192,8 +192,10 @@ quoteTextOnClick: function(e) {
 	if (e.target.tagName === 'A') return;
 	var found = $$.findRes(e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', ''), e.target);
 	if (!found) return;
-	var y = found.offsetTop;
+	var y;
 	if (found.tagName === 'TABLE') {
+		$$.modifyTables(found);
+		y = found.offsetTop;
 		found = $$.firstTag(found, 'BLOCKQUOTE');
 	} else {
 		y = $$.prev(found, 'INPUT').offsetTop;
@@ -216,7 +218,7 @@ quoteTextOnClick: function(e) {
 	$$.scrollTo(y, function() { found.classList.add('bookmark', 'found'); }, 'quoteText');
 },
 
-// Modifi Blockquotes ////////////////
+// Modify Blockquotes ////////////////
 SIO_PREFIX: {
 	su: 'http://www.nijibox5.com/futabafiles/tubu/src/',
 	ss: 'http://www.nijibox5.com/futabafiles/kobin/src/',
@@ -270,16 +272,10 @@ norefOnClick: function(e) {
 	var html = $$.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
 	$$.win.open('data:text/html; charset=utf-8,' + encodeURIComponent(html));
 },
-modifiBq: function(bq) {
+modifyBq: function(bq) {
 	var $$ = this;
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
-	// image res
-	var imgLink = $$.prev(bq, 'A'), img = imgLink && $$.firstTag(imgLink, 'IMG');
-	if (img) {
-		img.align = '';
-		bq.style.marginLeft = '0';
-	}
 	// auto link
 	$$.autoLinkTextNode(bq);
 	Array.forEach(bq.getElementsByTagName('font'), function(font) { $$.autoLinkTextNode(font); });
@@ -313,21 +309,21 @@ modifiBq: function(bq) {
 		font.classList.add('quote-text');
 	});
 },
-modifiTables: function(table) {
+modifyTables: function(table) {
 	var $$ = this;
 	for (var i = 0; i < 20; i ++) {
 		var rtd = $$.firstClass(table, 'rtd');
 		if (!rtd) continue;
-		$$.modifiBq($$.firstTag(rtd, 'BLOCKQUOTE'));
+		$$.modifyBq($$.firstTag(rtd, 'BLOCKQUOTE'));
 		table = $$.next(table, 'TABLE');
 		if (!table) {
 			break;
 		}
 	}
 },
-modifiTablesFromPageLeftTop: function() {
+modifyTablesFromPageLeftTop: function() {
 	var $$ = this;
-	// find left-top TABLE and modifi.
+	// find left-top TABLE and modify.
 	var x = 0, y = 0;
 	for (var i = 0; i < 10; i ++) {
 		var table = $$.doc.elementFromPoint(x, y);
@@ -337,7 +333,7 @@ modifiTablesFromPageLeftTop: function() {
 		if (table.tagName === 'TR') table = table.parentNode;
 		if (table.tagName === 'TBODY') table = table.parentNode;
 		if (table.tagName === 'TABLE' && table.border === '0') {
-			$$.modifiTables(table);
+			$$.modifyTables(table);
 			return;
 		}
 		x += 3;
@@ -436,16 +432,16 @@ exec: function(window) {
 	$$.appendMinThumbnail();
 	$$.on($$.win, 'scrollend', $$.showMinTumbnail);
 
-	// Modifi Blockquote (visible)
-	$$.modifiBq($$.firstTag($$.doc, 'BLOCKQUOTE'));
-	$$.modifiTables($$.first('TABLE[border="0"]'));
-	$$.on($$.win, 'scrollend', $$.modifiTablesFromPageLeftTop);
+	// Modify Blockquote (visible)
+	$$.modifyBq($$.firstTag($$.doc, 'BLOCKQUOTE'));
+	$$.modifyTables($$.first('TABLE[border="0"]'));
+	$$.on($$.win, 'scrollend', $$.modifyTablesFromPageLeftTop);
 
 	// Newer Border
 	$$.newerBorder = $$.create('DIV', { id: 'newer_border' });
 	$$.doc.body.appendChild($$.newerBorder);
 
-	// Modifi Form
+	// Modify Form
 	$$.modifyForm();
 
 	// Click Events
@@ -461,7 +457,7 @@ exec: function(window) {
 	// after repainted
 	$$.on($$.win, 'load', function() {
 		$$.scrollToThreadImage();
-		$$.modifiTablesFromPageLeftTop();
+		$$.modifyTablesFromPageLeftTop();
 	});
 }
 }; // end of my extension

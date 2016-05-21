@@ -7,6 +7,10 @@ small, #ddel, .chui, #contdisp {
 }
 blockquote {
 	font-size: 10pt;
+	margin-left: 0 !important;
+}
+.rtd>a>img[hspace="20"] {
+	float: none;
 }
 
 /* width */
