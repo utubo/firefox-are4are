@@ -310,6 +310,7 @@ modifyBq: function(bq) {
 	});
 },
 modifyTables: function(table) {
+	if (!table) return;
 	var $$ = this;
 	for (var i = 0; i < 20; i ++) {
 		var rtd = $$.firstClass(table, 'rtd');
