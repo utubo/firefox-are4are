@@ -32,11 +32,11 @@ Are4Are.prototype = {
 	id: function(_id) {
 		return this.doc.getElementById(_id);
 	},
-	firstTag: function(tagName) {
-		return this.doc.getElementsByTagName(tagName)[0];
+	firstTag: function(elm, tagName) {
+		return elm.getElementsByTagName(tagName)[0];
 	},
-	firstClass: function(className) {
-		return this.doc.getElementsByClassName(className)[0];
+	firstClass: function(elm, className) {
+		return elm.getElementsByClassName(className)[0];
 	},
 	first: function(query) {
 		return this.doc.querySelector(query);
@@ -74,7 +74,7 @@ Are4Are.prototype = {
 			type: 'text/css',
 			href: chrome.extension.getURL(cssFile)
 		});
-		this.firstTag('HEAD').appendChild(cssLink);
+		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
 		for (var name of names.split(' ')) {

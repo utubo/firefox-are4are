@@ -21,7 +21,7 @@ showMinTumbnail: function(e) {
 appendMinThumbnail: function() {
 	var $$ = this;
 	// find thread-image
-	var threadImage = $$.firstTag('BLOCKQUOTE'), href;
+	var threadImage = $$.firstTag($$.doc, 'BLOCKQUOTE'), href;
 	if (!threadImage) return;
 	while (threadImage = threadImage.previousSibling) {
 		if (
@@ -56,7 +56,7 @@ appendMinThumbnail: function() {
 
 	// favicon
 	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: threadImage.src});
-	$$.firstTag('HEAD').appendChild(faviconLink);
+	$$.firstTag($$.doc, 'HEAD').appendChild(faviconLink);
 },
 
 // Newer Border ///////////////////////
@@ -181,7 +181,7 @@ findRes: function(target, from) {
 		}
 		table = $$.prev(table, 'TABLE');
 	}
-	var bq = $$.firstTag('BLOCKQUOTE');
+	var bq = $$.firstTag($$.doc, 'BLOCKQUOTE');
 	if (bq.textContent.indexOf(target) !== -1) {
 		return bq;
 	}
@@ -195,7 +195,7 @@ quoteTextOnClick: function(e) {
 	var y = 0;
 	if (found.tagName === 'TABLE') {
 		y = found.offsetTop;
-		found = found.querySelector('blockquote');
+		found = $$.firstTag(found, 'BLOCKQUOTE');
 	}
 	// bookmark
 	if ($$.found) {
@@ -274,7 +274,7 @@ modifiBq: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
 	// image res
-	var imgLink = $$.prev(bq, 'a'), img = imgLink && imgLink.querySelector('img');
+	var imgLink = $$.prev(bq, 'a'), img = imgLink && $$.firstTag(imgLink, 'IMG');
 	if (img) {
 		img.align = '';
 		bq.style.marginLeft = '0';
@@ -308,14 +308,16 @@ modifiBq: function(bq) {
 		}
 	}
 	// find Qutoted Res
-	Array.forEach(bq.querySelectorAll('font[color="#789922"]'), function(font) { font.classList.add('quote-text'); });
+	Array.forEach(bq.querySelectorAll('FONT[color="#789922"]'), function(font) {
+		font.classList.add('quote-text');
+	});
 },
 modifiTables: function(table) {
 	var $$ = this;
 	for (var i = 0; i < 20; i ++) {
-		var rtd = table.querySelector('.rtd');
+		var rtd = $$.firstClass(table, 'rtd');
 		if (!rtd) continue;
-		$$.modifiBq(rtd.querySelector('blockquote'));
+		$$.modifiBq($$.firstTag(rtd, 'BLOCKQUOTE'));
 		table = $$.next(table, 'TABLE');
 		if (!table) {
 			break;
@@ -401,7 +403,7 @@ modifyForm: function() {
 // Others ////////////////////////////
 scrollToThreadImage: function() {
 	var $$ = this;
-	var i = $$.firstClass('thread-image');
+	var i = $$.firstClass($$.doc, 'thread-image');
 	i = i && $$.prev(i.parentNode, 'A') || $$.first('INPUT[value="delete"]');
 	if (i) { $$.scrollTo(i.offsetTop); }
 },
@@ -434,7 +436,7 @@ exec: function(window) {
 	$$.on($$.win, 'scrollend', $$.showMinTumbnail);
 
 	// Modifi Blockquote (visible)
-	$$.modifiBq($$.firstTag('BLOCKQUOTE'));
+	$$.modifiBq($$.firstTag($$.doc, 'BLOCKQUOTE'));
 	$$.modifiTables($$.first('TABLE[border="0"]'));
 	$$.on($$.win, 'scrollend', $$.modifiTablesFromPageLeftTop);
 

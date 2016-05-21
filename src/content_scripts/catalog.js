@@ -14,7 +14,7 @@ onclickCatalogMode: function(e) {
 	if (current.href != e.target.href) {
 		current.id = '';
 		e.target.id = 'catalog-mode-current';
-		$$.win.scrollTo(0, $$.firstTag('TABLE').offsetTop);
+		$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	}
 	$$.refreshCatalog(e.target.href);
 	return false;
@@ -23,15 +23,15 @@ onclickCatalogMode: function(e) {
 // RefreshCatalog ///////////////////////
 appendCatalogCountDelta: function(tablePalent) {
 	var $$ = this;
-	var work = tablePalent.querySelector('table[border="1"][align="center"]');
+	var work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
 	work.classList.add('catalog-table');
 	// add count delta
 	var searchMin = 0;
 	var searchMax = $$.catalogData.length;
 	var doAppend = searchMax !== 0;
-	Array.forEach(work.querySelectorAll('td'), function(td) { try {
-		var href = td.querySelector('a').href;
-		var countElm = td.querySelector('font');
+	Array.forEach(work.getElementsByTagName('TD'), function(td) { try {
+		var href = $$.firstTag(td, 'A').href;
+		var countElm = $$.firstTag(td, 'FONT');
 		countElm.classList.add('res-count');
 		var count = parseInt(countElm.textContent);
 		if (doAppend) {
@@ -109,7 +109,7 @@ exec: function(window) {
 	if (! $$.catalogTable) return;
 	$$.catalogTable.classList.add('catalog-table');
 	$$.addCssFile('content_scripts/catalog.css');
-	$$.win.scrollTo(0, $$.firstTag('TABLE').offsetTop);
+	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
 }
 }; // end of my extension
