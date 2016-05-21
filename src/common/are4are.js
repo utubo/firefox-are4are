@@ -124,6 +124,7 @@ Are4Are.prototype = {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (this.readyState !== 4) return;
+			$$.noactivateToolBar();
 			if (this.status == 200 && this.responseXML) {
 				func(xhr.responseXML);
 				return;
@@ -131,15 +132,17 @@ Are4Are.prototype = {
 			var errorMessage = errorMessages[this.status] || '__MSG_networkError__(' + this.status + ')';
 			$$.toast(errorMessage);
 		}
-		xhr.onabort = xhr.onerror = function() {
+		xhr.onabort = xhr.onerror = xhr.ontimeout = function() {
+			$$.toast('__MSG_networkError__');
+			$$.noactivateToolBar();
 		}
+		xhr.timeout = 30 * 1000;
 		try {
 			xhr.open("GET", href);
 			xhr.responseType = 'document';
 			xhr.send();
 		} catch (e) {
 			$$.toast('__MSG_networkError__');
-		} finally {
 			$$.noactivateToolBar();
 		}
 	},
