@@ -35,7 +35,7 @@ td > a:visited {
 	width: 100%;
 }
 .res-count-delta {
-	color:#fa8;
+	opacity: .5;
 	position: absolute;
 	right: 1pt;
 }
