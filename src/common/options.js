@@ -84,16 +84,10 @@ function addUrl(url) {
 	if (!urlReg) return;
 	urlReg = urlReg
 		.replace(/\\/, '\\\\')
-		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1')
-	;
-	if (urlReg.match(/(html?|\/)$/)) {
-		urlReg = urlReg + '$';
-	}
-	if (urlReg.match(/([\/_])[0-9][0-9]+(\\\.html?|\/|$)/)) { /* thread number */
-		urlReg = urlReg.replace(/([\/_])[0-9][0-9]+(\\\.html?|\/|$)/, '$1[0-9]+$2');
-	}
-	if (urlReg.match(/\/[0-9\/\-]+\//)) { /* date */
-		urlReg = urlReg.replace(
+		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1') // escape meta
+		.replace(/\b(tmp|up|dat|zip|cgi|may|nov|img|jun|www|dec)\b/g, '[a-z]{3}') // server name without 'ipv6'
+		.replace(/([\/_])[0-9][0-9]+(\\\.html?|\/|$)/, '$1[0-9]+$2') // thread number
+		.replace( // date
 			/\/([0-9\/\-]+)\//g,
 			function(m1) {
 				var r = '/[0-9';
@@ -104,10 +98,10 @@ function addUrl(url) {
 				r += ']+/';
 				return r;
 			}
-		);
-	}
-	urlReg = '^' + urlReg;
-	form.urls.value += "\n" + urlReg;
+		)
+		.replace(/^/, '^')
+		.replace(/(html?|\/)$/, '$1$');
+	form.urls.value += (form.urls.value.match(/\n$/) ? '' : "\n") + urlReg;
 	correctValues();
 }
 function urlsOnPaste(e) {
