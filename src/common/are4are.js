@@ -95,7 +95,7 @@ Are4Are.prototype = {
 		$$.clearTimeout($$._scrollendTimer);
 		$$._scrollendTimer = $$.win.setTimeout(function() {
 			try {
-				$$.scrollendFunc && $$.scrollendFunc();
+				if ($$.scrollendFunc) { $$.scrollendFunc(); }
 				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
 			} finally {
 				$$.scrollendFunc = null;
@@ -103,8 +103,8 @@ Are4Are.prototype = {
 			}
 		}, 200);
 	},
-	scrollTo: function(y, func, opt) {
-		this.scrollToNoMargin(Math.max(y - 2, 0), func, opt);
+	scrollTo: function(y, func, triggerSrc) {
+		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
 	},
 	scrollToNoMargin: function(targetY, func, triggerSrc) {
 		var $$ = this;
@@ -112,7 +112,7 @@ Are4Are.prototype = {
 		$$.scrollendFunc = func;
 		$$.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
 		if ($$.win.scrollY == y) {
-			func();
+			if (func) { func(); }
 		} else {
 			$$.win.scrollTo(0, y);
 		}

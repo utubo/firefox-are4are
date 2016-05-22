@@ -139,7 +139,7 @@ reloadBtnOnClick: function(e) {
 bottomBtnOnClick: function(e) {
 	var $$ = this;
 	$$.activateToolBar();
-	$$.scrollTo($$.doc.body.clientHeight - $$.win.innerHeight);
+	$$.scrollTo($$.doc.body.clientHeight - $$.win.innerHeight, null, 'pageDownBtn');
 	$$.noactivateToolBar();
 },
 backBtnOnClick: function() {
@@ -343,6 +343,19 @@ modifyTablesFromPageLeftTop: function() {
 },
 
 // Modify Form ///////////////////////
+showForm: function() {
+	var $$ = this;
+	$$.writeBtnY = $$.win.scrollY;
+	$$.writeBtn.classList.add('active');
+	$$.fadeIn($$.ftbl);
+	$$.id('ftxa').focus();
+},
+hideForm: function() {
+	var $$ = this;
+	$$.win.scrollTo(0, $$.writeBtnY);
+	$$.writeBtn.classList.remove('active');
+	$$.fadeOut($$.ftbl);
+},
 onSubmit: function(e) {
 	var $$ = this;
 	if ($$.areIframe.contentDocument.URL.indexOf('http') !== 0) return;
@@ -352,8 +365,7 @@ onSubmit: function(e) {
 	$$.areIframe.contentDocument.location.href = 'about:blank';
 	if ($$.areIframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
 		$$.doc.getElementById('ftxa').value = '';
-		$$.writeBtn.classList.remove('active');
-		$$.fadeOut($$.ftbl);
+		$$.hideForm();
 		$$.win.setTimeout(function() { $$.reloadBtnOnClick(); }, 2000);
 	}
 },
@@ -374,17 +386,14 @@ modifyForm: function() {
 	$$.ftbl.style = '';
 	$$.ftbl.classList.add('transparent');
 	$$.doc.body.appendChild($$.create('DIV', {id: 'ftbl' })); // dummy #ftbl
-	// toolbtn
 	$$.on($$.writeBtn, 'click', function() {
 		if ($$.ftbl.classList.contains('transparent')) {
-			$$.writeBtn.classList.add('active');
-			$$.fadeIn($$.ftbl);
-			$$.id('ftxa').focus();
+			$$.showForm();
 		} else {
-			$$.writeBtn.classList.remove('active');
-			$$.fadeOut($$.ftbl);
+			$$.hideForm();
 		}
 	});
+
 	// Post with iFrame
 	ftxa.form.setAttribute('target', 'areIframe');
 	$$.areIframe = $$.create(
