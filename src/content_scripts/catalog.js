@@ -23,9 +23,17 @@ onclickCatalogMode: function(e) {
 // Fix table layout ///////////////////////
 autoFix: function(table) {
 	var $$ = this;
-	if ($$.isAutoFix) {
-		table.classList.add('auto-fix');
-	}
+	if (!$$.isAutoFix) return;
+	table.classList.add('auto-fix');
+},
+autoFixWidth: function() {
+	var $$ = this;
+	if ($$.isAutoFix) return;
+	var width = 0;
+	Array.forEach($$.catalogTable.querySelectorAll('TD>A>IMG'), function(img) {
+		width = Math.max(width, img.width);
+	});
+	$$.doc.styleSheets[0].insertRule('.catalog-table>tbody>tr>td {width:' + (width + 4) + 'px !important;}', 0);
 },
 
 // RefreshCatalog ///////////////////////
@@ -120,6 +128,7 @@ exec: function(window) {
 	$$.addCssFile('content_scripts/catalog.css');
 	$$.isAutoFix =  $$.win.innerWidth < $$.catalogTable.clientWidth;
 	$$.autoFix($$.catalogTable);
+	$$.autoFixWidth();
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
 }

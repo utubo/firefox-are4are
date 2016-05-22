@@ -18,24 +18,28 @@
 	background: #f0e0d6;
 	border: none;
 	margin-bottom: 2px;
-	padding: 2pt;
+	padding: 2px;
 	text-align: left;
 	vertical-align: top;
 }
-td > a {
-	outline: 2pt solid #f0e0d6;
+td>a>img {
+	border: 2pt solid #f0e0d6;
 }
-td > a:visited {
-	outline-color: #800;
+td>a:visited>img {
+	border-color: #800;
 }
 
 .res-count {
-	display: inline-block;
 	position: relative;
-	width: 100%;
 }
 .res-count-delta {
 	opacity: .5;
+}
+br+.res-count {
+	display: inline-block;
+	width: 100%;
+}
+br+.res-count .res-count-delta {
 	position: absolute;
 	right: 1pt;
 }
