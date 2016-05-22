@@ -3,8 +3,9 @@
 }
 
 .catalog-table {
-	font-size:70%;
 	border: none;
+	font-size:70%;
+	text-align: center;
 }
 .auto-fix>tbody>tr {
 	display: inline;
@@ -18,6 +19,7 @@
 	border: none;
 	margin-bottom: 2px;
 	padding: 2pt;
+	text-align: left;
 	vertical-align: top;
 }
 td > a {
