@@ -161,7 +161,6 @@ td:hover > input[value="delete"] {
 	position: fixed !important;
 	right: 0%;
 	top: 0%;
-	transition: top .3s, opacity .5s ease-in;
 	z-index: 3;
 }
 .min-thumbnail-img {
