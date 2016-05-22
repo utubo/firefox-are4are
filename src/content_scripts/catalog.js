@@ -7,7 +7,7 @@ __proto__ : Are4Are.prototype,
 CATALOG_DATA_SIZE: 1000,
 
 // Event ///////////////////////////////
-onclickCatalogMode: function(e) {
+onClickCatalogMode: function(e) {
 	var $$ = this;
 	e.preventDefault();
 	var current = $$.id('catalog-mode-current');
@@ -18,6 +18,30 @@ onclickCatalogMode: function(e) {
 	}
 	$$.refreshCatalog(e.target.href);
 	return false;
+},
+bodyOnClick: function(e) {
+	var $$ = this;
+	if ($$.thumbnailSrc) {
+		$$.thumbnailSrc.focus();
+		$$.thumbnailSrc = null;
+		return;
+	}
+	if (!e.target) return;
+	if (e.target.tagName !== 'FONT' && e.target.tagName !== 'SMALL') return;
+	$$.thumbnailSrc = $$.firstTag($$.parentNode(e.target, 'TD'), 'A');
+	var src = $$.firstTag($$.thumbnailSrc, 'IMG').src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
+	if (!$$.thumbnail) {
+		$$.thumbnail = $$.create('A', { 'class': 'thumbnail', target: '_blank' });
+		$$.thumbnail.appendChild($$.create('IMG', { id: 'thumbnailImage' }));
+		$$.thumbnail.firstChild.addEventListener('load', function(e2) { e.preventDefault(); this.parentNode.focus(); });
+		$$.doc.body.appendChild($$.thumbnail);
+	}
+	$$.thumbnail.href = $$.thumbnailSrc.href;
+	if ($$.thumbnail.firstChild.src == src) {
+		$$.thumbnail.focus();
+	} else {
+		$$.thumbnail.firstChild.src = src;
+	}
 },
 
 // Fix table layout ///////////////////////
@@ -102,7 +126,7 @@ exec: function(window) {
 			a.id = 'catalog-mode-current';
 		}
 		if ($$.catalogTable) {
-			$$.on(a, 'click', $$.onclickCatalogMode);
+			$$.on(a, 'click', $$.onClickCatalogMode);
 		}
 		a.classList.add('are_toolbtn');
 		$$.toolbar.appendChild(a);
@@ -131,6 +155,7 @@ exec: function(window) {
 	$$.autoFixWidth();
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
+	$$.on($$.doc.body, 'click', $$.bodyOnClick);
 }
 }; // end of my extension
 

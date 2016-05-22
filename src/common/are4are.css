@@ -66,7 +66,7 @@ body {
 	background: #800;
 	border-radius: 3pt;
 	bottom: 20%;
-	box-shadow: 0 0 4pt rgba(255, 255, 220, .6);
+	box-shadow: 0 0 3pt 3pt #ffe;
 	color: #ffe;
 	display: inline-block;
 	font-size: 10pt;
