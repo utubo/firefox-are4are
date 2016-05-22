@@ -228,7 +228,7 @@ div[style^="width:336px"],
 div[style^="width:680px"] {
 	margin: 0 auto;
 	max-height: 2em;
-	max-width: 320px;
+	max-width: 80%;
 	overflow: scroll;
 }
 #ufm+div[align="center"] {
