@@ -176,7 +176,7 @@ Are4Are.prototype = {
 		$$.doc = window.document;
 
 		// ViewPort
-		var head = $$.doc.getElementsByTagName('HEAD')[0];
+		var head = $$.firstTag($$.doc, 'HEAD');
 		var viewPort = $$.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'
