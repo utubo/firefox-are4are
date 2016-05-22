@@ -43,7 +43,7 @@ appendMinThumbnail: function() {
 	// make minThumbnail
 	var img = $$.create('IMG', {
 		src: threadImage.src,
-		'class': 'min-thumbnail-img'
+		'class': 'min-thumbnail-img transparent'
 	});
 	$$.minThumbnail = $$.create('A', {
 		href: href,
