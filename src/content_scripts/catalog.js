@@ -20,11 +20,20 @@ onclickCatalogMode: function(e) {
 	return false;
 },
 
+// Fix table layout ///////////////////////
+autoFix: function(table) {
+	var $$ = this;
+	if ($$.isAutoFix) {
+		table.classList.add('auto-fix');
+	}
+},
+
 // RefreshCatalog ///////////////////////
 appendCatalogCountDelta: function(tablePalent) {
 	var $$ = this;
 	var work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
 	work.classList.add('catalog-table');
+	$$.autoFix(work);
 	// add count delta
 	var searchMin = 0;
 	var searchMax = $$.catalogData.length;
@@ -94,7 +103,7 @@ exec: function(window) {
 	// setting page
 	if ($$.doc.location.href.indexOf('mode=catset') !== -1) {
 		Array.forEach($$.all('INPUT[name="mode"]'), function(input) {
-			input.form.action += "?mode=" + this.value;
+			input.form.action += "?mode=" + input.value;
 		});
 		$$.doc.body.appendChild($$.create(
 			'A', {
@@ -109,6 +118,8 @@ exec: function(window) {
 	if (! $$.catalogTable) return;
 	$$.catalogTable.classList.add('catalog-table');
 	$$.addCssFile('content_scripts/catalog.css');
+	$$.isAutoFix =  $$.win.innerWidth < $$.catalogTable.clientWidth;
+	$$.autoFix($$.catalogTable);
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.doc.body);
 }

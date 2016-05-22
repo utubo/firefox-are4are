@@ -4,13 +4,24 @@
 
 .catalog-table {
 	font-size:70%;
-	transition:opacity .5s;
+	border: none;
 }
-td {
+.auto-fix>tbody>tr {
+	display: inline;
+}
+.auto-fix>tbody>tr>td {
+	display: inline-block;
+	width: 50px;
+}
+.catalog-table>tbody>tr>td {
+	background: #f0e0d6;
+	border: none;
+	margin-bottom: 2px;
 	padding: 2pt;
+	vertical-align: top;
 }
 td > a {
-	outline: 2pt solid #ffe;
+	outline: 2pt solid #f0e0d6;
 }
 td > a:visited {
 	outline-color: #800;
