@@ -28,7 +28,7 @@ autoFix: function(table) {
 },
 autoFixWidth: function() {
 	var $$ = this;
-	if ($$.isAutoFix) return;
+	if (!$$.isAutoFix) return;
 	var width = 0;
 	Array.forEach($$.catalogTable.querySelectorAll('TD>A>IMG'), function(img) {
 		width = Math.max(width, img.width);
