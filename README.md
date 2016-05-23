@@ -11,18 +11,13 @@ AndroidのFirefoxのアドオンです
 1. 以下URLからAurora(青いFirefox)をインストール  
 <https://www.mozilla.org/ja/firefox/channel/>
 1. Auroraを起動する
-1. about:configを開いて
-`xpinstall.signatures.required`を
-`false`に設定
+1. about:configを開いて`xpinstall.signatures.required`を`false`に設定
 1. 以下のどれかをインストール  
-
-- おすすめ(githubにプッシュしたやつ)  
+ - おすすめ(githubにプッシュしたやつ)  
 <https://cdn.rawgit.com/utubo/are4are/master/are.xpi>
-
-- 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
+ - 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
-
-- 承認済みだけど古い（※ここにあるバージョン3.X系は入れちゃダメ）   
+ - 承認済みだけど古い（※ここにあるバージョン3.X系は入れちゃダメ）   
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions/>  
  
 
