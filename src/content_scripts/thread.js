@@ -357,7 +357,8 @@ onSubmit: function(e) {
 	$$.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
 	$$.areIframe.contentDocument.location.href = 'about:blank';
 	if ($$.areIframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
-		$$.doc.getElementById('ftxa').value = '';
+		$$.id('ftxa').value = '';
+		($$.first('INPUT[name="upfile"]') || {}).value = '';
 		$$.hideForm();
 		$$.win.setTimeout(function() { $$.reloadBtnOnClick(); }, 2000);
 	}
@@ -378,7 +379,7 @@ modifyForm: function() {
 	$$.ftbl.id = 'ftbl_fixed';
 	$$.ftbl.style = '';
 	$$.ftbl.classList.add('transparent');
-	$$.body.appendChild($$.create('DIV', {id: 'ftbl' })); // dummy #ftbl
+	$$.body.appendChild($$.create('DIV', {id: 'ftbl', 'class': 'transparent' })); // dummy #ftbl
 	$$.on($$.writeBtn, 'click', function() {
 		if ($$.ftbl.classList.contains('transparent')) {
 			$$.showForm();

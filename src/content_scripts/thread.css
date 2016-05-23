@@ -49,14 +49,17 @@ textarea {
 }
 #ftbl, #ftbl_fixed {
 	background-color: rgba(255,255,238,.8);
-	border-bottom: 1pt solid #FA8;
+	border: none;
 	display: block;
+	font-size: 16px;
 	height: unset;
 	left: 0;
 	margin: 0 auto;
+	max-height: calc(100% - 26pt);
 	max-width: 100%;
-	overflow: hidden;
-	padding: 2em 0 0 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 2pt;
 	position: fixed !important;
 	top: 0;
 	z-index: 4;
@@ -66,6 +69,13 @@ textarea {
 }
 #ftxa {
 	max-height: 6em;
+}
+input[type=submit] {
+	margin: .5em .2em;
+	padding: .5em;
+}
+input[type=text] {
+	padding: .5em;
 }
 
 /* "..." */
