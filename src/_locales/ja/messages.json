@@ -17,11 +17,11 @@
 		"description": "toolbar write button"
 	},
 	"reload": {
-		"message": "リロード",
+		"message": "続きを読む",
 		"description": "toolbar reload button"
 	},
 	"pagedown": {
-		"message": "半画面進む",
+		"message": "半画面下",
 		"description": "toolbar pagedown button"
 	},
 	"bottom": {
