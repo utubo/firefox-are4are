@@ -8,6 +8,7 @@ small, #ddel, .chui, #contdisp {
 blockquote {
 	font-size: 10pt;
 	margin-left: 0 !important;
+	word-wrap: break-word;
 }
 .rtd>a>img[hspace="20"] {
 	float: none;
@@ -35,10 +36,10 @@ textarea {
 	margin-top: 1pt;
 	padding-top: 1.5em;
 }
-.ftbl tbody {
+.ftbl>tbody {
 	display: none;
 }
-.ftbl:hover tbody {
+.ftbl:hover>tbody {
 	display: unset;
 }
 
@@ -60,7 +61,7 @@ textarea {
 	top: 0;
 	z-index: 4;
 }
-#ftbl tbody, #ftbl_fixed tbody {
+#ftbl>tbody, #ftbl_fixed>tbody {
 	display: unset !important;
 }
 #ftxa {
@@ -80,7 +81,7 @@ td {
 hr {
 	counter-reset: resnumber;
 }
-.rtd:before {
+.rtd::before {
 	content: counter(resnumber);
 	counter-increment: resnumber;
 	padding: 0 1pt;
@@ -95,7 +96,7 @@ blockquote {
 	color: #B66;
 	margin: 0;
 }
-.del {
+td>.del {
 	color: #B66;
 	display: inline-block;
 	height: 1.2em;
@@ -104,7 +105,7 @@ blockquote {
 	opacity: 0;
 	overflow: hidden;
 }
-td > input[value="delete"] {
+td>input[value="delete"] {
 	display: none;
 	height: 7pt;
 	margin: 0;
@@ -113,7 +114,7 @@ td > input[value="delete"] {
 	transition: all .5s;
 	width: 0pt;
 }
-.bookmark:before {
+.bookmark::before {
 	animation: fadeInAnime 1s;
 	border-color: #b66 transparent #b66 #b66;
 	border-style: solid;
@@ -130,7 +131,7 @@ td > input[value="delete"] {
 	0% { opacity: 0; }
 	100% { opacity: 1; }
 }
-.found:before {
+.found::before {
 	border-color: #789922 transparent #789922 #789922;
 }
 .found {
@@ -143,13 +144,13 @@ td > input[value="delete"] {
 }
 
 /* del:hover */
-td:hover > .del {
+td:hover>.del {
 	max-width: 3em;
 	opacity: 1;
 	transition: all .5s;
 }
-td > input:checked,
-td:hover > input[value="delete"] {
+td>input:checked,
+td:hover>input[value="delete"] {
 	display: unset;
 	opacity: 1;
 	width: 7pt !important;

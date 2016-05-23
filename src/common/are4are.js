@@ -3,29 +3,14 @@ Are4Are.prototype = {
 	// Field ///////////////////////////////
 	win: null,
 	doc: null,
+	body: null,
 	toolbar: null,
 
 	// Util ////////////////////////////////
 	format: function() {
 		var args = arguments;
 		var str = args[0].replace(/__MSG_([^_]+)__/g, function(m, c) { return chrome.i18n.getMessage(c); });
-		return str.replace(/\{(\d)\}/g, function(m, c) { return args[parseInt(c) + 1]; });
-	},
-	fadeOut: function(elm) {
-		elm.classList.add('fade-effect', 'transparent');
-	},
-	fadeIn: function(elm) {
-		elm.classList.add('fade-effect');
-		elm.classList.remove('transparent');
-	},
-	toast: function() {
-		var $$ = this;
-		var text = $$.format.apply($$, arguments);
-		if (!$$.toastDiv) {
-		}
-		$$.toastDiv.textContent = text;
-		$$.fadeIn($$.toastDiv);
-		$$.win.setTimeout((function() { $$.fadeOut($$.toastDiv);}), 3000);
+		return str.replace(/\{(\d+)\}/g, function(m, c) { return args[parseInt(c) + 1]; });
 	},
 
 	// DOM & HTML Util /////////////////////
@@ -58,7 +43,7 @@ Are4Are.prototype = {
 	next: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.nextSibling; }); },
 	parentNode: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.parentNode; }); },
 	create: function(tag, attrs, text) {
-		var elm = this.doc.createElement(tag);
+		var elm = this.doc.createElement.call(this.doc, tag);
 		if (attrs) {
 			for (var attr in attrs) {
 				elm.setAttribute(attr, attrs[attr]);
@@ -89,35 +74,6 @@ Are4Are.prototype = {
 	queue: function(func) {
 		this.win.setTimeout(func, 1);
 	},
-	// scrollend event
-	scrollendEventTrigger: function() {
-		var $$ = this;
-		$$.clearTimeout($$._scrollendTimer);
-		$$._scrollendTimer = $$.win.setTimeout(function() {
-			try {
-				if ($$.scrollendFunc) { $$.scrollendFunc(); }
-				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
-			} finally {
-				$$.scrollendFunc = null;
-				$$.scrollendDetail = null;
-			}
-		}, 200);
-	},
-	scrollTo: function(y, func, triggerSrc) {
-		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
-	},
-	scrollToNoMargin: function(targetY, func, triggerSrc) {
-		var $$ = this;
-		var y = Math.min(targetY, $$.doc.body.clientHeight - $$.win.innerHeight);
-		$$.scrollendFunc = func;
-		$$.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
-		if ($$.win.scrollY == y) {
-			if (func) { func(); }
-		} else {
-			$$.win.scrollTo(0, y);
-		}
-	},
-
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
 		var $$ = this;
@@ -132,11 +88,11 @@ Are4Are.prototype = {
 			}
 			var errorMessage = errorMessages[this.status] || '__MSG_networkError__(' + this.status + ')';
 			$$.toast(errorMessage);
-		}
+		};
 		xhr.onabort = xhr.onerror = xhr.ontimeout = function() {
 			$$.toast('__MSG_networkError__(timeout)');
 			$$.noactivateToolBar();
-		}
+		};
 		xhr.timeout = 30 * 1000;
 		try {
 			xhr.open("GET", href);
@@ -148,7 +104,55 @@ Are4Are.prototype = {
 		}
 	},
 
-	// ToolBar /////////////////////////////
+	// UI //////////////////////////////////
+	// Scrollend event
+	scrollendEventTrigger: function() {
+		var $$ = this;
+		$$.clearTimeout($$._scrollendTimer);
+		$$._scrollendTimer = $$.win.setTimeout(function() {
+			try {
+				if ($$.scrollendFunc) { $$.scrollendFunc(); }
+				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
+			} finally {
+				$$.scrollendFunc = null;
+				$$.scrollendDetail = null;
+			}
+		}, 200);
+	},
+	// Scroll
+	scrollTo: function(y, func, triggerSrc) {
+		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
+	},
+	scrollToNoMargin: function(targetY, func, triggerSrc) {
+		var $$ = this;
+		var y = Math.min(targetY, $$.body.clientHeight - $$.win.innerHeight);
+		$$.scrollendFunc = func;
+		$$.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
+		if ($$.win.scrollY == y) {
+			if (func) { func(); }
+		} else {
+			$$.win.scrollTo(0, y);
+		}
+	},
+	// Fade
+	fadeOut: function(elm) {
+		elm.classList.add('fade-effect', 'transparent');
+	},
+	fadeIn: function(elm) {
+		elm.classList.add('fade-effect');
+		elm.classList.remove('transparent');
+	},
+	// Toast
+	toast: function() {
+		var $$ = this;
+		var text = $$.format.apply($$, arguments);
+		if (!$$.toastDiv) {
+		}
+		$$.toastDiv.textContent = text;
+		$$.fadeIn($$.toastDiv);
+		$$.win.setTimeout((function() { $$.fadeOut($$.toastDiv);}), 3000);
+	},
+	// ToolBar
 	addToolButton: function(label, onclick) {
 		var btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
@@ -168,20 +172,20 @@ Are4Are.prototype = {
 		this.toolbar.classList.remove('active');
 	},
 
-	// init ////////////////////////////////
+	// Init ////////////////////////////////
 	init: function(window) {
 		var $$ = this;
-		// setup fields
 		$$.win = window;
 		$$.doc = window.document;
+		$$.body = window.document.body;
 
-		// ViewPort
+		// Viewport
 		var head = $$.firstTag($$.doc, 'HEAD');
-		var viewPort = $$.create('META', {
+		var viewport = $$.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'
 		});
-		head.insertBefore(viewPort, head.firstChild);
+		head.insertBefore(viewport, head.firstChild);
 
 		// CSS
 		$$.addCssFile('common/are4are.css');
@@ -189,18 +193,18 @@ Are4Are.prototype = {
 		// Scrollend Event
 		$$._scrollendEventTrigger = $$.scrollendEventTrigger.bind($$);
 		$$.win.addEventListener('scroll', $$._scrollendEventTrigger);
-		$$.doc.body.addEventListener('touchmove', $$._scrollendEventTrigger);
+		$$.body.addEventListener('touchmove', $$._scrollendEventTrigger);
 
 		// Toast
 		$$.toastDiv = $$.create('DIV', {'class': 'are_toast transparent'});
-		$$.doc.body.appendChild($$.toastDiv);
+		$$.body.appendChild($$.toastDiv);
 
-		// ToolBar
+		// Toolbar
 		$$.toolbar = $$.create('DIV', {
 			id: 'are_toolbar',
 			style: 'display:none'
 		});
-		$$.doc.body.appendChild($$.toolbar);
+		$$.body.appendChild($$.toolbar);
 		$$.queue(function() { $$.toolbar.style = ''; });
 	}
 };

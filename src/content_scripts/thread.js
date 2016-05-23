@@ -52,7 +52,7 @@ appendMinThumbnail: function() {
 		'class': 'transparent'
 	});
 	$$.minThumbnail.appendChild(img);
-	$$.doc.body.appendChild($$.minThumbnail);
+	$$.body.appendChild($$.minThumbnail);
 
 	// favicon
 	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: threadImage.src});
@@ -76,7 +76,7 @@ pageDownBtnOnTouchstart: function(e) {
 	var $$ = this;
 	$$.pageDownBtn.classList.add('active');
 	$$.pageDownY = $$.win.scrollY + Math.round($$.win.innerHeight / 2);
-	$$.scrollTo($$.pageDownY, null, 'pageDownBtn');
+	$$.scrollToNoMargin($$.pageDownY, null, 'pageDownBtn');
 	$$.clearTimeout($$._pageDownTimeout);
 	$$._pageDownTimeout = $$.win.setTimeout(function() { $$.pageDownBtnOnTouchstart(); }, 1000);
 },
@@ -139,7 +139,7 @@ reloadBtnOnClick: function(e) {
 bottomBtnOnClick: function(e) {
 	var $$ = this;
 	$$.activateToolBar();
-	$$.scrollTo($$.doc.body.clientHeight - $$.win.innerHeight, null, 'pageDownBtn');
+	$$.scrollToNoMargin($$.body.clientHeight - $$.win.innerHeight, null, 'pageDownBtn');
 	$$.noactivateToolBar();
 },
 backBtnOnClick: function() {
@@ -219,6 +219,7 @@ quoteTextOnClick: function(e) {
 },
 
 // Modify Blockquotes ////////////////
+// auto link
 SIO_PREFIX: {
 	su: 'http://www.nijibox5.com/futabafiles/tubu/src/',
 	ss: 'http://www.nijibox5.com/futabafiles/kobin/src/',
@@ -279,7 +280,7 @@ modifyBq: function(bq) {
 	// auto link
 	$$.autoLinkTextNode(bq);
 	Array.forEach(bq.getElementsByTagName('font'), function(font) { $$.autoLinkTextNode(font); });
-	// Mail and del
+	// Mail
 	var a = bq;
 	for (var i = 0; i < 10; i ++) { // when over 10, it's may be HOKANKO...
 		a = a.previousSibling;
@@ -287,14 +288,6 @@ modifyBq: function(bq) {
 		if (!a || a.value === 'delete') {
 			// find Delete-Checkbox
 			break;
-		}
-		if (a.classList.contains('del')) {
-			// <a onclick="del(1234)">
-			//   to...
-			// <onclick='window.open("/del.php?b="+b+"&d=1234", "del_form")'>
-			// ('b' is global variable)
-			a.setAttribute('onclick', a.getAttribute('onclick').replace(/del\(([0-9]+)\)/, 'window.open("/del.php?b="+b+"&d=$1", "del_form")'));
-			continue;
 		}
 		if (a.href && /^mailto:/.test(a.href)) {
 			a.parentNode.insertBefore($$.create('SPAN', null, a.textContent), a);
@@ -385,7 +378,7 @@ modifyForm: function() {
 	$$.ftbl.id = 'ftbl_fixed';
 	$$.ftbl.style = '';
 	$$.ftbl.classList.add('transparent');
-	$$.doc.body.appendChild($$.create('DIV', {id: 'ftbl' })); // dummy #ftbl
+	$$.body.appendChild($$.create('DIV', {id: 'ftbl' })); // dummy #ftbl
 	$$.on($$.writeBtn, 'click', function() {
 		if ($$.ftbl.classList.contains('transparent')) {
 			$$.showForm();
@@ -404,7 +397,7 @@ modifyForm: function() {
 		src: 'about:blank'
 	});
 	$$.on($$.areIframe, 'load', $$.onSubmit);
-	$$.doc.body.appendChild($$.areIframe);
+	$$.body.appendChild($$.areIframe);
 },
 
 // Others ////////////////////////////
@@ -449,13 +442,13 @@ exec: function(window) {
 
 	// Newer Border
 	$$.newerBorder = $$.create('DIV', { id: 'newer_border' });
-	$$.doc.body.appendChild($$.newerBorder);
+	$$.body.appendChild($$.newerBorder);
 
 	// Modify Form
 	$$.modifyForm();
 
 	// Click Events
-	$$.on($$.doc.body, 'click', function(e) {
+	$$.on($$.body, 'click', function(e) {
 		if (!e.target) return;
 		if (e.target.classList.contains('noref')) {
 			$$.norefOnClick(e);
@@ -472,7 +465,7 @@ exec: function(window) {
 }
 }; // end of my extension
 
-// start ///////////////////////////////
+// Start ///////////////////////////////
 chrome.storage.local.get('urls', function(r) {
 	var href = document.location.href;
 	if (href.indexOf('mode=cat') === -1 && href.match(/^http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/)) {

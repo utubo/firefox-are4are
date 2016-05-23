@@ -34,7 +34,7 @@ bodyOnClick: function(e) {
 		$$.thumbnail = $$.create('A', { 'class': 'thumbnail', target: '_blank' });
 		$$.thumbnail.appendChild($$.create('IMG', { id: 'thumbnailImage' }));
 		$$.thumbnail.firstChild.addEventListener('load', function(e2) { e.preventDefault(); this.parentNode.focus(); });
-		$$.doc.body.appendChild($$.thumbnail);
+		$$.body.appendChild($$.thumbnail);
 	}
 	$$.thumbnail.href = $$.thumbnailSrc.href;
 	if ($$.thumbnail.firstChild.src == src) {
@@ -102,7 +102,7 @@ appendCatalogCountDelta: function(tablePalent) {
 	}
 },
 refreshCatalog: function(href) {
-	var $$ = this, $ = this.$;
+	var $$ = this;
 	$$.getDoc(href, function(doc) {
 		$$.appendCatalogCountDelta(doc);
 	}, {
@@ -114,10 +114,13 @@ refreshCatalog: function(href) {
 exec: function(window) {
 	var $$ = this;
 	$$.init(window);
-	// setup fields
 	$$.catalogTable = $$.first('TABLE[border="1"][align="center"]');
 	$$.catalogData = [];
-	// tool bar
+
+	// StyleSheet
+	$$.addCssFile('content_scripts/catalog.css');
+
+	// Toolbar
 	var addedHref = [];
 	Array.forEach($$.all('A[href *= "mode=cat"]'), function(a) {
 		if (a.href.indexOf('catset') !== -1) return;
@@ -132,12 +135,18 @@ exec: function(window) {
 		$$.toolbar.appendChild(a);
 		addedHref.push(a.href);
 	});
-	// setting page
+
+	// Setting page
 	if ($$.doc.location.href.indexOf('mode=catset') !== -1) {
+		$$.body.classList.add('catalog-setting');
 		Array.forEach($$.all('INPUT[name="mode"]'), function(input) {
 			input.form.action += "?mode=" + input.value;
 		});
-		$$.doc.body.appendChild($$.create(
+		Array.forEach($$.all('INPUT[name="cx"],INPUT[name="cy"],INPUT[name="cl"]'), function(input) {
+			input.setAttribute('type', 'tel');
+		});
+		var td = $$.parentNode($$.first('INPUT[name="mode"]'), 'TD') || $$.body;
+		td.appendChild($$.create(
 			'A', {
 			href: chrome.extension.getURL('common/options.html#tabpage'),
 			'class': 'options-page-link'
@@ -146,21 +155,21 @@ exec: function(window) {
 		));
 		return;
 	}
-	// main
-	if (! $$.catalogTable) return;
+
+	// Catalog
+	if (!$$.catalogTable) return;
 	$$.catalogTable.classList.add('catalog-table');
-	$$.addCssFile('content_scripts/catalog.css');
 	$$.isAutoFix =  $$.win.innerWidth < $$.catalogTable.clientWidth;
 	$$.autoFix($$.catalogTable);
 	$$.autoFixWidth();
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
-	$$.appendCatalogCountDelta($$.doc.body);
-	$$.on($$.doc.body, 'click', $$.bodyOnClick);
+	$$.appendCatalogCountDelta($$.body);
+	$$.on($$.body, 'click', $$.bodyOnClick);
 }
 }; // end of my extension
 
+// Start ///////////////////////////////
 var myExt = new Are4AreCatalog();
 myExt.exec(window);
-
 })();
 
