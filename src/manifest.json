@@ -23,6 +23,11 @@
 			"run_at": "document_end"
 		},
 		{
+			"matches": ["http://*.2chan.net/del.php?*"],
+			"js": ["content_scripts/futaba.js"],
+			"run_at": "document_end"
+		},
+		{
 			"matches": ["http://*/*", "https://*/*"],
 			"js": ["common/are4are.js", "content_scripts/thread.js"],
 			"run_at": "document_end"
