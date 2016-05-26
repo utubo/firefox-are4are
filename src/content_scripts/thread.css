@@ -47,7 +47,11 @@ textarea {
 #ufm {
 	display: none;
 }
-#ftbl, #ftbl_fixed {
+#ftbl {
+	display: none;
+	opacity: 0 !important;
+}
+#ftbl_fixed {
 	background-color: rgba(255,255,238,.8);
 	border: none;
 	display: block;
@@ -64,7 +68,7 @@ textarea {
 	top: 0;
 	z-index: 4;
 }
-#ftbl>tbody, #ftbl_fixed>tbody {
+#ftbl_fixed>tbody {
 	display: unset !important;
 }
 #ftxa {
@@ -221,7 +225,7 @@ img {
 	z-index: 1;
 }
 
-/* ad (resize for device-width) */
+/* AD (resize for device-width) */
 #rightad {
 	max-height: 2em;
 	overflow: scroll;
@@ -229,6 +233,7 @@ img {
 	width: 80%;
 }
 #rightad:hover {
+	float: none !important;
 	max-height: 800px;
 }
 .tue,
