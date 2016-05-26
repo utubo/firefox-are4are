@@ -51,7 +51,7 @@ textarea {
 	display: none;
 	opacity: 0 !important;
 }
-#ftbl_fixed {
+#ftblFixed {
 	background-color: rgba(255,255,238,.8);
 	border: none;
 	display: block;
@@ -68,7 +68,7 @@ textarea {
 	top: 0;
 	z-index: 4;
 }
-#ftbl_fixed>tbody {
+#ftblFixed>tbody {
 	display: unset !important;
 }
 #ftxa {
@@ -198,7 +198,7 @@ td:hover>input[value="delete"] {
 }
 
 /* toolbar button */
-#are_toolbtn_back {
+#areToolbtn_back {
 	max-width: 4em;
 }
 
@@ -218,7 +218,7 @@ img {
 	position: static;
 	text-align: right;
 }
-#newer_border {
+#newerBorder {
 	background:
 		linear-gradient( 45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%),
 		linear-gradient(-45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%);

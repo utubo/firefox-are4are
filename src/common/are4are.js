@@ -6,6 +6,7 @@ Are4Are.prototype = {
 	body: null,
 	toolbar: null,
 	exec: null,
+	timeoutIds: {},
 
 	// Util ////////////////////////////////
 	format: function() {
@@ -71,12 +72,21 @@ Are4Are.prototype = {
 			elm.addEventListener(name, func.bind(this));
 		}
 	},
+	setTimeout: function(id, func, msec) {
+		if (id) {
+			this.clearTimeout(id);
+			this.timeoutIds[id] = this.win.setTimeout(func, msec);
+		} else {
+			this.win.setTimeout(func, msec);
+		}
+	},
 	clearTimeout: function(id) {
-		if (id) this.win.clearTimeout(id);
-		return null;
+		var t = this.timeoutIds[id];
+		if (t) this.win.clearTimeout(t);
+		this.timeoutIds[id] = null;
 	},
 	queue: function(func) {
-		this.win.setTimeout(func, 1);
+		this.setTimeout(null, func, 1);
 	},
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
@@ -112,8 +122,7 @@ Are4Are.prototype = {
 	// Scrollend event
 	scrollendEventTrigger: function() {
 		var $$ = this;
-		$$.clearTimeout($$._scrollendTimer);
-		$$._scrollendTimer = $$.win.setTimeout(function() {
+		$$.setTimeout('scrollend', function() {
 			try {
 				if ($$.scrollendFunc) { $$.scrollendFunc(); }
 				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
@@ -154,15 +163,15 @@ Are4Are.prototype = {
 		}
 		$$.toastDiv.textContent = text;
 		$$.fadeIn($$.toastDiv);
-		$$.win.setTimeout((function() { $$.fadeOut($$.toastDiv);}), 3000);
+		$$.setTimeout('fadeOutToast', (function() { $$.fadeOut($$.toastDiv);}), 3000);
 	},
 	// ToolBar
 	addToolButton: function(label, onclick) {
 		var btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
-		btn.id = 'are_toolbtn_' + label;
+		btn.id = 'areToolbtn_' + label;
 		btn.href = 'javascript:void(0);';
-		btn.classList.add('are_toolbtn');
+		btn.classList.add('are-toolbtn');
 		if (onclick) {
 			btn.onclick = onclick.bind(this);
 		}
@@ -198,12 +207,12 @@ Are4Are.prototype = {
 		$$.body.addEventListener('touchmove', $$._scrollendEventTrigger);
 
 		// Toast
-		$$.toastDiv = $$.create('DIV', {'class': 'are_toast transparent'});
+		$$.toastDiv = $$.create('DIV', {'class': 'are-toast transparent'});
 		$$.body.appendChild($$.toastDiv);
 
 		// Toolbar
 		$$.toolbar = $$.create('DIV', {
-			id: 'are_toolbar',
+			id: 'areToolbar',
 			style: 'display:none'
 		});
 		$$.body.appendChild($$.toolbar);

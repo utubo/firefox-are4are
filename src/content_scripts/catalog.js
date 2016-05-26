@@ -144,7 +144,7 @@ exec: function(window) {
 		if ($$.catalogTable) {
 			$$.on(a, 'click', $$.onClickCatalogMode);
 		}
-		a.classList.add('are_toolbtn');
+		a.classList.add('are-toolbtn');
 		$$.toolbar.appendChild(a);
 		addedHref.push(a.href);
 	});

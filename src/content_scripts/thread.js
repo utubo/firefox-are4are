@@ -71,19 +71,17 @@ hideNewerBorder: function() {
 },
 
 // ToolButtons ///////////////////////
-_pageDownTimeout: null,
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
 	var $$ = this;
 	$$.pageDownBtn.classList.add('active');
 	$$.pageDownY = $$.win.scrollY + Math.round($$.win.innerHeight / 2);
 	$$.scrollToNoMargin($$.pageDownY, null, 'pageDownBtn');
-	$$.clearTimeout($$._pageDownTimeout);
-	$$._pageDownTimeout = $$.win.setTimeout(function() { $$.pageDownBtnOnTouchstart(); }, 1000);
+	$$.setTimeout('RePageDown', function() { $$.pageDownBtnOnTouchstart(); }, 1000);
 },
 pageDownBtnOnTouchend: function(e) {
 	var $$ = this;
-	$$._pageDownTimeout = $$.clearTimeout($$._pageDownTimeout);
+	$$.clearTimeout('RePageDown');
 	$$.pageDownBtn.classList.remove('active');
 	$$.pageDownY = null;
 },
@@ -375,7 +373,7 @@ onSubmit: function(e) {
 		$$.id('ftxa').value = '';
 		($$.first('INPUT[name="upfile"]') || {}).value = '';
 		$$.hideForm();
-		$$.win.setTimeout(function() { $$.reloadBtnOnClick(); }, 2000);
+		$$.setTimeout(null, function() { $$.reloadBtnOnClick(); }, 2000);
 	}
 },
 modifyForm: function() {
@@ -391,7 +389,7 @@ modifyForm: function() {
 		return;
 	}
 	// change id
-	$$.ftbl.id = 'ftbl_fixed';
+	$$.ftbl.id = 'ftblFixed';
 	$$.ftbl.style = '';
 	$$.ftbl.classList.add('transparent');
 	$$.body.appendChild($$.create('DIV', {id: 'ftbl', 'class': 'transparent' })); // dummy #ftbl
@@ -451,7 +449,7 @@ exec: function(window) {
 	$$.on($$.win, 'scrollend', $$.modifyTablesFromPageLeftTop);
 
 	// Newer Border
-	$$.newerBorder = $$.create('DIV', { id: 'newer_border' });
+	$$.newerBorder = $$.create('DIV', { id: 'newerBorder' });
 	$$.body.appendChild($$.newerBorder);
 
 	// Modify Form
