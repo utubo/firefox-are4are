@@ -210,7 +210,7 @@ Are4Are.prototype = {
 		$$.exec();
 	},
 
-	// Init ////////////////////////////////
+	// Start ///////////////////////////////
 	start : function(window) {
 		var $$ = this;
 		$$.win = window;
