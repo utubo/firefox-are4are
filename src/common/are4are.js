@@ -239,7 +239,7 @@ Are4Are.prototype = {
 				$$.doc.styleSheets[0].insertRule(cover, 0);
 				// Show body
 				$$.win.addEventListener('load', function() {
-					$$.doc.styleSheets[0].insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 1);
+					$$.doc.styleSheets[0].insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 0);
 				});
 			} catch (e) {
 				// nop
