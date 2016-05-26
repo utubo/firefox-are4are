@@ -52,7 +52,8 @@ appendMinThumbnail: function() {
 		'class': 'transparent'
 	});
 	$$.minThumbnail.appendChild(img);
-	$$.body.appendChild($$.minThumbnail);
+	// waite for FTBucket
+	$$.on($$.win, 'load', function() { $$.body.appendChild($$.minThumbnail); });
 
 	// favicon
 	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: threadImage.src});
