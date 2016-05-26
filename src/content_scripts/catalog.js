@@ -21,26 +21,38 @@ onClickCatalogMode: function(e) {
 },
 bodyOnClick: function(e) {
 	var $$ = this;
-	if ($$.thumbnailSrc) {
-		$$.thumbnailSrc.focus();
-		$$.thumbnailSrc = null;
-		return;
+	if (e.target.tagName === 'FONT' || e.target.tagName === 'SMALL') {
+		$$.showThumbnail(e.target);
 	}
-	if (!e.target) return;
-	if (e.target.tagName !== 'FONT' && e.target.tagName !== 'SMALL') return;
-	$$.thumbnailSrc = $$.firstTag($$.parentNode(e.target, 'TD'), 'A');
-	var src = $$.firstTag($$.thumbnailSrc, 'IMG').src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
+},
+
+// Thumbnail //////////////////////////////
+showThumbnail: function(target) {
+	var $$ = this;
+	var td = $$.parentNode(target, 'TD');
+	if (!td) return;
+	$$.thumbnailSrc = $$.firstTag(td, 'A');
+	if (!$$.thumbnailSrc) return;
+	var img = $$.firstTag($$.thumbnailSrc, 'IMG');
+	if (!img) return;
+	var src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
 	if (!$$.thumbnail) {
-		$$.thumbnail = $$.create('A', { 'class': 'thumbnail', target: '_blank' });
-		$$.thumbnail.appendChild($$.create('IMG', { id: 'thumbnailImage' }));
-		$$.thumbnail.firstChild.addEventListener('load', function(e2) { e.preventDefault(); this.parentNode.focus(); });
+		// image
+		$$.thumbnailImg = $$.create('IMG', { 'class': 'thumbnail-img' });
+		$$.on($$.thumbnailImg, 'load', function() { $$.fadeIn($$.thumbnail); });
+		$$.thumbnailLink = $$.create('A', { 'class': 'thumbnail-link', target: '_blank' });
+		$$.thumbnailLink.appendChild($$.thumbnailImg);
+		// thumbnail container
+		$$.thumbnail = $$.create('DIV', { 'class': 'thumbnail transparent' });
+		$$.thumbnail.appendChild($$.thumbnailLink);
+		$$.on($$.thumbnail, 'click', function() {$$.fadeOut($$.thumbnail); });
 		$$.body.appendChild($$.thumbnail);
 	}
-	$$.thumbnail.href = $$.thumbnailSrc.href;
-	if ($$.thumbnail.firstChild.src == src) {
-		$$.thumbnail.focus();
+	$$.thumbnailLink.href = $$.thumbnailSrc.href;
+	if ($$.thumbnailImg.src == src) {
+		$$.fadeIn($$.thumbnail);
 	} else {
-		$$.thumbnail.firstChild.src = src;
+		$$.thumbnailImg.src = src;
 	}
 },
 

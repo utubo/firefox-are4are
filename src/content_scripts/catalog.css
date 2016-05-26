@@ -44,27 +44,28 @@ br+.res-count .res-count-delta {
 }
 
 .thumbnail {
-	box-shadow: 0 0 2pt rgba(0, 0, 0, .5);
+	background: rgba(0, 0, 0, .5);
+	display: block;
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+.thumbnail-link {
 	display: block;
 	left: 50%;
 	max-height: 80%;
 	max-width: 80%;
-	opacity: 0;
-	outline: none;
-	pointer-events: none;
-	position: fixed;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	transition: opacity .5s;
+	position: absolute;
+	text-align: center;
+	top: calc(50% - 13pt);
+	transform: translate(-50%, -50%) scale(1.2);
 }
-.thumbnail:focus {
-	opacity: 1;
-	pointer-events: auto;
-}
-.thumbnail>img {
+.thumbnail-img {
 	max-height: 100%;
 	max-width: 100%;
-	transform: scale(1.2);
+	display: block;
 }
 
 #tit {
