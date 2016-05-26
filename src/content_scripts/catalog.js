@@ -113,12 +113,13 @@ refreshCatalog: function(href) {
 // Main ////////////////////////////////
 exec: function(window) {
 	var $$ = this;
-	$$.init(window);
+
 	$$.catalogTable = $$.first('TABLE[border="1"][align="center"]');
 	$$.catalogData = [];
 
-	// StyleSheet
-	$$.addCssFile('content_scripts/catalog.css');
+	// load by manifest.json
+	//// StyleSheet
+	//$$.addCssFile('content_scripts/catalog.css');
 
 	// Toolbar
 	var addedHref = [];
@@ -170,6 +171,6 @@ exec: function(window) {
 
 // Start ///////////////////////////////
 var myExt = new Are4AreCatalog();
-myExt.exec(window);
+myExt.start(window);
 })();
 

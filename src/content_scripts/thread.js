@@ -412,15 +412,9 @@ scrollToThreadImage: function() {
 // Main ////////////////////////////////
 exec: function(window) {
 	var $$ = this;
-	$$.init(window);
 
 	// StyleSheet
 	$$.addCssFile('content_scripts/thread.css');
-
-	// AD
-	// remove `style="float:right"`
-	var rightad = $$.id('rightad');
-	rightad && rightad.setAttribute('style', '');
 
 	// ToolButtons
 	$$.backBtn = $$.addToolButton('back', $$.backBtnOnClick);
@@ -468,6 +462,7 @@ exec: function(window) {
 
 // Start ///////////////////////////////
 chrome.storage.local.get('urls', function(r) {
+	// Check URL
 	var href = document.location.href;
 	if (href.indexOf('mode=cat') === -1 && href.match(/^http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/)) {
 		// default URL
@@ -479,7 +474,7 @@ chrome.storage.local.get('urls', function(r) {
 	}
 	// url matched
 	var myExt = new Are4AreThread();
-	myExt.exec(window);
+	myExt.start(window);
 });
 })();
 

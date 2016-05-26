@@ -5,6 +5,7 @@ Are4Are.prototype = {
 	doc: null,
 	body: null,
 	toolbar: null,
+	exec: null,
 
 	// Util ////////////////////////////////
 	format: function() {
@@ -93,7 +94,7 @@ Are4Are.prototype = {
 			$$.toast('__MSG_networkError__(timeout)');
 			$$.noactivateToolBar();
 		};
-		xhr.timeout = 30 * 1000;
+		xhr.timeout = 15 * 1000;
 		try {
 			xhr.open("GET", href);
 			xhr.responseType = 'document';
@@ -173,10 +174,8 @@ Are4Are.prototype = {
 	},
 
 	// Init ////////////////////////////////
-	init: function(window) {
+	onDOMContentLoaded: function() {
 		var $$ = this;
-		$$.win = window;
-		$$.doc = window.document;
 		$$.body = window.document.body;
 
 		// Viewport
@@ -206,6 +205,50 @@ Are4Are.prototype = {
 		});
 		$$.body.appendChild($$.toolbar);
 		$$.queue(function() { $$.toolbar.style = ''; });
+
+		// modify ThreadPage, CatalogPage, etc ...
+		$$.exec();
+	},
+
+	// Init ////////////////////////////////
+	start : function(window) {
+		var $$ = this;
+		$$.win = window;
+		$$.doc = window.document;
+		//$$.body = window.document.body; // document.body don't exist yet.
+
+		if ($$.doc.readyState != 'complete') {
+			try {
+				// Hide body
+				var cover = 'body::before {'
+					+ 'background: #fff;'
+					+ 'content: " ";'
+					+ 'display: block;'
+					+ 'height: 100%;'
+					+ 'left: 0;'
+					+ 'opacity: 1;'
+					+ 'pointer-events: none;'
+					+ 'position: fixed;'
+					+ 'top: 0;'
+					+ 'width: 100%;'
+					+ 'z-index: 99;'
+					+ '}';
+				$$.doc.styleSheets[0].insertRule(cover, 0);
+				// Show body
+				$$.win.addEventListener('load', function() {
+					$$.doc.styleSheets[0].insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 1);
+				});
+			} catch (e) {
+				// nop
+			}
+		}
+
+		// Modify futaba
+		if ($$.doc.readyState == 'interactive' || $$.doc.readyState == 'complete') {
+			$$.onDOMContentLoaded();
+		} else {
+			$$.doc.addEventListener('DOMContentLoaded', $$.onDOMContentLoaded.bind($$));
+		}
 	}
 };
 

@@ -18,19 +18,20 @@
 
 	"content_scripts": [
 		{
-			"matches": ["http://*.2chan.net/*/futaba.php?mode=cat*"],
-			"js": ["common/are4are.js", "content_scripts/catalog.js"],
-			"run_at": "document_end"
-		},
-		{
 			"matches": ["http://*.2chan.net/del.php?*"],
 			"js": ["content_scripts/futaba.js"],
 			"run_at": "document_end"
 		},
 		{
+			"matches": ["http://*.2chan.net/*/futaba.php?mode=cat*"],
+			"js": ["common/are4are.js", "content_scripts/catalog.js"],
+			"css": ["content_scripts/catalog.css"],
+			"run_at": "document_start"
+		},
+		{
 			"matches": ["http://*/*", "https://*/*"],
 			"js": ["common/are4are.js", "content_scripts/thread.js"],
-			"run_at": "document_end"
+			"run_at": "document_start"
 		}
 	],
 
@@ -40,7 +41,8 @@
 		"content_scripts/thread.css",
 		"content_scripts/catalog.css",
 		"common/are4are.css",
-		"common/options.html"
+		"common/options.html",
+		"icons/are4are-32.png"
 	],
 
 	"permissions": [
