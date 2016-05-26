@@ -13,6 +13,9 @@ Are4Are.prototype = {
 		var str = args[0].replace(/__MSG_([^_]+)__/g, function(m, c) { return chrome.i18n.getMessage(c); });
 		return str.replace(/\{(\d+)\}/g, function(m, c) { return args[parseInt(c) + 1]; });
 	},
+	regEscape: function(s) {
+		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	},
 
 	// DOM & HTML Util /////////////////////
 	id: function(_id) {

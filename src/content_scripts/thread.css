@@ -156,6 +156,15 @@ td>input[value="delete"] {
 	90% { background: #ce9; }
 	100% { background: transparent; }
 }
+.found-fuzzy::after {
+	color: #cf3;
+	content: '?';
+	display: block;
+	font-weight: bold;
+	left: -3pt;
+	position: absolute;
+	top: -11pt;
+}
 
 /* del:hover */
 td:hover>.del {

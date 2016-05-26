@@ -165,7 +165,7 @@ showBackBtn: function() {
 	$$._hideBackBtn = $$._hideBackBtn || $$.hideBackBtn.bind($$);
 	$$.win.addEventListener('scrollend', $$._hideBackBtn);
 },
-findRes: function(target, from) {
+findRes: function(reg, from) {
 	var $$ = this;
 	while (from) {
 		if (from.tagName === 'TABLE') {
@@ -176,13 +176,13 @@ findRes: function(target, from) {
 	if (!from) return;
 	var table = $$.prev(from, 'TABLE');
 	while(table) {
-		if (table.textContent.indexOf(target) !== -1) {
+		if (reg.test(table.textContent)) {
 			return table;
 		}
 		table = $$.prev(table, 'TABLE');
 	}
 	var bq = $$.firstTag($$.doc, 'BLOCKQUOTE');
-	if (bq.textContent.indexOf(target) !== -1) {
+	if (reg.test(bq.textContent)) {
 		return bq;
 	}
 	return false;
@@ -190,7 +190,21 @@ findRes: function(target, from) {
 quoteTextOnClick: function(e) {
 	var $$ = this;
 	if (e.target.tagName === 'A') return;
-	var found = $$.findRes(e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', ''), e.target);
+	// find res
+	var fuzzyClass = 'not-fuzzy';
+	var text = e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', '');
+	var found = $$.findRes(new RegExp($$.regEscape(text)), e.target);
+	// fuzzy
+	if (!found && 10 < text.length) {
+		fuzzyClass = 'found-fuzzy';
+		var halfLength = Math.round(text.length / 2);
+		var fuzzy = '.{' + (halfLength - 3) + ',' + (halfLength + 3) + '}';
+		var fuzzyReg = new RegExp(
+			$$.regEscape(text.substring(0, halfLength)) + fuzzy +
+			'|' + fuzzy + $$.regEscape(text.substring(halfLength))
+		);
+		found = $$.findRes(fuzzyReg, e.target);
+	}
 	if (!found) return;
 	var y;
 	if (found.tagName === 'TABLE') {
@@ -202,7 +216,7 @@ quoteTextOnClick: function(e) {
 	}
 	// bookmark
 	if ($$.found) {
-		$$.found.classList.remove('bookmark', 'found');
+		$$.found.classList.remove('bookmark', 'found', 'found-fuzzy', 'not-fuzzy');
 	}
 	$$.found = found;
 	if ($$.backY < $$.parentNode(e.target, 'TABLE').offsetTop) {
@@ -215,7 +229,7 @@ quoteTextOnClick: function(e) {
 	}
 	// scroll
 	$$.showBackBtn();
-	$$.scrollTo(y, function() { found.classList.add('bookmark', 'found'); }, 'quoteText');
+	$$.scrollTo(y, function() { found.classList.add('bookmark', 'found', fuzzyClass); }, 'quoteText');
 },
 
 // Modify Blockquotes ////////////////
