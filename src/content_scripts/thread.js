@@ -45,7 +45,7 @@ appendMinThumbnail: function() {
 		src: threadImage.src,
 		'class': 'min-thumbnail-img'
 	});
-	$$.minThumbnail = $$.create('A', {
+	$$.create('A', {
 		href: href,
 		target: '_blank',
 		id: 'minThumbnail',
@@ -124,6 +124,7 @@ reloadBtnOnClick: function(e) {
 			$$.toast('__MSG_notModified__');
 			return;
 		}
+		$$.modifyTables(newReses.querySelector('TABLE'));
 		var newerBorderY = lastResMarker.nextSibling.offsetTop;
 		$$.newerBorder.style.top = newerBorderY + 'px';
 		lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
@@ -373,7 +374,7 @@ onSubmit: function(e) {
 		$$.id('ftxa').value = '';
 		($$.first('INPUT[name="upfile"]') || {}).value = '';
 		$$.hideForm();
-		$$.setTimeout(null, function() { $$.reloadBtnOnClick(); }, 2000);
+		$$.setTimeout(null, function() { $$.reloadBtnOnClick(); }, 1000);
 	}
 },
 modifyForm: function() {
@@ -392,7 +393,11 @@ modifyForm: function() {
 	$$.ftbl.id = 'ftblFixed';
 	$$.ftbl.style = '';
 	$$.ftbl.classList.add('transparent');
-	$$.body.appendChild($$.create('DIV', {id: 'ftbl', 'class': 'transparent' })); // dummy #ftbl
+	// dummy #ftbl
+	$$.create('DIV', {id: 'dummyFtbl', 'class': 'transparent' });
+	$$.dummyFtbl.setAttribute('id', 'ftbl');
+	$$.body.appendChild($$.dummyFtbl);
+	// writeBtn
 	$$.on($$.writeBtn, 'click', function() {
 		if ($$.ftbl.classList.contains('transparent')) {
 			$$.showForm();
@@ -403,7 +408,7 @@ modifyForm: function() {
 
 	// Post with iFrame
 	ftxa.form.setAttribute('target', 'areIframe');
-	$$.areIframe = $$.create(
+	$$.create(
 		'IFRAME', {
 		id: 'areIframe',
 		name: 'areIframe',
@@ -449,7 +454,7 @@ exec: function(window) {
 	$$.on($$.win, 'scrollend', $$.modifyTablesFromPageLeftTop);
 
 	// Newer Border
-	$$.newerBorder = $$.create('DIV', { id: 'newerBorder' });
+	$$.create('DIV', { id: 'newerBorder' });
 	$$.body.appendChild($$.newerBorder);
 
 	// Modify Form

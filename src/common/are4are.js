@@ -53,6 +53,9 @@ Are4Are.prototype = {
 			for (var attr in attrs) {
 				elm.setAttribute(attr, attrs[attr]);
 			}
+			if (attrs.id) {
+				this[attrs.id] = elm;
+			}
 		}
 		if (text) {
 			elm.textContent = text;
@@ -86,7 +89,7 @@ Are4Are.prototype = {
 		this.timeoutIds[id] = null;
 	},
 	queue: function(func) {
-		this.setTimeout(null, func, 1);
+		this.setTimeout(null, func, 100);
 	},
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
@@ -169,9 +172,8 @@ Are4Are.prototype = {
 	addToolButton: function(label, onclick) {
 		var btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
-		btn.id = 'areToolbtn_' + label;
 		btn.href = 'javascript:void(0);';
-		btn.classList.add('are-toolbtn');
+		btn.classList.add('are-toolbtn', 'are-toolbtn-' + label);
 		if (onclick) {
 			btn.onclick = onclick.bind(this);
 		}
@@ -212,7 +214,7 @@ Are4Are.prototype = {
 
 		// Toolbar
 		$$.toolbar = $$.create('DIV', {
-			id: 'areToolbar',
+			'class': 'are-toolbar',
 			style: 'display:none'
 		});
 		$$.body.appendChild($$.toolbar);

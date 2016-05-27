@@ -198,7 +198,7 @@ td:hover>input[value="delete"] {
 }
 
 /* toolbar button */
-#areToolbtn_back {
+.are-toolbtn-back {
 	max-width: 4em;
 }
 

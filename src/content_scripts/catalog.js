@@ -7,52 +7,128 @@ __proto__ : Are4Are.prototype,
 CATALOG_DATA_SIZE: 1000,
 
 // Event ///////////////////////////////
-onClickCatalogMode: function(e) {
+catalogModeOnClick: function(e) {
 	var $$ = this;
 	e.preventDefault();
-	var current = $$.id('catalog-mode-current');
+	var current = $$.id('catalogModeCurrent');
 	if (current.href != e.target.href) {
 		current.id = '';
-		e.target.id = 'catalog-mode-current';
+		e.target.id = 'catalogModeCurrent';
 		$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	}
 	$$.refreshCatalog(e.target.href);
 	return false;
 },
-bodyOnClick: function(e) {
+bodyOnScroll: function(e) {
 	var $$ = this;
-	if (e.target.tagName === 'FONT' || e.target.tagName === 'SMALL') {
-		$$.showThumbnail(e.target);
+	$$.hideThumbnail();
+},
+// Longtap
+bodyOnTouchstart: function(e) {
+	var $$ = this;
+	if (e.target.tagName !== 'IMG') {
+		// nop
+	} else if ($$.parentNode(e.target, 'TD')) {
+		$$.threadLink = $$.parentNode(e.target, 'A'); if (!$$.threadLink) return;
+		$$.setLongtap(e.target, $$.showThumbnail.bind($$), 300);
+	}
+},
+bodyOnTouchmove: function(e) {
+	var $$ = this;
+	$$.cancelLongtap(e);
+},
+bodyOnTouchend: function(e) {
+	var $$ = this;
+	$$.cancelLongtap(e);
+	if ($$.isPreventTouchend) {
+		$$.isPreventTouchend = false;
+		e.preventDefault();
+	}
+},
+setLongtap: function(elem, func, msec) {
+	var $$ = this;
+	$$.longtapLink = elem.tagName == 'A' ? elem : $$.parentNode(elem, 'A');
+	$$.longtapLinkHref = $$.longtapLink.href;
+	$$.setTimeout('longtap', function () {
+		if ($$.longtapLink) {
+			$$.longtapLink.removeAttribute('href');
+		}
+		$$.isPreventTouchend = true;
+		func();
+	}, msec);
+},
+cancelLongtap: function(e) {
+	var $$ = this;
+	$$.clearTimeout('longtap');
+	if ($$.longtapLink) {
+		$$.queue(function() {
+			$$.longtapLink.href = $$.longtapLinkHref;
+			$$.longtapLink = null;
+		});
 	}
 },
 
 // Thumbnail //////////////////////////////
-showThumbnail: function(target) {
+hideThumbnail: function(visible) {
 	var $$ = this;
-	var td = $$.parentNode(target, 'TD');
-	if (!td) return;
-	$$.thumbnailSrc = $$.firstTag(td, 'A');
-	if (!$$.thumbnailSrc) return;
-	var img = $$.firstTag($$.thumbnailSrc, 'IMG');
-	if (!img) return;
-	var src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
+	if ($$.isThumbnailVisible) {
+		$$.isThumbnailVisible = false;
+		$$.fadeOut($$.thumbnail);
+		$$.threadImgBtn.classList.add('slide-out-h');
+	}
+},
+thumbnaiImgOnLoad: function() {
+	var $$ = this;
+	$$.fadeIn($$.thumbnail);
+	$$.threadImgBtn.classList.remove('slide-out-h');
+	$$.isThumbnailVisible = true;
+},
+showThumbnail: function() {
+	var $$ = this;
+	var img = $$.firstTag($$.threadLink, 'IMG');
+	// create thumbnail
 	if (!$$.thumbnail) {
-		// image
-		$$.thumbnailImg = $$.create('IMG', { 'class': 'thumbnail-img' });
-		$$.on($$.thumbnailImg, 'load', function() { $$.fadeIn($$.thumbnail); });
-		$$.thumbnailLink = $$.create('A', { 'class': 'thumbnail-link', target: '_blank' });
-		$$.thumbnailLink.appendChild($$.thumbnailImg);
-		// thumbnail container
-		$$.thumbnail = $$.create('DIV', { 'class': 'thumbnail transparent' });
-		$$.thumbnail.appendChild($$.thumbnailLink);
-		$$.on($$.thumbnail, 'click', function() {$$.fadeOut($$.thumbnail); });
+		$$.create('DIV', { id: 'thumbnail', 'class': 'thumbnail transparent' })
+		.appendChild($$.create('A', { id: 'thumbnailLink', 'class': 'thumbnail-link', target: '_blank' }))
+		.appendChild($$.create('IMG', { id: 'thumbnailImg', 'class': 'thumbnail-img' }));
+		$$.on($$.thumbnail, 'click', $$.hideThumbnail);
+		$$.on($$.thumbnailImg, 'load', $$.thumbnaiImgOnLoad);
 		$$.body.appendChild($$.thumbnail);
 	}
-	$$.thumbnailLink.href = $$.thumbnailSrc.href;
+	// show thumbnail
+	$$.thumbnailLink.href = $$.longtapLinkHref;
+	$$.threadImgBtn.href = 'javascript: void(0);';
+	$$.threadImgBtn.removeAttribute('target');
+	$$.isThreadImgBtnLoaded = false;
+	var src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
 	if ($$.thumbnailImg.src == src) {
-		$$.fadeIn($$.thumbnail);
+		$$.thumbnaiImgOnLoad();
 	} else {
 		$$.thumbnailImg.src = src;
+	}
+},
+
+// Thread image ///////////////////////////
+threadImgBtnOnTouchstart: function() {
+	var $$ = this;
+	if ($$.isThreadImgBtnLoaded) return;
+	$$.getDoc($$.threadLink.href, function(doc) {
+		var img = doc.querySelector('IMG[src="' + $$.thumbnailImg.src + '"]');
+		if (!img) {
+			$$.toast('__MSG_networkError__');
+			return;
+		}
+		$$.threadImgBtn.href = img.parentNode.href;
+		$$.threadImgBtn.target = '_blank';
+		$$.isThreadImgBtnLoaded = true;
+	}, {
+		'404': '__MSG_threadNotFound__'
+	});
+},
+threadImgBtnOnClick: function() {
+	var $$ = this;
+	if (!$$.isThreadImgBtnLoaded) {
+		$$.win.alert($$.format('__MSG_plzWait__'));
 	}
 },
 
@@ -115,6 +191,7 @@ appendCatalogCountDelta: function(tablePalent) {
 },
 refreshCatalog: function(href) {
 	var $$ = this;
+	$$.hideThumbnail();
 	$$.getDoc(href, function(doc) {
 		$$.appendCatalogCountDelta(doc);
 	}, {
@@ -139,10 +216,10 @@ exec: function(window) {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
 		if (a.parentNode.tagName == 'B') {
-			a.id = 'catalog-mode-current';
+			a.id = 'catalogModeCurrent';
 		}
 		if ($$.catalogTable) {
-			$$.on(a, 'click', $$.onClickCatalogMode);
+			$$.on(a, 'click', $$.catalogModeOnClick);
 		}
 		a.classList.add('are-toolbtn');
 		$$.toolbar.appendChild(a);
@@ -171,13 +248,20 @@ exec: function(window) {
 
 	// Catalog
 	if (!$$.catalogTable) return;
+	$$.create('A', { id: 'threadImgBtn', 'class': 'are-toolbtn slide-out-h' }, $$.format('__MSG_threadImg__'));
+	$$.on($$.threadImgBtn, 'mousedown touchstart', $$.threadImgBtnOnTouchstart);
+	$$.on($$.threadImgBtn, 'click', $$.threadImgBtnOnClick);
+	$$.toolbar.insertBefore($$.threadImgBtn, $$.toolbar.firstChild);
 	$$.catalogTable.classList.add('catalog-table');
 	$$.isAutoFix =  $$.win.innerWidth < $$.catalogTable.clientWidth;
 	$$.autoFix($$.catalogTable);
 	$$.autoFixWidth();
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.body);
-	$$.on($$.body, 'click', $$.bodyOnClick);
+	$$.on($$.body, 'mousedown touchstart', $$.bodyOnTouchstart);
+	$$.on($$.body, 'mousemove touchmove', $$.bodyOnTouchmove);
+	$$.on($$.body, 'mouseup touchend', $$.bodyOnTouchend);
+	$$.on($$.win, 'scroll', $$.bodyOnScroll);
 }
 }; // end of my extension
 

@@ -47,8 +47,12 @@
 		"description": ""
 	},
 
-	"uriRegexWrong": {
-		"message": "target-uri-regex is worong.<br>{0}<br>{1}",
+	"threadImg": {
+		"message": "Image",
+		"description": ""
+	},
+	"plzWait": {
+		"message": "Please wait a little",
 		"description": ""
 	},
 
@@ -66,6 +70,10 @@
 	},
 	"urlsTextAreaNote": {
 		"message": "(regex)",
+		"description": ""
+	},
+	"uriRegexWrong": {
+		"message": "target-uri-regex is worong.<br>{0}<br>{1}",
 		"description": ""
 	},
 	"addFromTabs": {
