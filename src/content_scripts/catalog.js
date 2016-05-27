@@ -112,6 +112,7 @@ showThumbnail: function() {
 threadImgBtnOnTouchstart: function() {
 	var $$ = this;
 	if ($$.isThreadImgBtnLoaded) return;
+	$$.threadImgBtn.focus();
 	$$.getDoc($$.threadLink.href, function(doc) {
 		var img = doc.querySelector('IMG[src="' + $$.thumbnailImg.src + '"]');
 		if (!img) {
