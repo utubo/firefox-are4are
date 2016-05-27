@@ -249,7 +249,12 @@ autoLinkNode: function(node, after) {
 	var $$ = this;
 	var text = after || node.nodeValue;
 	var m = $$.autoLinkRegexp.exec(text);
-	if (!m) return null;
+	if (!m) {
+		if (node && after) {
+			node.appendChild($$.doc.createTextNode(after));
+		}
+		return false;
+	}
 	if (!after) {
 		node = $$.doc.createDocumentFragment();
 	}
