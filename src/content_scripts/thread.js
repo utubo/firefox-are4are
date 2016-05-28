@@ -360,7 +360,7 @@ showForm: function() {
 	$$.writeBtnY = $$.win.scrollY;
 	$$.writeBtn.classList.add('active');
 	$$.fadeIn($$.ftbl);
-	$$.id('ftxa').focus();
+	$$.ftxa.focus();
 },
 hideForm: function() {
 	var $$ = this;
@@ -376,7 +376,7 @@ onSubmit: function(e) {
 	$$.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
 	$$.areIframe.contentDocument.location.href = 'about:blank';
 	if ($$.areIframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
-		$$.id('ftxa').value = '';
+		$$.ftxa.value = '';
 		($$.first('INPUT[name="upfile"]') || {}).value = '';
 		$$.hideForm();
 		$$.setTimeout(null, function() { $$.reloadBtnOnClick(); }, 1000);
@@ -384,8 +384,8 @@ onSubmit: function(e) {
 },
 modifyForm: function() {
 	var $$ = this;
-	var ftxa = $$.id('ftxa');
-	if (!ftxa) {
+	$$.ftxa = $$.id('ftxa');
+	if (!$$.ftxa) {
 		$$.writeBtn.classList.add('disable');
 		return;
 	}
@@ -412,7 +412,7 @@ modifyForm: function() {
 	});
 
 	// Post with iFrame
-	ftxa.form.setAttribute('target', 'areIframe');
+	$$.ftxa.form.setAttribute('target', 'areIframe');
 	$$.create(
 		'IFRAME', {
 		id: 'areIframe',
@@ -422,6 +422,28 @@ modifyForm: function() {
 	});
 	$$.on($$.areIframe, 'load', $$.onSubmit);
 	$$.body.appendChild($$.areIframe);
+
+	// Quote
+	$$.on($$.body, 'mousedown touchstart', $$.showQuoteBtn);
+},
+showQuoteBtn: function() {
+	var $$ = this;
+	$$.setTimeout('showQuoteBtn', function () {
+		if (!$$.doc.getSelection().toString()) return;
+		$$.quoteBtn.classList.remove('slide-out-h');
+	}, 1000);
+},
+quoteBtnOnClick: function() {
+	var $$ = this;
+	var text = $$.doc.getSelection().toString();
+	for (var i = 0; i < 1; i ++) {
+		if (!text) break;
+		text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
+		if (!text) break;
+		$$.ftxa.value += (/[^\n]$/.test($$.ftxa.value) ? "\n" : '') + text + "\n";
+		$$.showForm();
+	}
+	$$.quoteBtn.classList.add('slide-out-h');
 },
 
 // Others ////////////////////////////
@@ -442,6 +464,8 @@ exec: function(window) {
 	// ToolButtons
 	$$.backBtn = $$.addToolButton('back', $$.backBtnOnClick);
 	$$.backBtn.classList.add('slide-out-h');
+	$$.quoteBtn = $$.addToolButton('quote', $$.quoteBtnOnClick);
+	$$.quoteBtn.classList.add('slide-out-h');
 	$$.writeBtn = $$.addToolButton('write');
 	$$.addToolButton('reload', $$.reloadBtnOnClick);
 	$$.pageDownBtn = $$.addToolButton('pagedown');
