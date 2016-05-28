@@ -85,12 +85,12 @@ function addUrl(url) {
 	urlReg = urlReg
 		.replace(/\\/, '\\\\')
 		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1') // escape meta
-		.replace(/\b(tmp|dat|zip|cgi|may|nov|img|jun|www|dec)\b/g, '[a-z]{3}') // server name without 'up' and 'ipv6'
-		.replace(/([\/_])[0-9][0-9]+(\\\.html?|\/|$)/, '$1[0-9]+$2') // thread number
+		.replace(/(\b|_)(tmp|dat|zip|cgi|may|nov|img|jun|www|dec)(_|\b)/g, '$1[a-z]{3}$3') // server name without 'up' and 'ipv6'
+		.replace(/([\/_])\d\d+(\\\.html?|\/|$)/, '$1\\d+$2') // thread number
 		.replace( // date
-			/\/([0-9\/\-]+)\//g,
+			/\/([\d\/\-]+)\//g,
 			function(m1) {
-				var r = '/[0-9';
+				var r = '/[\\d';
 				if (m1.indexOf('/') != -1)
 					r += '/';
 				if (m1.indexOf('-') != -1)
@@ -101,6 +101,13 @@ function addUrl(url) {
 		)
 		.replace(/^/, '^')
 		.replace(/(html?|\/)$/, '$1$');
+	// FTBucket
+	var FTBUCKET_SUFIX = '/src/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
+	if (urlReg.endsWith(FTBUCKET_SUFIX)) {
+		var paths = urlReg.split("/");
+		urlReg = paths[0] + '//' + paths[2] + '/.+' + FTBUCKET_SUFIX;
+	}
+
 	form.urls.value += (form.urls.value.match(/\n$/) ? '' : "\n") + urlReg;
 	correctValues();
 }
