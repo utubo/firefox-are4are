@@ -102,7 +102,7 @@ function addUrl(url) {
 		.replace(/^/, '^')
 		.replace(/(html?|\/)$/, '$1$');
 	// FTBucket
-	var FTBUCKET_SUFIX = '/src/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
+	var FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
 	if (urlReg.endsWith(FTBUCKET_SUFIX)) {
 		var paths = urlReg.split("/");
 		urlReg = paths[0] + '//' + paths[2] + '/.+' + FTBUCKET_SUFIX;
