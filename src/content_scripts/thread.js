@@ -460,6 +460,9 @@ exec: function(window) {
 
 	// StyleSheet
 	$$.addCssFile('content_scripts/thread.css');
+	if (!$$.doc.getElementsByClassName('rts')[0]) {
+		$$.addCssFile('content_scripts/legacy_thread.css');
+	}
 
 	// ToolButtons
 	$$.backBtn = $$.addToolButton('back', $$.backBtnOnClick);

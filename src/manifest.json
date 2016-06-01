@@ -39,6 +39,7 @@
 
 	"web_accessible_resources": [
 		"content_scripts/thread.css",
+		"content_scripts/legacy_thread.css",
 		"content_scripts/catalog.css",
 		"common/are4are.css",
 		"common/options.html",
