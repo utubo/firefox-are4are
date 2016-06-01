@@ -83,11 +83,15 @@ input[type=text] {
 }
 
 /* "..." */
-table[border="0"] tbody tr td[align="right"][valign="top"][nowrap=""]:first-child {
+table[border="0"] tbody tr td[align="right"][valign="top"][nowrap]:first-child,
+.rts {
 	display: none;
 }
 
 /* res */
+.thre table {
+	min-width: 0 !important;
+}
 td {
 	border-radius: 3pt;
 	color:#B66;
