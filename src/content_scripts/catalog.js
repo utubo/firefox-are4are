@@ -26,16 +26,14 @@ bodyOnScroll: function(e) {
 // Longtap
 bodyOnTouchstart: function(e) {
 	var $$ = this;
-	if (e.target.tagName !== 'IMG') {
+	if (e.target.id === 'thumbnail') {
+		$$.cancelLongtap(e);
+	} else if (e.target.tagName !== 'IMG') {
 		// nop
 	} else if ($$.parentNode(e.target, 'TD')) {
 		$$.threadLink = $$.parentNode(e.target, 'A'); if (!$$.threadLink) return;
 		$$.setLongtap(e.target, $$.showThumbnail.bind($$), 300);
 	}
-},
-bodyOnTouchmove: function(e) {
-	var $$ = this;
-	$$.cancelLongtap(e);
 },
 bodyOnTouchend: function(e) {
 	var $$ = this;
@@ -260,7 +258,6 @@ exec: function(window) {
 	$$.win.scrollTo(0, $$.firstTag($$.doc, 'TABLE').offsetTop);
 	$$.appendCatalogCountDelta($$.body);
 	$$.on($$.body, 'mousedown touchstart', $$.bodyOnTouchstart);
-	$$.on($$.body, 'mousemove touchmove', $$.bodyOnTouchmove);
 	$$.on($$.body, 'mouseup touchend', $$.bodyOnTouchend);
 	$$.on($$.win, 'scroll', $$.bodyOnScroll);
 }
