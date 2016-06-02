@@ -21,9 +21,8 @@ showMinTumbnail: function(e) {
 appendMinThumbnail: function() {
 	var $$ = this;
 	// find thread-image
-	var threadImage = $$.firstTag($$.doc, 'BLOCKQUOTE'), href;
-	if (!threadImage) return;
-	while (threadImage = threadImage.previousSibling) {
+	var threadImage, href;
+	for (threadImage = $$.firstTag($$.doc, 'BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
 		if (
 			threadImage.tagName == 'A' &&
 			threadImage.firstChild &&
@@ -38,7 +37,7 @@ appendMinThumbnail: function() {
 	}
 	if (!threadImage) return;
 	threadImage.align = '';
-	threadImage.className = 'thread-image';
+	threadImage.classList.add('thread-image');
 
 	// make minThumbnail
 	var img = $$.create('IMG', {
@@ -450,7 +449,8 @@ quoteBtnOnClick: function() {
 scrollToThreadImage: function() {
 	var $$ = this;
 	var i = $$.firstClass($$.doc, 'thread-image');
-	i = i && $$.prev(i.parentNode, 'A') || $$.first('INPUT[value="delete"]');
+	// 'SMALL' is for Ms.MHT
+	i = i && ($$.prev(i.parentNode, 'A') || $$.prev(i.parentNode, 'SMALL') || i) || $$.first('INPUT[value="delete"]');
 	if (i) { $$.scrollTo(i.offsetTop); }
 },
 
