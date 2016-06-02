@@ -14,14 +14,17 @@ body {
 	overflow:scroll;
 	position:fixed;
 	text-align:center;
-	transition: border 1s ease-in;
 	white-space: nowrap;
 	width:100%;
 	z-index:10;
 }
 .are-toolbar.active {
-	border-color:#8cf;
-	transition: none;
+	animation: are-toolbar-active-animation 3s ease-in .5s infinite alternate;
+}
+@keyframes are-toolbar-active-animation {
+	0% { border-color: #fa8; }
+	25% { border-color:#8cf; }
+	100% { border-color:#8cf; }
 }
 .are-toolbtn,
 .are-toolbtn:active,
