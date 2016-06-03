@@ -1,4 +1,7 @@
 (function() {
+
+'use strict';
+
 function Are4AreThread() {}
 Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,

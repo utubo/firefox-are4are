@@ -1,4 +1,7 @@
 (function() {
+
+'use strict';
+
 function Are4AreCatalog() {}
 Are4AreCatalog.prototype = {
 __proto__ : Are4Are.prototype,

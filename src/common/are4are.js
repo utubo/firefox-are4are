@@ -1,4 +1,8 @@
 function Are4Are() { }
+(function() {
+
+'use strict';
+
 Are4Are.prototype = {
 	// Field ///////////////////////////////
 	win: null,
@@ -234,19 +238,19 @@ Are4Are.prototype = {
 		if ($$.doc.readyState != 'complete') {
 			try {
 				// Hide body
-				var cover = 'body::before {'
-					+ 'background: #fff;'
-					+ 'content: " ";'
-					+ 'display: block;'
-					+ 'height: 100%;'
-					+ 'left: 0;'
-					+ 'opacity: 1;'
-					+ 'pointer-events: none;'
-					+ 'position: fixed;'
-					+ 'top: 0;'
-					+ 'width: 100%;'
-					+ 'z-index: 99;'
-					+ '}';
+				var cover = 'body::before {' +
+					'background: #fff;' +
+					'content: " ";' +
+					'display: block;' +
+					'height: 100%;' +
+					'left: 0;' +
+					'opacity: 1;' +
+					'pointer-events: none;' +
+					'position: fixed;' +
+					'top: 0;' +
+					'width: 100%;' +
+					'z-index: 99;' +
+					'}';
 				$$.doc.styleSheets[0].insertRule(cover, 0);
 				// Show body
 				$$.win.addEventListener('load', function() {
@@ -265,4 +269,5 @@ Are4Are.prototype = {
 		}
 	}
 };
+})();
 
