@@ -100,8 +100,8 @@ reloadBtnOnClick: function(e) {
 		}
 		// find last Res
 		var checkboxs = $$.all('INPUT[type="checkbox"][value="delete"]');
-		var lastCheckbox = checkboxs[checkboxs.length - 1];
-		var lastResNumber = lastCheckbox .name;
+		var lastCheckbox = $$.arrayLast(checkboxs);
+		var lastResNumber = lastCheckbox.name;
 		var lastResMarker = $$.parentNode(lastCheckbox, 'TABLE').nextSibling;
 		// new reses
 		var newReses = $$.doc.createDocumentFragment();

@@ -21,6 +21,9 @@ Are4Are.prototype = {
 	regEscape: function(s) {
 		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 	},
+	arrayLast: function(a) {
+		return a[a.length - 1];
+	},
 
 	// DOM & HTML Util /////////////////////
 	id: function(_id) {
@@ -251,10 +254,12 @@ Are4Are.prototype = {
 					'width: 100%;' +
 					'z-index: 99;' +
 					'}';
-				$$.doc.styleSheets[0].insertRule(cover, 0);
+				$$.doc.documentElement.appendChild($$.create('STYLE'));
+				var ss = $$.arrayLast($$.doc.styleSheets);
+				ss.insertRule(cover, 0);
 				// Show body
 				$$.win.addEventListener('load', function() {
-					$$.doc.styleSheets[0].insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 0);
+					ss.insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 0);
 				});
 			} catch (e) {
 				// nop

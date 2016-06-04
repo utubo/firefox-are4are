@@ -19,12 +19,10 @@ body {
 	z-index:10;
 }
 .are-toolbar.active {
-	animation: are-toolbar-active-animation 1.5s ease-in .5s infinite alternate;
+	animation: are-toolbar-active-animation 3s ease-in .5s infinite alternate;
 }
 @keyframes are-toolbar-active-animation {
-	0% { border-color: #fa8; }
-	10% { border-color:#8cf; }
-	90% { border-color:#8cf; }
+	0% { border-color:#8cf; }
 	100% { border-color:#fa8; }
 }
 .are-toolbtn,
