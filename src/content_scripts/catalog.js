@@ -42,8 +42,9 @@ bodyOnTouchend: function(e) {
 	var $$ = this;
 	$$.cancelLongtap(e);
 	if ($$.isPreventTouchend) {
-		$$.isPreventTouchend = false;
 		e.preventDefault();
+		$$.isPreventTouchend = false;
+		$$.body.classList.remove('user-select-none');
 	}
 },
 setLongtap: function(elem, func, msec) {
@@ -54,6 +55,7 @@ setLongtap: function(elem, func, msec) {
 		if ($$.longtapLink) {
 			$$.longtapLink.removeAttribute('href');
 		}
+		$$.body.classList.add('user-select-none');
 		$$.isPreventTouchend = true;
 		func();
 	}, msec);

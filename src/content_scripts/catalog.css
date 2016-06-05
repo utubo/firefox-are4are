@@ -50,9 +50,6 @@ br+.res-count .res-count-delta {
 	left: 0;
 	position: fixed;
 	top: 0;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
 	width: 100%;
 }
 .thumbnail-link {
@@ -63,18 +60,12 @@ br+.res-count .res-count-delta {
 	position: absolute;
 	text-align: center;
 	top: calc(50% - 13pt);
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
 	transform: translate(-50%, -50%) scale(1.2);
 }
 .thumbnail-img {
 	display: block;
 	max-height: 100%;
 	max-width: 100%;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
 }
 #are-toolbtn-threadImgBtn {
 	max-width: 5em;
