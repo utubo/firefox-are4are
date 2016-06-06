@@ -45,6 +45,7 @@ appendMinThumbnail: function() {
 	// make minThumbnail
 	var img = $$.create('IMG', {
 		src: threadImage.src,
+		id: 'minThumbnailImg',
 		'class': 'min-thumbnail-img'
 	});
 	$$.create('A', {
@@ -58,7 +59,15 @@ appendMinThumbnail: function() {
 	$$.on($$.win, 'load', function() { $$.body.appendChild($$.minThumbnail); });
 
 	// favicon
-	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: threadImage.src});
+	if ($$.minThumbnailImg.complete) {
+		$$.modifyFavicon();
+	} else {
+		$$.on($$.minThumbnailImg, 'load', $$.modifyFavicon);
+	}
+},
+modifyFavicon: function() {
+	var $$ = this;
+	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: $$.minThumbnailImg.src});
 	$$.firstTag($$.doc, 'HEAD').appendChild(faviconLink);
 },
 
