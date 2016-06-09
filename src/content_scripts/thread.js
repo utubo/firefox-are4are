@@ -57,6 +57,18 @@ appendMinThumbnail: function() {
 	$$.minThumbnail.appendChild(img);
 	// waite for FTBucket
 	$$.on($$.win, 'load', function() { $$.body.appendChild($$.minThumbnail); });
+
+	// favicon
+	if ($$.minThumbnailImg.complete) {
+		$$.modifyFavicon();
+	} else {
+		$$.on($$.minThumbnailImg, 'load', $$.modifyFavicon);
+	}
+},
+modifyFavicon: function() {
+	var $$ = this;
+	var faviconLink = $$.create('LINK', {rel:'shortcut icon', href: $$.minThumbnailImg.src});
+	$$.firstTag($$.doc, 'HEAD').appendChild(faviconLink);
 },
 
 // Newer Border ///////////////////////
