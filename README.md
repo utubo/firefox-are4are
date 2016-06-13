@@ -8,9 +8,7 @@ AndroidのFirefoxのアドオンです
 でもフレームには対応してませんごめん
 
 ##インストール(現状)
-1. 以下URLからAurora(青いFirefox)をインストール  
-<https://www.mozilla.org/ja/firefox/channel/>
-1. Auroraを起動する
+1. Firefoxβをインストール
 1. about:configを開いて`xpinstall.signatures.required`を`false`に設定
 1. 以下のどれかをインストール  
  - おすすめ(githubにプッシュしたやつ)  
