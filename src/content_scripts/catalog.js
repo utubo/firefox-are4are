@@ -24,13 +24,14 @@ catalogModeOnClick: function(e) {
 },
 bodyOnScroll: function(e) {
 	var $$ = this;
+	$$.cancelLongtap();
 	$$.hideThumbnail();
 },
 // Longtap
 bodyOnTouchstart: function(e) {
 	var $$ = this;
 	if (e.target.id === 'thumbnail') {
-		$$.cancelLongtap(e);
+		$$.cancelLongtap();
 	} else if (e.target.tagName !== 'IMG') {
 		// nop
 	} else if ($$.parentNode(e.target, 'TD')) {
@@ -40,7 +41,7 @@ bodyOnTouchstart: function(e) {
 },
 bodyOnTouchend: function(e) {
 	var $$ = this;
-	$$.cancelLongtap(e);
+	$$.cancelLongtap();
 	if ($$.isPreventTouchend) {
 		e.preventDefault();
 		$$.isPreventTouchend = false;
@@ -60,7 +61,7 @@ setLongtap: function(elem, func, msec) {
 		func();
 	}, msec);
 },
-cancelLongtap: function(e) {
+cancelLongtap: function() {
 	var $$ = this;
 	$$.clearTimeout('longtap');
 	if ($$.longtapLink) {
