@@ -52,7 +52,7 @@ setLongtap: function(elem, func, msec) {
 	var $$ = this;
 	$$.longtapLink = elem.tagName == 'A' ? elem : $$.parentNode(elem, 'A');
 	$$.longtapLinkHref = $$.longtapLink.href;
-	$$.setTimeout('longtap', function () {
+	$$.timeout('longtap', function () {
 		if ($$.longtapLink) {
 			$$.longtapLink.removeAttribute('href');
 		}

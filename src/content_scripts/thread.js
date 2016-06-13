@@ -88,7 +88,7 @@ pageDownBtnOnTouchstart: function(e) {
 	$$.pageDownBtn.classList.add('active');
 	$$.pageDownY = $$.win.scrollY + Math.round($$.win.innerHeight / 2);
 	$$.scrollToNoMargin($$.pageDownY, null, 'pageDownBtn');
-	$$.setTimeout('RePageDown', function() { $$.pageDownBtnOnTouchstart(); }, 1000);
+	$$.timeout('RePageDown', function() { $$.pageDownBtnOnTouchstart(); }, 1000);
 },
 pageDownBtnOnTouchend: function(e) {
 	var $$ = this;
@@ -390,7 +390,7 @@ onSubmit: function(e) {
 		$$.ftxa.value = '';
 		($$.first('INPUT[name="upfile"]') || {}).value = '';
 		$$.hideForm();
-		$$.setTimeout(null, function() { $$.reloadBtnOnClick(); }, 1000);
+		$$.timeout(null, function() { $$.reloadBtnOnClick(); }, 1000);
 	}
 },
 modifyForm: function() {
@@ -439,7 +439,7 @@ modifyForm: function() {
 },
 showQuoteBtn: function() {
 	var $$ = this;
-	$$.setTimeout('showQuoteBtn', function () {
+	$$.timeout('showQuoteBtn', function () {
 		if (!$$.doc.getSelection().toString()) return;
 		$$.quoteBtn.classList.remove('slide-out-h');
 	}, 1000);

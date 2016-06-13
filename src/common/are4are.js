@@ -82,7 +82,7 @@ Are4Are.prototype = {
 			elm.addEventListener(name, func.bind(this));
 		}
 	},
-	setTimeout: function(id, func, msec) {
+	timeout: function(id, func, msec) { // ??? "setTimeout or setInterval must have function as 1st arg"
 		if (id) {
 			this.clearTimeout(id);
 			this.timeoutIds[id] = this.win.setTimeout(func, msec);
@@ -96,7 +96,7 @@ Are4Are.prototype = {
 		this.timeoutIds[id] = null;
 	},
 	queue: function(func) {
-		this.setTimeout(null, func, 100);
+		this.timeout(null, func, 100);
 	},
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
@@ -132,7 +132,7 @@ Are4Are.prototype = {
 	// Scrollend event
 	scrollendEventTrigger: function() {
 		var $$ = this;
-		$$.setTimeout('scrollend', function() {
+		$$.timeout('scrollend', function() {
 			try {
 				if ($$.scrollendFunc) { $$.scrollendFunc(); }
 				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
@@ -173,7 +173,7 @@ Are4Are.prototype = {
 		}
 		$$.toastDiv.textContent = text;
 		$$.fadeIn($$.toastDiv);
-		$$.setTimeout('fadeOutToast', (function() { $$.fadeOut($$.toastDiv);}), 3000);
+		$$.timeout('fadeOutToast', (function() { $$.fadeOut($$.toastDiv);}), 3000);
 	},
 	// ToolBar
 	addToolButton: function(label, onclick) {
