@@ -14,8 +14,8 @@ Are4Are.prototype = {
 
 	// Util ////////////////////////////////
 	format: function() {
-		var args = arguments;
-		var str = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => { return chrome.i18n.getMessage(c); });
+		let args = arguments;
+		let str = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => { return chrome.i18n.getMessage(c); });
 		return str.replace(/\{(\d+)\}/g, (m, c) => { return args[parseInt(c) + 1]; });
 	},
 	regEscape: function(s) {
@@ -42,7 +42,7 @@ Are4Are.prototype = {
 		return this.doc.querySelectorAll(query);
 	},
 	findTag: function(elm, tag, func) {
-		var e = elm;
+		let e = elm;
 		while(true) {
 			e = func(e);
 			if (!e) return null;
@@ -55,9 +55,9 @@ Are4Are.prototype = {
 	next: function(elm, tag) { return this.findTag(elm, tag, e => { return e.nextSibling; }); },
 	parentNode: function(elm, tag) { return this.findTag(elm, tag, e => { return e.parentNode; }); },
 	create: function(tag, attrs, text) {
-		var elm = this.doc.createElement.call(this.doc, tag);
+		let elm = this.doc.createElement.call(this.doc, tag);
 		if (attrs) {
-			for (var attr in attrs) {
+			for (let attr in attrs) {
 				elm.setAttribute(attr, attrs[attr]);
 			}
 			if (attrs.id) {
@@ -70,7 +70,7 @@ Are4Are.prototype = {
 		return elm;
 	},
 	addCssFile: function(cssFile) {
-		var cssLink = this.create('LINK', {
+		let cssLink = this.create('LINK', {
 			rel: 'stylesheet',
 			type: 'text/css',
 			href: chrome.extension.getURL(cssFile)
@@ -78,7 +78,7 @@ Are4Are.prototype = {
 		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
-		for (var name of names.split(' ')) {
+		for (let name of names.split(' ')) {
 			elm.addEventListener(name, func.bind(this));
 		}
 	},
@@ -91,7 +91,7 @@ Are4Are.prototype = {
 		}
 	},
 	clearTimeout: function(id) {
-		var t = this.timeoutIds[id];
+		let t = this.timeoutIds[id];
 		if (t) this.win.clearTimeout(t);
 		this.timeoutIds[id] = null;
 	},
@@ -101,7 +101,7 @@ Are4Are.prototype = {
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
 		this.activateToolBar();
-		var xhr = new XMLHttpRequest();
+		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState !== 4) return;
 			this.noactivateToolBar();
@@ -109,7 +109,7 @@ Are4Are.prototype = {
 				func(xhr.responseXML);
 				return;
 			}
-			var errorMessage = errorMessages[xhr.status] || `__MSG_networkError__(${xhr.status})`;
+			let errorMessage = errorMessages[xhr.status] || `__MSG_networkError__(${xhr.status})`;
 			this.toast(errorMessage);
 		};
 		xhr.onabort = xhr.onerror = xhr.ontimeout = () => {
@@ -145,7 +145,7 @@ Are4Are.prototype = {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
 	},
 	scrollToNoMargin: function(targetY, func, triggerSrc) {
-		var y = Math.min(targetY, this.body.clientHeight - this.win.innerHeight);
+		let y = Math.min(targetY, this.body.clientHeight - this.win.innerHeight);
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
 		if (this.win.scrollY == y) {
@@ -164,7 +164,7 @@ Are4Are.prototype = {
 	},
 	// Toast
 	toast: function() {
-		var text = this.format.apply(this, arguments);
+		let text = this.format.apply(this, arguments);
 		if (!this.toastDiv) {
 		}
 		this.toastDiv.textContent = text;
@@ -173,7 +173,7 @@ Are4Are.prototype = {
 	},
 	// ToolBar
 	addToolButton: function(label, onclick) {
-		var btn = this.create('A');
+		let btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.href = 'javascript:void(0);';
 		btn.classList.add('are-toolbtn', `are-toolbtn-${label}`);
@@ -195,8 +195,8 @@ Are4Are.prototype = {
 		this.body = window.document.body;
 
 		// Viewport
-		var head = this.firstTag(this.doc, 'HEAD');
-		var viewport = this.create('META', {
+		let head = this.firstTag(this.doc, 'HEAD');
+		let viewport = this.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'
 		});
@@ -235,7 +235,7 @@ Are4Are.prototype = {
 		if (this.doc.readyState != 'complete') {
 			try {
 				// Hide body
-				var cover =
+				let cover =
 					`body::before {
 						background: #fff;
 						content: " ";
@@ -250,7 +250,7 @@ Are4Are.prototype = {
 						z-index: 99;
 					}`;
 				this.doc.documentElement.appendChild(this.create('STYLE'));
-				var ss = this.arrayLast(this.doc.styleSheets);
+				let ss = this.arrayLast(this.doc.styleSheets);
 				ss.insertRule(cover, 0);
 				// Show body
 				this.win.addEventListener('load', () => {

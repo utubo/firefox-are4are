@@ -12,7 +12,7 @@ CATALOG_DATA_SIZE: 1000,
 // Event ///////////////////////////////
 catalogModeOnClick: function(e) {
 	e.preventDefault();
-	var current = this.id('catalogModeCurrent');
+	let current = this.id('catalogModeCurrent');
 	if (current.href != e.target.href) {
 		current.id = '';
 		e.target.id = 'catalogModeCurrent';
@@ -32,7 +32,8 @@ bodyOnTouchstart: function(e) {
 	} else if (e.target.tagName !== 'IMG') {
 		// nop
 	} else if (this.parentNode(e.target, 'TD')) {
-		this.threadLink = this.parentNode(e.target, 'A'); if (!this.threadLink) return;
+		this.threadLink = this.parentNode(e.target, 'A');
+		if (!this.threadLink) return;
 		this.setLongtap(e.target, this.showThumbnail.bind(this), 300);
 	}
 },
@@ -80,7 +81,7 @@ thumbnaiImgOnLoad: function() {
 	this.isThumbnailVisible = true;
 },
 showThumbnail: function() {
-	var img = this.firstTag(this.threadLink, 'IMG');
+	let img = this.firstTag(this.threadLink, 'IMG');
 	// create thumbnail
 	if (!this.thumbnail) {
 		this.create('DIV', { id: 'thumbnail', 'class': 'thumbnail transparent' })
@@ -95,7 +96,7 @@ showThumbnail: function() {
 	this.threadImgBtn.href = 'javascript: void(0);';
 	this.threadImgBtn.removeAttribute('target');
 	this.isThreadImgBtnLoaded = false;
-	var src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
+	let src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
 	if (this.thumbnailImg.src == src) {
 		this.thumbnaiImgOnLoad();
 	} else {
@@ -108,7 +109,7 @@ threadImgBtnOnTouchstart: function() {
 	if (this.isThreadImgBtnLoaded) return;
 	this.threadImgBtn.focus();
 	this.getDoc(this.threadLink.href, doc => {
-		var img = doc.querySelector(`IMG[src="${this.thumbnailImg.src}"]`);
+		let img = doc.querySelector(`IMG[src="${this.thumbnailImg.src}"]`);
 		if (!img) {
 			this.toast('__MSG_networkError__');
 			return;
@@ -133,7 +134,7 @@ autoFix: function(table) {
 },
 autoFixWidth: function() {
 	if (!this.isAutoFix) return;
-	var width = 0;
+	let width = 0;
 	Array.forEach(this.catalogTable.querySelectorAll('TD>A>IMG'), img => {
 		width = Math.max(width, img.width);
 	});
@@ -142,22 +143,22 @@ autoFixWidth: function() {
 
 // RefreshCatalog ///////////////////////
 appendCatalogCountDelta: function(tablePalent) {
-	var work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
+	let work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
 	work.classList.add('catalog-table');
 	this.autoFix(work);
 	// add count delta
-	var searchMin = 0;
-	var searchMax = this.catalogData.length;
-	var doAppend = searchMax !== 0;
+	let searchMin = 0;
+	let searchMax = this.catalogData.length;
+	let doAppend = searchMax !== 0;
 	Array.forEach(work.getElementsByTagName('TD'), td => { try {
-		var href = this.firstTag(td, 'A').href;
-		var countElm = this.firstTag(td, 'FONT');
+		let href = this.firstTag(td, 'A').href;
+		let countElm = this.firstTag(td, 'FONT');
 		countElm.classList.add('res-count');
-		var count = parseInt(countElm.textContent);
+		let count = parseInt(countElm.textContent);
 		if (doAppend) {
-			var delta = '?';
-			for (var i = searchMin; i < searchMax; i ++) {
-				var old = this.catalogData[i];
+			let delta = '?';
+			for (let i = searchMin; i < searchMax; i ++) {
+				let old = this.catalogData[i];
 				if (old.href != href) {
 					continue;
 				}
@@ -199,7 +200,7 @@ exec: function(window) {
 	//this.addCssFile('content_scripts/catalog.css');
 
 	// Toolbar
-	var addedHref = [];
+	let addedHref = [];
 	Array.forEach(this.all('A[href *= "mode=cat"]'), a => {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
@@ -223,7 +224,7 @@ exec: function(window) {
 		Array.forEach(this.all('INPUT[name="cx"],INPUT[name="cy"],INPUT[name="cl"]'), input => {
 			input.setAttribute('type', 'tel');
 		});
-		var td = this.parentNode(this.first('INPUT[name="mode"]'), 'TD') || this.body;
+		let td = this.parentNode(this.first('INPUT[name="mode"]'), 'TD') || this.body;
 		td.appendChild(this.create(
 			'A', {
 			href: chrome.extension.getURL('common/options.html#tabpage'),
@@ -253,7 +254,7 @@ exec: function(window) {
 }; // end of my extension
 
 // Start ///////////////////////////////
-var myExt = new Are4AreCatalog();
+let myExt = new Are4AreCatalog();
 myExt.start(window);
 })();
 

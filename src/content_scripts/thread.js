@@ -10,7 +10,7 @@ __proto__ : Are4Are.prototype,
 MINTHUMBNAIL_SIZE: 60,
 MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
 showMinTumbnail: function(e) {
-	var y = this.win.scrollY;
+	let y = this.win.scrollY;
 	if (
 		y < this.MINTHUMBNAIL_HIDE_SCROLLTOP ||
 		e.detail && e.detail.triggerSrc !== 'pageDownBtn' && e.detail.y && e.detail.y - y < this.MINTHUMBNAIL_SIZE
@@ -22,7 +22,7 @@ showMinTumbnail: function(e) {
 },
 appendMinThumbnail: function() {
 	// find thread-image
-	var threadImage, href;
+	let threadImage, href;
 	for (threadImage = this.firstTag(this.doc, 'BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
 		if (
 			threadImage.tagName == 'A' &&
@@ -41,7 +41,7 @@ appendMinThumbnail: function() {
 	threadImage.classList.add('thread-image');
 
 	// make minThumbnail
-	var img = this.create('IMG', {
+	let img = this.create('IMG', {
 		src: threadImage.src,
 		id: 'minThumbnailImg',
 		'class': 'min-thumbnail-img'
@@ -64,7 +64,7 @@ appendMinThumbnail: function() {
 	}
 },
 modifyFavicon: function() {
-	var faviconLink = this.create('LINK', {rel:'shortcut icon', href: this.minThumbnailImg.src});
+	let faviconLink = this.create('LINK', {rel:'shortcut icon', href: this.minThumbnailImg.src});
 	this.firstTag(this.doc, 'HEAD').appendChild(faviconLink);
 },
 
@@ -94,24 +94,24 @@ reloadBtnOnClick: function(e) {
 	this.hideNewerBorder();
 	this.getDoc(this.doc.location.href.replace(/#.*$/, ''), doc => {
 		// update contdisp
-		var contdisp = this.id('contdisp');
-		var newContdisp = contdisp && doc.getElementById('contdisp');
+		let contdisp = this.id('contdisp');
+		let newContdisp = contdisp && doc.getElementById('contdisp');
 		if (newContdisp) {
 			contdisp.textContent = newContdisp.textContent;
 		}
 		// find last Res
-		var checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
-		var lastCheckbox = this.arrayLast(checkboxs);
-		var lastResNumber = lastCheckbox.name;
-		var lastResMarker = this.parentNode(lastCheckbox, 'TABLE').nextSibling;
+		let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
+		let lastCheckbox = this.arrayLast(checkboxs);
+		let lastResNumber = lastCheckbox.name;
+		let lastResMarker = this.parentNode(lastCheckbox, 'TABLE').nextSibling;
 		// new reses
-		var newReses = this.doc.createDocumentFragment();
-		var count = 0;
-		var table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
+		let newReses = this.doc.createDocumentFragment();
+		let count = 0;
+		let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
 		if (table) {
 			table = this.parentNode(table, 'TABLE').nextSibling;
 			while (table) {
-				var next = table.nextSibling;
+				let next = table.nextSibling;
 				if (table.nodeType !== 1) {
 					// skip
 				} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
@@ -128,7 +128,7 @@ reloadBtnOnClick: function(e) {
 			return;
 		}
 		this.modifyTables(newReses.querySelector('TABLE'));
-		var newerBorderY = lastResMarker.nextSibling.offsetTop;
+		let newerBorderY = lastResMarker.nextSibling.offsetTop;
 		this.newerBorder.style.top = newerBorderY + 'px';
 		lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
 		this.queue(() => {
@@ -172,14 +172,14 @@ findRes: function(reg, from) {
 		from = from.parentNode;
 	}
 	if (!from) return;
-	var table = this.prev(from, 'TABLE');
+	let table = this.prev(from, 'TABLE');
 	while(table) {
 		if (reg.test(table.textContent)) {
 			return table;
 		}
 		table = this.prev(table, 'TABLE');
 	}
-	var bq = this.firstTag(this.doc, 'BLOCKQUOTE');
+	let bq = this.firstTag(this.doc, 'BLOCKQUOTE');
 	if (reg.test(bq.textContent)) {
 		return bq;
 	}
@@ -188,22 +188,22 @@ findRes: function(reg, from) {
 quoteTextOnClick: function(e) {
 	if (e.target.tagName === 'A') return;
 	// find res
-	var fuzzyClass = 'not-fuzzy';
-	var text = e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', '');
-	var found = this.findRes(new RegExp(this.regEscape(text)), e.target);
+	let fuzzyClass = 'not-fuzzy';
+	let text = e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', '');
+	let found = this.findRes(new RegExp(this.regEscape(text)), e.target);
 	// fuzzy
 	if (!found && 10 < text.length) {
 		fuzzyClass = 'found-fuzzy';
-		var halfLength = Math.round(text.length / 2);
-		var fuzzy = `.{${halfLength - 3},${halfLength + 3}}`;
-		var fuzzyReg = new RegExp(
+		let halfLength = Math.round(text.length / 2);
+		let fuzzy = `.{${halfLength - 3},${halfLength + 3}}`;
+		let fuzzyReg = new RegExp(
 			this.regEscape(text.substring(0, halfLength)) + fuzzy +
 			'|' + fuzzy + this.regEscape(text.substring(halfLength))
 		);
 		found = this.findRes(fuzzyReg, e.target);
 	}
 	if (!found) return;
-	var y;
+	let y;
 	if (found.tagName === 'TABLE') {
 		this.modifyTables(found);
 		y = found.offsetTop;
@@ -243,8 +243,8 @@ SIO_PREFIX: {
 // 1:URL, 2:Filename, 3:SioPrefix, 4:SioNumber, 5:Ext
 autoLinkRegexp: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi,
 autoLinkNode: function(node, after) {
-	var text = after || node.nodeValue;
-	var m = this.autoLinkRegexp.exec(text);
+	let text = after || node.nodeValue;
+	let m = this.autoLinkRegexp.exec(text);
 	if (!m) {
 		if (node && after) {
 			node.appendChild(this.doc.createTextNode(after));
@@ -267,11 +267,11 @@ autoLinkNode: function(node, after) {
 	return node;
 },
 autoLinkTextNode: function(elm) {
-	var textNode = elm.lastChild;
+	let textNode = elm.lastChild;
 	while (textNode) {
-		var prev = textNode.previousSibling;
+		let prev = textNode.previousSibling;
 		if (textNode.nodeType === 3) {
-			var fragment = this.autoLinkNode(textNode);
+			let fragment = this.autoLinkNode(textNode);
 			if (fragment) {
 				textNode.nodeValue = '';
 				elm.insertBefore(fragment, textNode);
@@ -282,8 +282,8 @@ autoLinkTextNode: function(elm) {
 },
 norefOnClick: function(e) {
 	e.preventDefault();
-	var href = e.target.href;
-	var html = this.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
+	let href = e.target.href;
+	let html = this.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
 	this.win.open(`data:text/html; charset=utf-8,${encodeURIComponent(html)}`);
 },
 modifyBq: function(bq) {
@@ -293,8 +293,8 @@ modifyBq: function(bq) {
 	this.autoLinkTextNode(bq);
 	Array.forEach(bq.getElementsByTagName('font'), font => { this.autoLinkTextNode(font); });
 	// Mail
-	var a = bq;
-	for (var i = 0; i < 10; i ++) { // when over 10, it's may be HOKANKO...
+	let a = bq;
+	for (let i = 0; i < 10; i ++) { // when over 10, it's may be HOKANKO...
 		a = a.previousSibling;
 		if (a.nodeType !== 1) continue;
 		if (!a || a.value === 'delete') {
@@ -314,8 +314,8 @@ modifyBq: function(bq) {
 },
 modifyTables: function(table) {
 	if (!table) return;
-	for (var i = 0; i < 20; i ++) {
-		var rtd = this.firstClass(table, 'rtd');
+	for (let i = 0; i < 20; i ++) {
+		let rtd = this.firstClass(table, 'rtd');
 		if (!rtd) continue;
 		this.modifyBq(this.firstTag(rtd, 'BLOCKQUOTE'));
 		table = this.next(table, 'TABLE');
@@ -326,9 +326,9 @@ modifyTables: function(table) {
 },
 modifyTablesFromPageLeftTop: function() {
 	// find left-top TABLE and modify.
-	var x = 0, y = 0;
-	for (var i = 0; i < 10; i ++) {
-		var table = this.doc.elementFromPoint(x, y);
+	let x = 0, y = 0;
+	for (let i = 0; i < 10; i ++) {
+		let table = this.doc.elementFromPoint(x, y);
 		if (table.tagName === 'A') table = table.parentNode;
 		if (table.tagName === 'BLOCKQUOTE') table = table.parentNode;
 		if (table.tagName === 'TD') table = table.parentNode;
@@ -358,7 +358,7 @@ hideForm: function() {
 onSubmit: function(e) {
 	if (this.areIframe.contentDocument.URL.indexOf('http') !== 0) return;
 	this.areIframe.contentDocument.defaultView.stop();
-	var msg = this.areIframe.contentDocument.getElementsByTagName('DIV')[0] || this.areIframe.contentDocument.body;
+	let msg = this.areIframe.contentDocument.getElementsByTagName('DIV')[0] || this.areIframe.contentDocument.body;
 	this.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
 	this.areIframe.contentDocument.location.href = 'about:blank';
 	if (this.areIframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
@@ -418,8 +418,8 @@ showQuoteBtn: function() {
 	}, 1000);
 },
 quoteBtnOnClick: function() {
-	var text = this.doc.getSelection().toString();
-	for (var i = 0; i < 1; i ++) {
+	let text = this.doc.getSelection().toString();
+	for (let i = 0; i < 1; i ++) {
 		if (!text) break;
 		text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
 		if (!text) break;
@@ -431,7 +431,7 @@ quoteBtnOnClick: function() {
 
 // Others ////////////////////////////
 scrollToThreadImage: function() {
-	var i = this.firstClass(this.doc, 'thread-image');
+	let i = this.firstClass(this.doc, 'thread-image');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.scrollTo(i.offsetTop); }
@@ -494,17 +494,17 @@ exec: function(window) {
 // Start ///////////////////////////////
 chrome.storage.local.get('urls', r => {
 	// Check URL
-	var href = document.location.href;
+	let href = document.location.href;
 	if (href.indexOf('mode=cat') === -1 && href.match(/^http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/)) {
 		// default URL
 	} else {
 		// addtional URL
 		if (!(r.urls)) return;
-		var reg = new RegExp(r.urls.replace(/\n/g, '|'));
+		let reg = new RegExp(r.urls.replace(/\n/g, '|'));
 		if (!href.replace(/[#\?].*$/, '').match(reg)) return;
 	}
 	// url matched
-	var myExt = new Are4AreThread();
+	let myExt = new Are4AreThread();
 	myExt.start(window);
 });
 })();

@@ -1,35 +1,35 @@
 form = {};
-for (var i of document.getElementById('myForm').elements) {
+for (let i of document.getElementById('myForm').elements) {
 	if (i.id) { form[i.id] = document.getElementById(i.id); }
 }
 
 // with new tab //////////////////////
 function setupAsNewTab() {
-	var head = document.querySelector('head');
+	let head = document.querySelector('head');
 	// ViewPort
-	var viewPort = document.createElement('meta');
+	let viewPort = document.createElement('meta');
 	viewPort.name = 'viewport';
 	viewPort.content = 'width=device-width';
 	head.insertBefore(viewPort, head.firstChild);
 	// CSS
-	var cssLink = document.createElement('link');
+	let cssLink = document.createElement('link');
 	cssLink.rel = 'stylesheet';
 	cssLink.type = 'text/css';
 	cssLink.href = chrome.extension.getURL('common/options.css');
 	head.appendChild(cssLink);
 	// Title
-	var extensionName = chrome.i18n.getMessage('extensionName');
-	var title = document.createElement('title');
+	let extensionName = chrome.i18n.getMessage('extensionName');
+	let title = document.createElement('title');
 	title.textContent = extensionName;
 	head.appendChild(title);
-	var h1 = document.createElement('h1');
+	let h1 = document.createElement('h1');
 	h1.textContent = extensionName;
 	document.body.insertBefore(h1, document.body.firstChild);
 }
 // validator /////////////////////////
 function isValidUrls() {
-	var t = form.urls;
-	var targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
+	let t = form.urls;
+	let targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
 	if (!targetUrls) return true;
 	try {
 		targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
@@ -78,7 +78,7 @@ function restoreOptions() {
 
 // urls //////////////////////////////
 function addUrl(url) {
-	var urlReg = url.replace(/^\s+|\s+$/g, '');
+	let urlReg = url.replace(/^\s+|\s+$/g, '');
 	if (!urlReg) return;
 	urlReg = urlReg
 		.replace(/\\/, '\\\\')
@@ -88,7 +88,7 @@ function addUrl(url) {
 		.replace( // date
 			/\/([\d\/\-]+)\//g,
 			m1 => {
-				var r = '/[\\d';
+				let r = '/[\\d';
 				if (m1.indexOf('/') != -1)
 					r += '/';
 				if (m1.indexOf('-') != -1)
@@ -100,9 +100,9 @@ function addUrl(url) {
 		.replace(/^/, '^')
 		.replace(/(html?|\/)$/, '$1$');
 	// FTBucket
-	var FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
+	let FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
 	if (urlReg.endsWith(FTBUCKET_SUFIX)) {
-		var paths = urlReg.split("/");
+		let paths = urlReg.split("/");
 		urlReg = paths[0] + `//${paths[2]}/.+${FTBUCKET_SUFIX}`;
 	}
 
@@ -110,7 +110,7 @@ function addUrl(url) {
 	correctValues();
 }
 function urlsOnPaste(e) {
-	var text = e.clipboardData.getData('text');
+	let text = e.clipboardData.getData('text');
 	if (text.indexOf('\\') === -1 && text.indexOf('http') === 0) {
 		e.preventDefault();
 		addUrl(e.clipboardData.getData('text'));
@@ -122,7 +122,7 @@ function tabsOnChange(e) {
 	addUrl(e.target.value);
 }
 function addOption(sel, value, label) {
-	var o = document.createElement('option');
+	let o = document.createElement('option');
 	o.appendChild(document.createTextNode(label));
 	o.setAttribute('value', value);
 	sel.appendChild(o);
@@ -137,7 +137,7 @@ function tabsBtnOnClick(e) {
 	chrome.tabs.query({
 		"url": ["http://*/*", "https://*/*"]
 	}, tabs => {
-		for(var tab of tabs) {
+		for(let tab of tabs) {
 			addOption(form.tabs, tab.url, `${tab.title} ${tab.url}`);
 		}
 	});
