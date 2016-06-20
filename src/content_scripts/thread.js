@@ -314,14 +314,12 @@ modifyBq: function(bq) {
 },
 modifyTables: function(table) {
 	if (!table) return;
-	for (let i = 0; i < 20; i ++) {
+	for (let i = 0; i < 20 && table; i ++) {
 		let rtd = this.firstClass(table, 'rtd');
-		if (!rtd) continue;
-		this.modifyBq(this.firstTag(rtd, 'BLOCKQUOTE'));
-		table = this.next(table, 'TABLE');
-		if (!table) {
-			break;
+		if (rtd) {
+			this.modifyBq(this.firstTag(rtd, 'BLOCKQUOTE'));
 		}
+		table = this.next(table, 'TABLE');
 	}
 },
 modifyTablesFromPageLeftTop: function() {
