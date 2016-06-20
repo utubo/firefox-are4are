@@ -15,8 +15,8 @@ Are4Are.prototype = {
 	// Util ////////////////////////////////
 	format: function() {
 		var args = arguments;
-		var str = args[0].replace(/__MSG_([^_]+)__/g, function(m, c) { return chrome.i18n.getMessage(c); });
-		return str.replace(/\{(\d+)\}/g, function(m, c) { return args[parseInt(c) + 1]; });
+		var str = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => { return chrome.i18n.getMessage(c); });
+		return str.replace(/\{(\d+)\}/g, (m, c) => { return args[parseInt(c) + 1]; });
 	},
 	regEscape: function(s) {
 		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -51,9 +51,9 @@ Are4Are.prototype = {
 		}
 		return null;
 	},
-	prev: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.previousSibling; }); },
-	next: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.nextSibling; }); },
-	parentNode: function(elm, tag) { return this.findTag(elm, tag, function(e) { return e.parentNode; }); },
+	prev: function(elm, tag) { return this.findTag(elm, tag, e => { return e.previousSibling; }); },
+	next: function(elm, tag) { return this.findTag(elm, tag, e => { return e.nextSibling; }); },
+	parentNode: function(elm, tag) { return this.findTag(elm, tag, e => { return e.parentNode; }); },
 	create: function(tag, attrs, text) {
 		var elm = this.doc.createElement.call(this.doc, tag);
 		if (attrs) {
@@ -100,22 +100,21 @@ Are4Are.prototype = {
 	},
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, errorMessages) {
-		var $$ = this;
-		$$.activateToolBar();
+		this.activateToolBar();
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (this.readyState !== 4) return;
-			$$.noactivateToolBar();
-			if (this.status == 200 && this.responseXML) {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState !== 4) return;
+			this.noactivateToolBar();
+			if (xhr.status == 200 && xhr.responseXML) {
 				func(xhr.responseXML);
 				return;
 			}
-			var errorMessage = errorMessages[this.status] || '__MSG_networkError__(' + this.status + ')';
-			$$.toast(errorMessage);
+			var errorMessage = errorMessages[xhr.status] || `__MSG_networkError__(${xhr.status})`;
+			this.toast(errorMessage);
 		};
-		xhr.onabort = xhr.onerror = xhr.ontimeout = function() {
-			$$.toast('__MSG_networkError__(timeout)');
-			$$.noactivateToolBar();
+		xhr.onabort = xhr.onerror = xhr.ontimeout = () => {
+			this.toast('__MSG_networkError__(timeout)');
+			this.noactivateToolBar();
 		};
 		xhr.timeout = 15 * 1000;
 		try {
@@ -123,22 +122,21 @@ Are4Are.prototype = {
 			xhr.responseType = 'document';
 			xhr.send();
 		} catch (e) {
-			$$.toast('__MSG_networkError__');
-			$$.noactivateToolBar();
+			this.toast('__MSG_networkError__');
+			this.noactivateToolBar();
 		}
 	},
 
 	// UI //////////////////////////////////
 	// Scrollend event
 	scrollendEventTrigger: function() {
-		var $$ = this;
-		$$.timeout('scrollend', function() {
+		this.timeout('scrollend', () => {
 			try {
-				if ($$.scrollendFunc) { $$.scrollendFunc(); }
-				$$.win.dispatchEvent(new CustomEvent('scrollend', { detail: $$.scrollendDetail }));
+				if (this.scrollendFunc) { this.scrollendFunc(); }
+				this.win.dispatchEvent(new CustomEvent('scrollend', { detail: this.scrollendDetail }));
 			} finally {
-				$$.scrollendFunc = null;
-				$$.scrollendDetail = null;
+				this.scrollendFunc = null;
+				this.scrollendDetail = null;
 			}
 		}, 200);
 	},
@@ -147,14 +145,13 @@ Are4Are.prototype = {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
 	},
 	scrollToNoMargin: function(targetY, func, triggerSrc) {
-		var $$ = this;
-		var y = Math.min(targetY, $$.body.clientHeight - $$.win.innerHeight);
-		$$.scrollendFunc = func;
-		$$.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
-		if ($$.win.scrollY == y) {
+		var y = Math.min(targetY, this.body.clientHeight - this.win.innerHeight);
+		this.scrollendFunc = func;
+		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
+		if (this.win.scrollY == y) {
 			if (func) { func(); }
 		} else {
-			$$.win.scrollTo(0, y);
+			this.win.scrollTo(0, y);
 		}
 	},
 	// Fade
@@ -167,20 +164,19 @@ Are4Are.prototype = {
 	},
 	// Toast
 	toast: function() {
-		var $$ = this;
-		var text = $$.format.apply($$, arguments);
-		if (!$$.toastDiv) {
+		var text = this.format.apply(this, arguments);
+		if (!this.toastDiv) {
 		}
-		$$.toastDiv.textContent = text;
-		$$.fadeIn($$.toastDiv);
-		$$.timeout('fadeOutToast', (function() { $$.fadeOut($$.toastDiv);}), 3000);
+		this.toastDiv.textContent = text;
+		this.fadeIn(this.toastDiv);
+		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv);}, 3000);
 	},
 	// ToolBar
 	addToolButton: function(label, onclick) {
 		var btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.href = 'javascript:void(0);';
-		btn.classList.add('are-toolbtn', 'are-toolbtn-' + label);
+		btn.classList.add('are-toolbtn', `are-toolbtn-${label}`);
 		if (onclick) {
 			btn.onclick = onclick.bind(this);
 		}
@@ -196,69 +192,68 @@ Are4Are.prototype = {
 
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
-		var $$ = this;
-		$$.body = window.document.body;
+		this.body = window.document.body;
 
 		// Viewport
-		var head = $$.firstTag($$.doc, 'HEAD');
-		var viewport = $$.create('META', {
+		var head = this.firstTag(this.doc, 'HEAD');
+		var viewport = this.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'
 		});
 		head.insertBefore(viewport, head.firstChild);
 
 		// CSS
-		$$.addCssFile('common/are4are.css');
+		this.addCssFile('common/are4are.css');
 
 		// Scrollend Event
-		$$._scrollendEventTrigger = $$.scrollendEventTrigger.bind($$);
-		$$.win.addEventListener('scroll', $$._scrollendEventTrigger);
-		$$.body.addEventListener('touchmove', $$._scrollendEventTrigger);
+		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
+		this.win.addEventListener('scroll', this._scrollendEventTrigger);
+		this.body.addEventListener('touchmove', this._scrollendEventTrigger);
 
 		// Toast
-		$$.toastDiv = $$.create('DIV', {'class': 'are-toast transparent'});
-		$$.body.appendChild($$.toastDiv);
+		this.toastDiv = this.create('DIV', {'class': 'are-toast transparent'});
+		this.body.appendChild(this.toastDiv);
 
 		// Toolbar
-		$$.toolbar = $$.create('DIV', {
+		this.toolbar = this.create('DIV', {
 			'class': 'are-toolbar',
 			style: 'display:none'
 		});
-		$$.body.appendChild($$.toolbar);
-		$$.queue(function() { $$.toolbar.style = ''; });
+		this.body.appendChild(this.toolbar);
+		this.queue(() => { this.toolbar.style = ''; });
 
 		// modify ThreadPage, CatalogPage, etc ...
-		$$.exec();
+		this.exec();
 	},
 
 	// Start ///////////////////////////////
 	start : function(window) {
-		var $$ = this;
-		$$.win = window;
-		$$.doc = window.document;
-		//$$.body = window.document.body; // document.body don't exist yet.
+		this.win = window;
+		this.doc = window.document;
+		//this.body = window.document.body; // document.body don't exist yet.
 
-		if ($$.doc.readyState != 'complete') {
+		if (this.doc.readyState != 'complete') {
 			try {
 				// Hide body
-				var cover = 'body::before {' +
-					'background: #fff;' +
-					'content: " ";' +
-					'display: block;' +
-					'height: 100%;' +
-					'left: 0;' +
-					'opacity: 1;' +
-					'pointer-events: none;' +
-					'position: fixed;' +
-					'top: 0;' +
-					'width: 100%;' +
-					'z-index: 99;' +
-					'}';
-				$$.doc.documentElement.appendChild($$.create('STYLE'));
-				var ss = $$.arrayLast($$.doc.styleSheets);
+				var cover =
+					`body::before {
+						background: #fff;
+						content: " ";
+						display: block;
+						height: 100%;
+						left: 0;
+						opacity: 1;
+						pointer-events: none;
+						position: fixed;
+						top: 0;
+						width: 100%;
+						z-index: 99;
+					}`;
+				this.doc.documentElement.appendChild(this.create('STYLE'));
+				var ss = this.arrayLast(this.doc.styleSheets);
 				ss.insertRule(cover, 0);
 				// Show body
-				$$.win.addEventListener('load', function() {
+				this.win.addEventListener('load', () => {
 					ss.insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 0);
 				});
 			} catch (e) {
@@ -267,10 +262,10 @@ Are4Are.prototype = {
 		}
 
 		// Modify futaba
-		if ($$.doc.readyState == 'interactive' || $$.doc.readyState == 'complete') {
-			$$.onDOMContentLoaded();
+		if (this.doc.readyState == 'interactive' || this.doc.readyState == 'complete') {
+			this.onDOMContentLoaded();
 		} else {
-			$$.doc.addEventListener('DOMContentLoaded', $$.onDOMContentLoaded.bind($$));
+			this.doc.addEventListener('DOMContentLoaded', this.onDOMContentLoaded.bind(this));
 		}
 	}
 };

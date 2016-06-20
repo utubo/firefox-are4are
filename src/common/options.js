@@ -68,13 +68,11 @@ function saveOptions(e) {
 	});
 }
 function restoreOptions() {
-	chrome.storage.local.get('urls', function(res) {
-		form.urls.value = (res.urls || '') + (res.urls ? "\n" : '');
+	chrome.storage.local.get('urls', res => {
+		form.urls.value = res.urls ? `${res.urls}\n` : '';
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
-		function (e, i, a) {
-			e.textContent = chrome.i18n.getMessage(e.getAttribute('data-message-id'));
-		}
+		(e, i, a) => { e.textContent = chrome.i18n.getMessage(e.getAttribute('data-message-id')); }
 	]);
 }
 
@@ -89,7 +87,7 @@ function addUrl(url) {
 		.replace(/([\/_])\d\d+(\\\.html?|\/|$)/, '$1\\d+$2') // thread number
 		.replace( // date
 			/\/([\d\/\-]+)\//g,
-			function(m1) {
+			m1 => {
 				var r = '/[\\d';
 				if (m1.indexOf('/') != -1)
 					r += '/';
@@ -105,7 +103,7 @@ function addUrl(url) {
 	var FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
 	if (urlReg.endsWith(FTBUCKET_SUFIX)) {
 		var paths = urlReg.split("/");
-		urlReg = paths[0] + '//' + paths[2] + '/.+' + FTBUCKET_SUFIX;
+		urlReg = paths[0] + `//${paths[2]}/.+${FTBUCKET_SUFIX}`;
 	}
 
 	form.urls.value += (form.urls.value.match(/\n$/) ? '' : "\n") + urlReg;
@@ -138,9 +136,9 @@ function tabsBtnOnClick(e) {
 	addOption(form.tabs, '', chrome.i18n.getMessage('selectTargetUrlTab'));
 	chrome.tabs.query({
 		"url": ["http://*/*", "https://*/*"]
-	}, function(tabs) {
+	}, tabs => {
 		for(var tab of tabs) {
-			addOption(form.tabs, tab.url, tab.title + ' ' + tab.url);
+			addOption(form.tabs, tab.url, `${tab.title} ${tab.url}`);
 		}
 	});
 }
