@@ -103,32 +103,31 @@ reloadBtnOnClick: function(e) {
 		let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
 		let lastCheckbox = this.arrayLast(checkboxs);
 		let lastResNumber = lastCheckbox.name;
-		let lastResMarker = this.parentNode(lastCheckbox, 'TABLE').nextSibling;
+		let lastResMarker = this.next(this.parentNode(lastCheckbox, 'TABLE') || this.next(lastCheckbox, 'BLOCKQUOTE'), 'DIV');
 		// new reses
 		let newReses = this.doc.createDocumentFragment();
 		let count = 0;
 		let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
-		if (table) {
-			table = this.parentNode(table, 'TABLE').nextSibling;
-			while (table) {
-				let next = table.nextSibling;
-				if (table.nodeType !== 1) {
-					// skip
-				} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
-					count ++;
-					newReses.appendChild(table);
-				} else if (table.tagName === 'DIV' && table.style.clear == 'left') {
-					break;
-				}
-				table = next;
+		table = table && (this.parentNode(table, 'TABLE') || this.next(table, 'BLOCKQUOTE'));
+		table = table && table.nextSibling;
+		while (table) {
+			let next = table.nextSibling;
+			if (table.nodeType !== 1) {
+				// skip
+			} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
+				count ++;
+				newReses.appendChild(table);
+			} else if (table.tagName === 'DIV' && table.style.clear == 'left') {
+				break;
 			}
+			table = next;
 		}
 		if (!count) {
 			this.toast('__MSG_notModified__');
 			return;
 		}
 		this.modifyTables(newReses.querySelector('TABLE'));
-		let newerBorderY = lastResMarker.nextSibling.offsetTop;
+		let newerBorderY = lastResMarker.offsetTop;
 		this.newerBorder.style.top = newerBorderY + 'px';
 		lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
 		this.queue(() => {
