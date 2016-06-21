@@ -29,9 +29,9 @@ appendMinThumbnail: function() {
 			threadImage.firstChild &&
 			threadImage.firstChild.tagName == 'IMG'
 		) {
-				href = threadImage.href;
-				threadImage = threadImage.firstChild;
-				break;
+			href = threadImage.href;
+			threadImage = threadImage.firstChild;
+			break;
 		} else if (threadImage.tagName == 'HR') {
 			break;
 		}
@@ -89,6 +89,9 @@ pageDownBtnOnTouchend: function(e) {
 	this.pageDownBtn.classList.remove('active');
 	this.pageDownY = null;
 },
+findTableOrBlockquote: function(checkbox) {
+	return checkbox ? (this.parentNode(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
+},
 reloadBtnOnClick: function(e) {
 	this.activateToolBar();
 	this.hideNewerBorder();
@@ -103,12 +106,12 @@ reloadBtnOnClick: function(e) {
 		let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
 		let lastCheckbox = this.arrayLast(checkboxs);
 		let lastResNumber = lastCheckbox.name;
-		let lastResMarker = this.next(this.parentNode(lastCheckbox, 'TABLE') || this.next(lastCheckbox, 'BLOCKQUOTE'), 'DIV');
+		let lastResMarker = this.next(this.findTableOrBlockquote(lastCheckbox), 'DIV');
 		// new reses
 		let newReses = this.doc.createDocumentFragment();
 		let count = 0;
 		let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
-		table = table && (this.parentNode(table, 'TABLE') || this.next(table, 'BLOCKQUOTE'));
+		table = this.findTableOrBlockquote(table);
 		table = table && table.nextSibling;
 		while (table) {
 			let next = table.nextSibling;
