@@ -192,7 +192,7 @@ Are4Are.prototype = {
 
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
-		this.body = window.document.body;
+		this.body = this.doc.body;
 
 		// Viewport
 		let head = this.firstTag(this.doc, 'HEAD');
@@ -229,7 +229,7 @@ Are4Are.prototype = {
 	// Start ///////////////////////////////
 	start : function(window) {
 		this.win = window;
-		this.doc = window.document;
+		this.doc = this.win.document;
 		//this.body = window.document.body; // document.body don't exist yet.
 
 		if (this.doc.readyState != 'complete') {
