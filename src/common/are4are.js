@@ -82,12 +82,17 @@ Are4Are.prototype = {
 		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
-		func = func.name ? this.func(func.name) : func.bind(this);
+		if (func.name) {
+			func = this.func(func.name);
+		}
 		for (let name of names.split(' ')) {
 			elm.addEventListener(name, func);
 		}
 	},
 	timeout: function(id, func, msec) { // ??? "setTimeout or setInterval must have function as 1st arg"
+		if (func.name) {
+			func = this.func(func.name);
+		}
 		if (id) {
 			this.clearTimeout(id);
 			this.timeoutIds[id] = this.win.setTimeout(func, msec);

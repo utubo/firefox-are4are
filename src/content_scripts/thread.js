@@ -82,7 +82,7 @@ pageDownBtnOnTouchstart: function(e) {
 	this.pageDownBtn.classList.add('active');
 	this.pageDownY = this.win.scrollY + Math.round(this.win.innerHeight / 2);
 	this.scrollToNoMargin(this.pageDownY, null, 'pageDownBtn');
-	this.timeout('RePageDown', () => { this.pageDownBtnOnTouchstart(); }, 1000);
+	this.timeout('RePageDown', this.pageDownBtnOnTouchstart, 1000);
 },
 pageDownBtnOnTouchend: function(e) {
 	this.clearTimeout('RePageDown');
@@ -365,7 +365,7 @@ onSubmit: function(e) {
 		this.ftxa.value = '';
 		(this.first('INPUT[name="upfile"]') || {}).value = '';
 		this.hideForm();
-		this.timeout(null, () => { this.reloadBtnOnClick(); }, 1000);
+		this.timeout(null, this.reloadBtnOnClick, 1000);
 	}
 },
 modifyForm: function() {
