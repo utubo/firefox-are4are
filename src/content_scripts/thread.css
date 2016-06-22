@@ -232,7 +232,7 @@ img {
 	opacity: 0;
 	position: absolute;
 	top: 0;
-	transition: width .3s, opacity .3s;
+	transition: width .3s, opacity;
 	width: 0;
 	z-index: 1;
 }

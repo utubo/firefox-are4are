@@ -76,7 +76,7 @@ hideNewerBorder: function() {
 	this.newerBorder.style = `top:${this.newerBorder.style.top};`;
 },
 
-// ToolButtons ///////////////////////
+// Common-tool-buttons ///////////////////////
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
 	this.pageDownBtn.classList.add('active');
@@ -90,56 +90,7 @@ pageDownBtnOnTouchend: function(e) {
 	this.pageDownY = null;
 },
 findTableOrBlockquote: function(checkbox) {
-	return checkbox ? (this.parentNode(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
-},
-reloadBtnOnClick: function(e) {
-	this.activateToolBar();
-	this.hideNewerBorder();
-	this.getDoc(this.doc.location.href.replace(/#.*$/, ''), doc => {
-		// update contdisp
-		let contdisp = this.id('contdisp');
-		let newContdisp = contdisp && doc.getElementById('contdisp');
-		if (newContdisp) {
-			contdisp.textContent = newContdisp.textContent;
-		}
-		// find last Res
-		let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
-		let lastCheckbox = this.arrayLast(checkboxs);
-		let lastResNumber = lastCheckbox.name;
-		let lastResMarker = this.next(this.findTableOrBlockquote(lastCheckbox), 'DIV');
-		// new reses
-		let newReses = this.doc.createDocumentFragment();
-		let count = 0;
-		let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
-		table = this.findTableOrBlockquote(table);
-		table = table && table.nextSibling;
-		while (table) {
-			let next = table.nextSibling;
-			if (table.nodeType !== 1) {
-				// skip
-			} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
-				count ++;
-				newReses.appendChild(table);
-			} else if (table.tagName === 'DIV' && table.style.clear == 'left') {
-				break;
-			}
-			table = next;
-		}
-		if (!count) {
-			this.toast('__MSG_notModified__');
-			return;
-		}
-		this.modifyTables(newReses.querySelector('TABLE'));
-		let newerBorderY = lastResMarker.offsetTop;
-		this.newerBorder.style.top = newerBorderY + 'px';
-		lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
-		this.queue(() => {
-			this.scrollTo(newerBorderY, this.showNewerBorder.bind(this));
-		});
-	}, {
-		'304': '__MSG_notModified__',
-		'404': '__MSG_threadNotFound__'
-	});
+	return checkbox ? (this.parentTag(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
 },
 bottomBtnOnClick: function(e) {
 	this.activateToolBar();
@@ -151,11 +102,65 @@ backBtnOnClick: function() {
 	this.hideBackBtn({force: true});
 },
 
+// Reload  ///////////////////////////
+onReloaded: function(doc) {
+	// update contdisp
+	let contdisp = this.id('contdisp');
+	let newContdisp = contdisp && doc.getElementById('contdisp');
+	if (newContdisp) {
+		contdisp.textContent = newContdisp.textContent;
+	}
+	// find last Res
+	let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
+	let lastCheckbox = this.arrayLast(checkboxs);
+	let lastResNumber = lastCheckbox.name;
+	let lastResMarker = this.next(this.findTableOrBlockquote(lastCheckbox), 'DIV');
+	// new reses
+	let newReses = this.doc.createDocumentFragment();
+	let count = 0;
+	let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
+	table = this.findTableOrBlockquote(table);
+	table = table && table.nextSibling;
+	while (table) {
+		let next = table.nextSibling;
+		if (table.nodeType !== 1) {
+			// skip
+		} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
+			count ++;
+			newReses.appendChild(table);
+		} else if (table.tagName === 'DIV' && table.style.clear == 'left') {
+			break;
+		}
+		table = next;
+	}
+	if (!count) {
+		this.toast('__MSG_notModified__');
+		return;
+	}
+	this.modifyTables(newReses.querySelector('TABLE'));
+	let newerBorderY = lastResMarker.offsetTop;
+	this.newerBorder.style.top = newerBorderY + 'px';
+	lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
+	this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
+},
+reloadBtnOnClick: function(e) {
+	this.activateToolBar();
+	this.hideNewerBorder();
+	this.getDoc(
+		this.doc.location.href.replace(/#.*$/, ''),
+		this.onReloaded,
+		{
+			'304': '__MSG_notModified__',
+			'404': '__MSG_threadNotFound__'
+		}
+	);
+},
+
 // FindRes ///////////////////////////
 hideBackBtn: function(e) {
 	if (e.force || this.backY && this.backY <= this.win.scrollY) {
 		this.backY = 0;
-		this.win.removeEventListener('scrollend', this._hideBackBtn);
+		this.win.removeEventListener('scrollend', this.func('hideBackBtn'));
 		this.backBtn.classList.add('slide-out-h');
 	}
 },
@@ -163,14 +168,10 @@ showBackBtn: function() {
 	if (this.backY) return;
 	this.backY = this.win.scrollY;
 	this.backBtn.classList.remove('slide-out-h');
-	this._hideBackBtn = this._hideBackBtn || this.hideBackBtn.bind(this);
-	this.win.addEventListener('scrollend', this._hideBackBtn);
+	this.win.addEventListener('scrollend', this.func('hideBackBtn'));
 },
 findRes: function(reg, from) {
-	while (from) {
-		if (from.tagName === 'TABLE') {
-			break;
-		}
+	while (from && from.tagName !== 'TABLE') {
 		from = from.parentNode;
 	}
 	if (!from) return;
@@ -218,12 +219,12 @@ quoteTextOnClick: function(e) {
 		this.found.classList.remove('bookmark', 'found', 'found-fuzzy', 'not-fuzzy');
 	}
 	this.found = found;
-	if (this.backY < this.parentNode(e.target, 'TABLE').offsetTop) {
+	if (this.backY < this.parentTag(e.target, 'TABLE').offsetTop) {
 		this.backY = 0;
 	}
 	if (!this.backY) {
 		this.foundFrom && this.foundFrom.classList.remove('bookmark');
-		this.foundFrom = this.parentNode(e.target, 'BLOCKQUOTE');
+		this.foundFrom = this.parentTag(e.target, 'BLOCKQUOTE');
 		this.foundFrom.classList.add('bookmark');
 	}
 	// scroll
@@ -326,20 +327,19 @@ modifyTables: function(table) {
 },
 modifyTablesFromPageLeftTop: function() {
 	// find left-top TABLE and modify.
-	let x = 0, y = 0;
-	for (let i = 0; i < 10; i ++) {
-		let table = this.doc.elementFromPoint(x, y);
-		if (table.tagName === 'A') table = table.parentNode;
-		if (table.tagName === 'BLOCKQUOTE') table = table.parentNode;
-		if (table.tagName === 'TD') table = table.parentNode;
-		if (table.tagName === 'TR') table = table.parentNode;
-		if (table.tagName === 'TBODY') table = table.parentNode;
-		if (table.tagName === 'TABLE' && table.border === '0') {
+	for (let xy = 3; xy < 30; xy += 3) {
+		let table = this.doc.elementFromPoint(xy, xy);
+		if (table.tagName === 'HTML') {
+			continue;
+		} else if (table.tagName !== 'TABLE') {
+			table = this.parentTag(table, 'TABLE');
+			if (!table) continue;
+		}
+		let rtd = this.firstClass(table, 'rtd');
+		if (rtd && this.parentTag(rtd, 'TABLE') === table) {
 			this.modifyTables(table);
 			return;
 		}
-		x += 3;
-		y += 3;
 	}
 },
 

@@ -21,20 +21,20 @@ catalogModeOnClick: function(e) {
 	this.refreshCatalog(e.target.href);
 	return false;
 },
+// Longtap
 bodyOnScroll: function(e) {
 	this.cancelLongtap();
 	this.hideThumbnail();
 },
-// Longtap
 bodyOnTouchstart: function(e) {
 	if (e.target.id === 'thumbnail') {
 		this.cancelLongtap();
 	} else if (e.target.tagName !== 'IMG') {
 		// nop
-	} else if (this.parentNode(e.target, 'TD')) {
-		this.threadLink = this.parentNode(e.target, 'A');
+	} else if (this.parentTag(e.target, 'TD')) {
+		this.threadLink = this.parentTag(e.target, 'A');
 		if (!this.threadLink) return;
-		this.setLongtap(e.target, this.showThumbnail.bind(this), 300);
+		this.setLongtap(e.target, this.showThumbnail, 300);
 	}
 },
 bodyOnTouchend: function(e) {
@@ -46,7 +46,7 @@ bodyOnTouchend: function(e) {
 	}
 },
 setLongtap: function(elem, func, msec) {
-	this.longtapLink = elem.tagName == 'A' ? elem : this.parentNode(elem, 'A');
+	this.longtapLink = elem.tagName == 'A' ? elem : this.parentTag(elem, 'A');
 	this.longtapLinkHref = this.longtapLink.href;
 	this.timeout('longtap', () => {
 		if (this.longtapLink) {
@@ -54,7 +54,7 @@ setLongtap: function(elem, func, msec) {
 		}
 		this.body.classList.add('user-select-none');
 		this.isPreventTouchend = true;
-		func();
+		func.call(this);
 	}, msec);
 },
 cancelLongtap: function() {
@@ -183,11 +183,11 @@ appendCatalogCountDelta: function(tablePalent) {
 },
 refreshCatalog: function(href) {
 	this.hideThumbnail();
-	this.getDoc(href, doc => {
-		this.appendCatalogCountDelta(doc);
-	}, {
-		'304': '__MSG_notModified__'
-	});
+	this.getDoc(
+		href,
+		this.appendCatalogCountDelta,
+		{ '304': '__MSG_notModified__' }
+	);
 },
 
 // Main ////////////////////////////////
@@ -224,7 +224,7 @@ exec: function(window) {
 		Array.forEach(this.all('INPUT[name="cx"],INPUT[name="cy"],INPUT[name="cl"]'), input => {
 			input.setAttribute('type', 'tel');
 		});
-		let td = this.parentNode(this.first('INPUT[name="mode"]'), 'TD') || this.body;
+		let td = this.parentTag(this.first('INPUT[name="mode"]'), 'TD') || this.body;
 		td.appendChild(this.create(
 			'A', {
 			href: chrome.extension.getURL('common/options.html#tabpage'),

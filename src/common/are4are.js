@@ -13,18 +13,22 @@ Are4Are.prototype = {
 	timeoutIds: {},
 
 	// Util ////////////////////////////////
-	format: function() {
-		let args = arguments;
-		let str = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => { return chrome.i18n.getMessage(c); });
-		return str.replace(/\{(\d+)\}/g, (m, c) => { return args[parseInt(c) + 1]; });
+	format: (...args) => {
+		let s = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => chrome.i18n.getMessage(c));
+		return s.replace(/\{(\d+)\}/g, (m, c) => args[parseInt(c) + 1]);
 	},
-	regEscape: function(s) {
-		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	regEscape: s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
+	arrayLast: a => a[a.length - 1],
+	// bind function
+	funcs: {},
+	func: function(name) {
+		let func = this.funcs[name];
+		if (!func) {
+			func = (this[name]).bind(this);
+			this.funcs[name] = func;
+		}
+		return func;
 	},
-	arrayLast: function(a) {
-		return a[a.length - 1];
-	},
-
 	// DOM & HTML Util /////////////////////
 	id: function(_id) {
 		return this.doc.getElementById(_id);
@@ -51,9 +55,9 @@ Are4Are.prototype = {
 		}
 		return null;
 	},
-	prev: function(elm, tag) { return this.findTag(elm, tag, e => { return e.previousSibling; }); },
-	next: function(elm, tag) { return this.findTag(elm, tag, e => { return e.nextSibling; }); },
-	parentNode: function(elm, tag) { return this.findTag(elm, tag, e => { return e.parentNode; }); },
+	prev: function(elm, tag) { return this.findTag(elm, tag, e => e.previousSibling); },
+	next: function(elm, tag) { return this.findTag(elm, tag, e => e.nextSibling); },
+	parentTag: function(elm, tag) { return this.findTag(elm, tag, e => e.parentNode); },
 	create: function(tag, attrs, text) {
 		let elm = this.doc.createElement.call(this.doc, tag);
 		if (attrs) {
@@ -78,8 +82,9 @@ Are4Are.prototype = {
 		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
+		func = func.name ? this.func(func.name) : func.bind(this);
 		for (let name of names.split(' ')) {
-			elm.addEventListener(name, func.bind(this));
+			elm.addEventListener(name, func);
 		}
 	},
 	timeout: function(id, func, msec) { // ??? "setTimeout or setInterval must have function as 1st arg"
@@ -106,7 +111,7 @@ Are4Are.prototype = {
 			if (xhr.readyState !== 4) return;
 			this.noactivateToolBar();
 			if (xhr.status == 200 && xhr.responseXML) {
-				func(xhr.responseXML);
+				func.call(this, xhr.responseXML);
 				return;
 			}
 			let errorMessage = errorMessages[xhr.status] || `__MSG_networkError__(${xhr.status})`;
@@ -149,7 +154,7 @@ Are4Are.prototype = {
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
 		if (this.win.scrollY == y) {
-			if (func) { func(); }
+			if (func) { func.call(this); }
 		} else {
 			this.win.scrollTo(0, y);
 		}
@@ -165,8 +170,6 @@ Are4Are.prototype = {
 	// Toast
 	toast: function() {
 		let text = this.format.apply(this, arguments);
-		if (!this.toastDiv) {
-		}
 		this.toastDiv.textContent = text;
 		this.fadeIn(this.toastDiv);
 		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv);}, 3000);
@@ -178,7 +181,7 @@ Are4Are.prototype = {
 		btn.href = 'javascript:void(0);';
 		btn.classList.add('are-toolbtn', `are-toolbtn-${label}`);
 		if (onclick) {
-			btn.onclick = onclick.bind(this);
+			this.on(btn, 'click', onclick);
 		}
 		this.toolbar.appendChild(btn, this.toolbar.firstChild);
 		return btn;
@@ -206,9 +209,8 @@ Are4Are.prototype = {
 		this.addCssFile('common/are4are.css');
 
 		// Scrollend Event
-		this._scrollendEventTrigger = this.scrollendEventTrigger.bind(this);
-		this.win.addEventListener('scroll', this._scrollendEventTrigger);
-		this.body.addEventListener('touchmove', this._scrollendEventTrigger);
+		this.on(this.win, 'scroll', this.scrollendEventTrigger);
+		this.on(this.body, 'touchmove', this.scrollendEventTrigger);
 
 		// Toast
 		this.toastDiv = this.create('DIV', {'class': 'are-toast transparent'});
@@ -265,7 +267,7 @@ Are4Are.prototype = {
 		if (this.doc.readyState == 'interactive' || this.doc.readyState == 'complete') {
 			this.onDOMContentLoaded();
 		} else {
-			this.doc.addEventListener('DOMContentLoaded', this.onDOMContentLoaded.bind(this));
+			this.on(this.doc, 'DOMContentLoaded', this.onDOMContentLoaded);
 		}
 	}
 };
