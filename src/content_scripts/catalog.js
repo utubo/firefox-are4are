@@ -46,7 +46,7 @@ bodyOnTouchend: function(e) {
 	}
 },
 setLongtap: function(elem, func, msec) {
-	this.longtapLink = elem.tagName == 'A' ? elem : this.parentTag(elem, 'A');
+	this.longtapLink = elem.tagName === 'A' ? elem : this.parentTag(elem, 'A');
 	this.longtapLinkHref = this.longtapLink.href;
 	this.timeout('longtap', () => {
 		if (this.longtapLink) {
@@ -117,8 +117,6 @@ threadImgBtnOnTouchstart: function() {
 		this.threadImgBtn.href = img.parentNode.href;
 		this.threadImgBtn.target = '_blank';
 		this.isThreadImgBtnLoaded = true;
-	}, {
-		'404': '__MSG_threadNotFound__'
 	});
 },
 threadImgBtnOnClick: function() {
@@ -138,7 +136,7 @@ autoFixWidth: function() {
 	Array.forEach(this.catalogTable.querySelectorAll('TD>A>IMG'), img => {
 		width = Math.max(width, img.width);
 	});
-	this.doc.styleSheets[0].insertRule(`.catalog-table>tbody>tr>td {width:${width + 4}px !important;}`, 0);
+	this.doc.styleSheets[0].insertRule(`.catalog-table>tbody>tr>td { width:${width + 4}px !important; }`, 0);
 },
 
 // RefreshCatalog ///////////////////////
@@ -183,11 +181,7 @@ appendCatalogCountDelta: function(tablePalent) {
 },
 refreshCatalog: function(href) {
 	this.hideThumbnail();
-	this.getDoc(
-		href,
-		this.appendCatalogCountDelta,
-		{ '304': '__MSG_notModified__' }
-	);
+	this.getDoc(href, this.appendCatalogCountDelta);
 },
 
 // Main ////////////////////////////////
@@ -204,7 +198,7 @@ exec: function(window) {
 	Array.forEach(this.all('A[href *= "mode=cat"]'), a => {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
-		if (a.parentNode.tagName == 'B') {
+		if (a.parentNode.tagName === 'B') {
 			a.id = 'catalogModeCurrent';
 		}
 		if (this.catalogTable) {
@@ -250,6 +244,12 @@ exec: function(window) {
 	this.on(this.body, 'mousedown touchstart', 'bodyOnTouchstart');
 	this.on(this.body, 'mouseup touchend', 'bodyOnTouchend');
 	this.on(this.win, 'scroll', 'bodyOnScroll');
+
+	// Catalog title
+	if (this.doc.location.href.indexOf('/b/futaba.php') !== -1) {
+		let title = this.firstTag(this.doc, 'TITLE');
+		title.textContent = this.doc.location.hostname.replace(/\..+$/, ' - ') + title.textContent;
+	}
 }
 }; // end of my extension
 

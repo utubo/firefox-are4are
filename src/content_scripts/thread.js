@@ -25,14 +25,14 @@ appendMinThumbnail: function() {
 	let threadImage, href;
 	for (threadImage = this.firstTag(this.doc, 'BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
 		if (
-			threadImage.tagName == 'A' &&
+			threadImage.tagName === 'A' &&
 			threadImage.firstChild &&
-			threadImage.firstChild.tagName == 'IMG'
+			threadImage.firstChild.tagName === 'IMG'
 		) {
 			href = threadImage.href;
 			threadImage = threadImage.firstChild;
 			break;
-		} else if (threadImage.tagName == 'HR') {
+		} else if (threadImage.tagName === 'HR') {
 			break;
 		}
 	}
@@ -128,7 +128,7 @@ onReloaded: function(doc) {
 		} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
 			count ++;
 			newReses.appendChild(table);
-		} else if (table.tagName === 'DIV' && table.style.clear == 'left') {
+		} else if (table.tagName === 'DIV' && table.style.clear === 'left') {
 			break;
 		}
 		table = next;
@@ -146,14 +146,7 @@ onReloaded: function(doc) {
 reloadBtnOnClick: function(e) {
 	this.activateToolBar();
 	this.hideNewerBorder();
-	this.getDoc(
-		this.doc.location.href.replace(/#.*$/, ''),
-		this.onReloaded,
-		{
-			'304': '__MSG_notModified__',
-			'404': '__MSG_threadNotFound__'
-		}
-	);
+	this.getDoc(this.doc.location.href.replace(/#.*$/, ''), this.onReloaded);
 },
 
 // FindRes ///////////////////////////

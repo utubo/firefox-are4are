@@ -10,6 +10,7 @@ Are4Are.prototype = {
 	body: null,
 	toolbar: null,
 	exec: null,
+	funcs: {},
 	timeoutIds: {},
 
 	// Util ////////////////////////////////
@@ -20,7 +21,6 @@ Are4Are.prototype = {
 	regEscape: s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
 	arrayLast: a => a[a.length - 1],
 	// bind function
-	funcs: {},
 	func: function(name) {
 		let func = this.funcs[name];
 		if (!func) {
@@ -109,7 +109,7 @@ Are4Are.prototype = {
 		this.timeout(null, func, 100);
 	},
 	// Ajax ////////////////////////////////
-	getDoc: function(href, func, errorMessages) {
+	getDoc: function(href, func) {
 		this.activateToolBar();
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
@@ -119,8 +119,11 @@ Are4Are.prototype = {
 				func.call(this, xhr.responseXML);
 				return;
 			}
-			let errorMessage = errorMessages[xhr.status] || `__MSG_networkError__(${xhr.status})`;
-			this.toast(errorMessage);
+			switch (xhr.status) {
+				case 304: this.toast('__MSG_notModified__'); break;
+				case 404: this.toast('__MSG_notFound__'); break;
+				default: this.toast(`__MSG_networkError__(${xhr.status})`);
+			}
 		};
 		xhr.onabort = xhr.onerror = xhr.ontimeout = () => {
 			this.toast('__MSG_networkError__(timeout)');
@@ -132,7 +135,7 @@ Are4Are.prototype = {
 			xhr.responseType = 'document';
 			xhr.send();
 		} catch (e) {
-			this.toast('__MSG_networkError__');
+			this.toast(`__MSG_networkError__(${e.message})`);
 			this.noactivateToolBar();
 		}
 	},
@@ -177,7 +180,7 @@ Are4Are.prototype = {
 		let text = this.format.apply(this, arguments);
 		this.toastDiv.textContent = text;
 		this.fadeIn(this.toastDiv);
-		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv);}, 3000);
+		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv); }, 3000);
 	},
 	// ToolBar
 	addToolButton: function(label, onclick) {
@@ -239,7 +242,7 @@ Are4Are.prototype = {
 		this.doc = this.win.document;
 		//this.body = window.document.body; // document.body don't exist yet.
 
-		if (this.doc.readyState != 'complete') {
+		if (this.doc.readyState !== 'complete') {
 			try {
 				// Hide body
 				let cover =
@@ -269,7 +272,7 @@ Are4Are.prototype = {
 		}
 
 		// Modify futaba
-		if (this.doc.readyState == 'interactive' || this.doc.readyState == 'complete') {
+		if (this.doc.readyState === 'interactive' || this.doc.readyState === 'complete') {
 			this.onDOMContentLoaded();
 		} else {
 			this.on(this.doc, 'DOMContentLoaded', 'onDOMContentLoaded');
