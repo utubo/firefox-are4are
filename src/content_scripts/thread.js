@@ -446,16 +446,16 @@ exec: function(window) {
 	}
 
 	// ToolButtons
-	this.backBtn = this.addToolButton('back', this.backBtnOnClick);
+	this.backBtn = this.addToolButton('back', 'backBtnOnClick');
 	this.backBtn.classList.add('slide-out-h');
-	this.quoteBtn = this.addToolButton('quote', this.quoteBtnOnClick);
+	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick');
 	this.quoteBtn.classList.add('slide-out-h');
 	this.writeBtn = this.addToolButton('write');
-	this.addToolButton('reload', this.reloadBtnOnClick);
+	this.addToolButton('reload', 'reloadBtnOnClick');
 	this.pageDownBtn = this.addToolButton('pagedown');
 	this.on(this.pageDownBtn, 'touchstart mousedown', 'pageDownBtnOnTouchstart');
 	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
-	this.addToolButton('bottom', this.bottomBtnOnClick);
+	this.addToolButton('bottom', 'bottomBtnOnClick');
 
 	// MinThumbnail
 	this.appendMinThumbnail();
