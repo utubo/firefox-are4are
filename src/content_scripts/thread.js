@@ -60,7 +60,7 @@ appendMinThumbnail: function() {
 	if (this.minThumbnailImg.complete) {
 		this.modifyFavicon();
 	} else {
-		this.on(this.minThumbnailImg, 'load', this.modifyFavicon);
+		this.on(this.minThumbnailImg, 'load', 'modifyFavicon');
 	}
 },
 modifyFavicon: function() {
@@ -82,7 +82,7 @@ pageDownBtnOnTouchstart: function(e) {
 	this.pageDownBtn.classList.add('active');
 	this.pageDownY = this.win.scrollY + Math.round(this.win.innerHeight / 2);
 	this.scrollToNoMargin(this.pageDownY, null, 'pageDownBtn');
-	this.timeout('RePageDown', this.pageDownBtnOnTouchstart, 1000);
+	this.timeout('RePageDown', 'pageDownBtnOnTouchstart', 1000);
 },
 pageDownBtnOnTouchend: function(e) {
 	this.clearTimeout('RePageDown');
@@ -365,7 +365,7 @@ onSubmit: function(e) {
 		this.ftxa.value = '';
 		(this.first('INPUT[name="upfile"]') || {}).value = '';
 		this.hideForm();
-		this.timeout(null, this.reloadBtnOnClick, 1000);
+		this.timeout(null, 'reloadBtnOnClick', 1000);
 	}
 },
 modifyForm: function() {
@@ -405,11 +405,11 @@ modifyForm: function() {
 		style: 'display:none',
 		src: 'about:blank'
 	});
-	this.on(this.areIframe, 'load', this.onSubmit);
+	this.on(this.areIframe, 'load', 'onSubmit');
 	this.body.appendChild(this.areIframe);
 
 	// Quote
-	this.on(this.body, 'mousedown touchstart', this.showQuoteBtn);
+	this.on(this.body, 'mousedown touchstart', 'showQuoteBtn');
 },
 showQuoteBtn: function() {
 	this.timeout('showQuoteBtn', () => {
@@ -453,18 +453,18 @@ exec: function(window) {
 	this.writeBtn = this.addToolButton('write');
 	this.addToolButton('reload', this.reloadBtnOnClick);
 	this.pageDownBtn = this.addToolButton('pagedown');
-	this.on(this.pageDownBtn, 'touchstart mousedown', this.pageDownBtnOnTouchstart);
-	this.on(this.pageDownBtn, 'touchend mouseup', this.pageDownBtnOnTouchend);
+	this.on(this.pageDownBtn, 'touchstart mousedown', 'pageDownBtnOnTouchstart');
+	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
 	this.addToolButton('bottom', this.bottomBtnOnClick);
 
 	// MinThumbnail
 	this.appendMinThumbnail();
-	this.on(this.win, 'scrollend', this.showMinTumbnail);
+	this.on(this.win, 'scrollend', 'showMinTumbnail');
 
 	// Modify Blockquote (visible)
 	this.modifyBq(this.firstTag(this.doc, 'BLOCKQUOTE'));
 	this.modifyTables(this.first('TABLE[border="0"]'));
-	this.on(this.win, 'scrollend', this.modifyTablesFromPageLeftTop);
+	this.on(this.win, 'scrollend', 'modifyTablesFromPageLeftTop');
 
 	// Newer Border
 	this.create('DIV', { id: 'newerBorder' });

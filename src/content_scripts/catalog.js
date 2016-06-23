@@ -87,8 +87,8 @@ showThumbnail: function() {
 		this.create('DIV', { id: 'thumbnail', 'class': 'thumbnail transparent' })
 		.appendChild(this.create('A', { id: 'thumbnailLink', 'class': 'thumbnail-link', target: '_blank' }))
 		.appendChild(this.create('IMG', { id: 'thumbnailImg', 'class': 'thumbnail-img' }));
-		this.on(this.thumbnail, 'click', this.hideThumbnail);
-		this.on(this.thumbnailImg, 'load', this.thumbnaiImgOnLoad);
+		this.on(this.thumbnail, 'click', 'hideThumbnail');
+		this.on(this.thumbnailImg, 'load', 'thumbnaiImgOnLoad');
 		this.body.appendChild(this.thumbnail);
 	}
 	// show thumbnail
@@ -208,7 +208,7 @@ exec: function(window) {
 			a.id = 'catalogModeCurrent';
 		}
 		if (this.catalogTable) {
-			this.on(a, 'click', this.catalogModeOnClick);
+			this.on(a, 'click', 'catalogModeOnClick');
 		}
 		a.classList.add('are-toolbtn');
 		this.toolbar.appendChild(a);
@@ -238,8 +238,8 @@ exec: function(window) {
 	// Catalog
 	if (!this.catalogTable) return;
 	this.create('A', { id: 'threadImgBtn', 'class': 'are-toolbtn slide-out-h' }, this.format('__MSG_threadImg__'));
-	this.on(this.threadImgBtn, 'mousedown touchstart', this.threadImgBtnOnTouchstart);
-	this.on(this.threadImgBtn, 'click', this.threadImgBtnOnClick);
+	this.on(this.threadImgBtn, 'mousedown touchstart', 'threadImgBtnOnTouchstart');
+	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);
 	this.catalogTable.classList.add('catalog-table');
 	this.isAutoFix =  this.win.innerWidth < this.catalogTable.clientWidth;
@@ -247,9 +247,9 @@ exec: function(window) {
 	this.autoFixWidth();
 	this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
 	this.appendCatalogCountDelta(this.body);
-	this.on(this.body, 'mousedown touchstart', this.bodyOnTouchstart);
-	this.on(this.body, 'mouseup touchend', this.bodyOnTouchend);
-	this.on(this.win, 'scroll', this.bodyOnScroll);
+	this.on(this.body, 'mousedown touchstart', 'bodyOnTouchstart');
+	this.on(this.body, 'mouseup touchend', 'bodyOnTouchend');
+	this.on(this.win, 'scroll', 'bodyOnScroll');
 }
 }; // end of my extension
 

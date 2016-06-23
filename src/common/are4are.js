@@ -82,16 +82,16 @@ Are4Are.prototype = {
 		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
-		if (func.name) {
-			func = this.func(func.name);
+		if (typeof func === 'string') {
+			func = this.func(func);
 		}
 		for (let name of names.split(' ')) {
 			elm.addEventListener(name, func);
 		}
 	},
 	timeout: function(id, func, msec) { // ??? "setTimeout or setInterval must have function as 1st arg"
-		if (func.name) {
-			func = this.func(func.name);
+		if (typeof func === 'string') {
+			func = this.func(func);
 		}
 		if (id) {
 			this.clearTimeout(id);
@@ -214,8 +214,8 @@ Are4Are.prototype = {
 		this.addCssFile('common/are4are.css');
 
 		// Scrollend Event
-		this.on(this.win, 'scroll', this.scrollendEventTrigger);
-		this.on(this.body, 'touchmove', this.scrollendEventTrigger);
+		this.on(this.win, 'scroll', 'scrollendEventTrigger');
+		this.on(this.body, 'touchmove', 'scrollendEventTrigger');
 
 		// Toast
 		this.toastDiv = this.create('DIV', {'class': 'are-toast transparent'});
@@ -272,7 +272,7 @@ Are4Are.prototype = {
 		if (this.doc.readyState == 'interactive' || this.doc.readyState == 'complete') {
 			this.onDOMContentLoaded();
 		} else {
-			this.on(this.doc, 'DOMContentLoaded', this.onDOMContentLoaded);
+			this.on(this.doc, 'DOMContentLoaded', 'onDOMContentLoaded');
 		}
 	}
 };
