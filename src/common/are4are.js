@@ -14,14 +14,14 @@ Are4Are.prototype = {
 	timeoutIds: {},
 
 	// Util ////////////////////////////////
-	format: (...args) => {
-		let s = args[0].replace(/__MSG_([^_]+)__/g, (m, c) => chrome.i18n.getMessage(c));
-		return s.replace(/\{(\d+)\}/g, (m, c) => args[parseInt(c) + 1]);
+	format: (s, ...args) => {
+		return s
+			.replace(/__MSG_([^_]+)__/g, (m, c) => chrome.i18n.getMessage(c))
+			.replace(/\{(\d+)\}/g, (m, c) => args[+c]);
 	},
 	regEscape: s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
 	arrayLast: a => a[a.length - 1],
-	// bind function
-	func: function(name) {
+	bindFunc: function(name) {
 		let func = this.funcs[name];
 		if (!func) {
 			func = (this[name]).bind(this);
@@ -46,14 +46,12 @@ Are4Are.prototype = {
 		return this.doc.querySelectorAll(query);
 	},
 	findTag: function(elm, tag, func) {
-		let e = elm;
-		while(true) {
-			e = func(e);
-			if (!e) return null;
-			if (e.nodeType !== 1) continue;
-			if (e.tagName === tag) return e;
+		while (true) {
+			elm = func(elm);
+			if (!elm) return null;
+			if (elm.nodeType !== 1) continue;
+			if (elm.tagName === tag) return elm;
 		}
-		return null;
 	},
 	prev: function(elm, tag) { return this.findTag(elm, tag, e => e.previousSibling); },
 	next: function(elm, tag) { return this.findTag(elm, tag, e => e.nextSibling); },
@@ -83,7 +81,7 @@ Are4Are.prototype = {
 	},
 	on: function(elm, names, func) {
 		if (typeof func === 'string') {
-			func = this.func(func);
+			func = this.bindFunc(func);
 		}
 		for (let name of names.split(' ')) {
 			elm.addEventListener(name, func);
@@ -91,7 +89,7 @@ Are4Are.prototype = {
 	},
 	timeout: function(id, func, msec) { // ??? "setTimeout or setInterval must have function as 1st arg"
 		if (typeof func === 'string') {
-			func = this.func(func);
+			func = this.bindFunc(func);
 		}
 		if (id) {
 			this.clearTimeout(id);

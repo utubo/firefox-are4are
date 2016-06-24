@@ -9,7 +9,7 @@ body {
 	bottom:0;
 	font-size: 12pt;
 	left:0;
-	line-height: 26pt;
+	line-height: 21pt;
 	max-width:100%;
 	overflow:scroll;
 	position:fixed;
@@ -33,6 +33,7 @@ body {
 	border-radius: 3pt;
 	color: #00e;
 	display: inline-block;
+	margin: 2pt 0;
 	outline: none;
 	padding: 0 2pt;
 	transition: all .3s ease-in;

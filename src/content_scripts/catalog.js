@@ -7,7 +7,7 @@ Are4AreCatalog.prototype = {
 __proto__ : Are4Are.prototype,
 
 // Field ///////////////////////////////
-CATALOG_DATA_SIZE: 1000,
+CATALOG_CACHE_SIZE: 1000,
 
 // Event ///////////////////////////////
 catalogModeOnClick: function(e) {
@@ -19,7 +19,6 @@ catalogModeOnClick: function(e) {
 		this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
 	}
 	this.refreshCatalog(e.target.href);
-	return false;
 },
 // Longtap
 bodyOnScroll: function(e) {
@@ -39,9 +38,9 @@ bodyOnTouchstart: function(e) {
 },
 bodyOnTouchend: function(e) {
 	this.cancelLongtap();
-	if (this.isPreventTouchend) {
+	if (this.handleTouchend) {
 		e.preventDefault();
-		this.isPreventTouchend = false;
+		this.handleTouchend = false;
 		this.body.classList.remove('user-select-none');
 	}
 },
@@ -53,7 +52,7 @@ setLongtap: function(elem, func, msec) {
 			this.longtapLink.removeAttribute('href');
 		}
 		this.body.classList.add('user-select-none');
-		this.isPreventTouchend = true;
+		this.handleTouchend = true;
 		func.call(this);
 	}, msec);
 },
@@ -173,7 +172,7 @@ appendCatalogCountDelta: function(tablePalent) {
 		searchMin ++;
 		searchMax ++;
 	} catch (e) { /*nop*/ } });
-	this.catalogData.splice(this.CATALOG_DATA_SIZE);
+	this.catalogData.splice(this.CATALOG_CACHE_SIZE);
 	if (doAppend) {
 		this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
 		this.catalogTable = this.first('TABLE[border="1"][align="center"]');

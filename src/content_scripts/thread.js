@@ -89,9 +89,6 @@ pageDownBtnOnTouchend: function(e) {
 	this.pageDownBtn.classList.remove('active');
 	this.pageDownY = null;
 },
-findTableOrBlockquote: function(checkbox) {
-	return checkbox ? (this.parentTag(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
-},
 bottomBtnOnClick: function(e) {
 	this.activateToolBar();
 	this.scrollToNoMargin(this.body.clientHeight - this.win.innerHeight, null, 'pageDownBtn');
@@ -103,6 +100,9 @@ backBtnOnClick: function() {
 },
 
 // Reload  ///////////////////////////
+findTableOrBlockquote: function(checkbox) {
+	return checkbox ? (this.parentTag(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
+},
 onReloaded: function(doc) {
 	// update contdisp
 	let contdisp = this.id('contdisp');
@@ -153,7 +153,7 @@ reloadBtnOnClick: function(e) {
 hideBackBtn: function(e) {
 	if (e.force || this.backY && this.backY <= this.win.scrollY) {
 		this.backY = 0;
-		this.win.removeEventListener('scrollend', this.func('hideBackBtn'));
+		this.win.removeEventListener('scrollend', this.bindFunc('hideBackBtn'));
 		this.backBtn.classList.add('slide-out-h');
 	}
 },
@@ -161,19 +161,15 @@ showBackBtn: function() {
 	if (this.backY) return;
 	this.backY = this.win.scrollY;
 	this.backBtn.classList.remove('slide-out-h');
-	this.win.addEventListener('scrollend', this.func('hideBackBtn'));
+	this.win.addEventListener('scrollend', this.bindFunc('hideBackBtn'));
 },
 findRes: function(reg, from) {
-	while (from && from.tagName !== 'TABLE') {
-		from = from.parentNode;
-	}
+	from = from && (from.tagName === 'TABLE' ? from : this.parentTag(from, 'TABLE'));
 	if (!from) return;
-	let table = this.prev(from, 'TABLE');
-	while(table) {
+	for (let table = this.prev(from, 'TABLE'); table; table = this.prev(table, 'TABLE')) {
 		if (reg.test(table.textContent)) {
 			return table;
 		}
-		table = this.prev(table, 'TABLE');
 	}
 	let bq = this.firstTag(this.doc, 'BLOCKQUOTE');
 	if (reg.test(bq.textContent)) {
