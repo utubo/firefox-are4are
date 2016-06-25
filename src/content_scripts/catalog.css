@@ -12,7 +12,11 @@
 }
 .auto-fix>tbody>tr>td {
 	display: inline-block;
-	width: 50px;
+	width: 54px;
+}
+.auto-fix>tbody>tr>td>a {
+	display: inline-block;
+	height: 54px;
 }
 .catalog-table>tbody>tr>td {
 	background: #f0e0d6;

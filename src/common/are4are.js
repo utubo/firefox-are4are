@@ -113,7 +113,7 @@ Are4Are.prototype = {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState !== 4) return;
 			this.noactivateToolBar();
-			if (xhr.status == 200 && xhr.responseXML) {
+			if (xhr.status === 200 && xhr.responseXML) {
 				func.call(this, xhr.responseXML);
 				return;
 			}
@@ -159,7 +159,7 @@ Are4Are.prototype = {
 		let y = Math.min(targetY, this.body.clientHeight - this.win.innerHeight);
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
-		if (this.win.scrollY == y) {
+		if (this.win.scrollY === y) {
 			if (func) { func.call(this); }
 		} else {
 			this.win.scrollTo(0, y);
@@ -238,7 +238,7 @@ Are4Are.prototype = {
 	start : function(window) {
 		this.win = window;
 		this.doc = this.win.document;
-		//this.body = window.document.body; // document.body don't exist yet.
+		//this.body = this.doc.document.body; // document.body don't exist yet.
 
 		if (this.doc.readyState !== 'complete') {
 			try {

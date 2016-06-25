@@ -13,7 +13,8 @@ showMinTumbnail: function(e) {
 	let y = this.win.scrollY;
 	if (
 		y < this.MINTHUMBNAIL_HIDE_SCROLLTOP ||
-		e.detail && e.detail.triggerSrc !== 'pageDownBtn' && e.detail.y && e.detail.y - y < this.MINTHUMBNAIL_SIZE
+		e.detail && e.detail.triggerSrc !== 'pageDownBtn' &&
+		e.detail.y && e.detail.y - y < this.MINTHUMBNAIL_SIZE
 	) {
 		this.fadeOut(this.minThumbnail);
 	} else {
@@ -64,7 +65,7 @@ appendMinThumbnail: function() {
 	}
 },
 modifyFavicon: function() {
-	let faviconLink = this.create('LINK', {rel:'shortcut icon', href: this.minThumbnailImg.src});
+	let faviconLink = this.create('LINK', { rel: 'shortcut icon', href: this.minThumbnailImg.src });
 	this.firstTag(this.doc, 'HEAD').appendChild(faviconLink);
 },
 
@@ -408,14 +409,12 @@ showQuoteBtn: function() {
 },
 quoteBtnOnClick: function() {
 	let text = this.doc.getSelection().toString();
-	for (let i = 0; i < 1; i ++) {
-		if (!text) break;
-		text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
-		if (!text) break;
-		this.ftxa.value += (/[^\n]$/.test(this.ftxa.value) ? "\n" : '') + text + "\n";
-		this.showForm();
-	}
 	this.quoteBtn.classList.add('slide-out-h');
+	if (!text) return;
+	text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
+	if (!text) return;
+	this.ftxa.value += (/[^\n]$/.test(this.ftxa.value) ? "\n" : '') + text + "\n";
+	this.showForm();
 },
 
 // Others ////////////////////////////
@@ -427,7 +426,7 @@ scrollToThreadImage: function() {
 },
 
 // Main ////////////////////////////////
-exec: function(window) {
+exec: function() {
 	// StyleSheet
 	this.addCssFile('content_scripts/thread.css');
 	if (!this.doc.getElementsByClassName('rts')[0]) {

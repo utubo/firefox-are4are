@@ -13,7 +13,7 @@ CATALOG_CACHE_SIZE: 1000,
 catalogModeOnClick: function(e) {
 	e.preventDefault();
 	let current = this.id('catalogModeCurrent');
-	if (current.href != e.target.href) {
+	if (current.href !== e.target.href) {
 		current.id = '';
 		e.target.id = 'catalogModeCurrent';
 		this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
@@ -44,8 +44,8 @@ bodyOnTouchend: function(e) {
 		this.body.classList.remove('user-select-none');
 	}
 },
-setLongtap: function(elem, func, msec) {
-	this.longtapLink = elem.tagName === 'A' ? elem : this.parentTag(elem, 'A');
+setLongtap: function(elm, func, msec) {
+	this.longtapLink = elm.tagName === 'A' ? elm : this.parentTag(elm, 'A');
 	this.longtapLinkHref = this.longtapLink.href;
 	this.timeout('longtap', () => {
 		if (this.longtapLink) {
@@ -96,7 +96,7 @@ showThumbnail: function() {
 	this.threadImgBtn.removeAttribute('target');
 	this.isThreadImgBtnLoaded = false;
 	let src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
-	if (this.thumbnailImg.src == src) {
+	if (this.thumbnailImg.src === src) {
 		this.thumbnaiImgOnLoad();
 	} else {
 		this.thumbnailImg.src = src;
@@ -135,7 +135,8 @@ autoFixWidth: function() {
 	Array.forEach(this.catalogTable.querySelectorAll('TD>A>IMG'), img => {
 		width = Math.max(width, img.width);
 	});
-	this.doc.styleSheets[0].insertRule(`.catalog-table>tbody>tr>td { width:${width + 4}px !important; }`, 0);
+	this.doc.styleSheets[0].insertRule(`.catalog-table td { width:${width + 4}px !important; }`, 0);
+	this.doc.styleSheets[0].insertRule(`.catalog-table td>a { height:${width + 4}px !important; }`, 0);
 },
 
 // RefreshCatalog ///////////////////////
@@ -156,7 +157,7 @@ appendCatalogCountDelta: function(tablePalent) {
 			let delta = '?';
 			for (let i = searchMin; i < searchMax; i ++) {
 				let old = this.catalogData[i];
-				if (old.href != href) {
+				if (old.href !== href) {
 					continue;
 				}
 				delta = count - old.count;
@@ -184,7 +185,7 @@ refreshCatalog: function(href) {
 },
 
 // Main ////////////////////////////////
-exec: function(window) {
+exec: function() {
 	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
 	this.catalogData = [];
 
