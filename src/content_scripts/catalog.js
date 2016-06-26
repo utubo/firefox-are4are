@@ -191,6 +191,8 @@ exec: function() {
 	//// StyleSheet
 	//this.addCssFile('content_scripts/catalog.css');
 
+	this.firstTag(this.doc, 'BODY').classList.add('are4are-initialized');
+
 	// Toolbar
 	let addedHref = [];
 	Array.forEach(this.all('A[href *= "mode=cat"]'), a => {
@@ -252,6 +254,7 @@ exec: function() {
 }; // end of my extension
 
 // Start ///////////////////////////////
+if (window.document.getElementsByClassName('are4are-initialized')[0]) return;
 let myExt = new Are4AreCatalog();
 myExt.start(window);
 })();

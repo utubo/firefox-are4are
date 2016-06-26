@@ -370,9 +370,10 @@ modifyForm: function() {
 		return;
 	}
 	// change id
-	this.ftbl.id = 'ftblFixed';
+	this.ftbl.id = 'are4are_ftblFixed';
 	this.ftbl.style = '';
 	this.ftbl.classList.add('are4are-transparent');
+	this.firstTag(this.ftbl, 'TBODY').classList.add('are4are-ftblFixed-tbody');
 	// dummy #ftbl
 	this.create('DIV', {id: 'are4are_dummyFtbl', 'class': 'are4are-transparent' });
 	this.dummyFtbl.setAttribute('id', 'ftbl');
@@ -424,6 +425,10 @@ scrollToThreadImage: function() {
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.scrollTo(i.offsetTop); }
 },
+afterRepainted: function() {
+	this.scrollToThreadImage();
+	this.modifyTablesFromPageLeftTop();
+},
 
 // Main ////////////////////////////////
 exec: function() {
@@ -471,11 +476,12 @@ exec: function() {
 		}
 	});
 
-	// after repainted
-	this.on(this.win, 'load', () => {
-		this.scrollToThreadImage();
-		this.modifyTablesFromPageLeftTop();
-	});
+	// After repainted
+	if (this.doc.readyState === 'complete') {
+		afterRepainted();
+	} else {
+		this.on(this.win, 'load', 'afterRepainted');
+	}
 }
 }; // end of my extension
 
