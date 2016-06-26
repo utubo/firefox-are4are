@@ -3,7 +3,7 @@ body {
 	padding-bottom: 55pt;
 	scroll-behavior: smooth;
 }
-.are-toolbar {
+.are4are-toolbar {
 	background: #ffe;
 	border-top: 1pt solid #fa8;
 	bottom:0;
@@ -18,17 +18,17 @@ body {
 	width:100%;
 	z-index:10;
 }
-.are-toolbar.active {
-	animation: are-toolbar-active-animation 3s ease-in .5s infinite alternate;
+.are4are-toolbar.active {
+	animation: are4are-toolbar-active-animation 3s ease-in .5s infinite alternate;
 }
-@keyframes are-toolbar-active-animation {
+@keyframes are4are-toolbar-active-animation {
 	0% { border-color:#8cf; }
 	100% { border-color:#fa8; }
 }
-.are-toolbtn,
-.are-toolbtn:active,
-.are-toolbtn:focus,
-.are-toolbtn:visited {
+.are4are-toolbtn,
+.are4are-toolbtn:active,
+.are4are-toolbtn:focus,
+.are4are-toolbtn:visited {
 	background: #ffe;
 	border-radius: 3pt;
 	color: #00e;
@@ -38,39 +38,39 @@ body {
 	padding: 0 2pt;
 	transition: all .3s ease-in;
 }
-.are-toolbtn.active,
-.are-toolbar.active .are-toolbtn:focus {
+.are4are-toolbtn.active,
+.are4are-toolbar.active .are4are-toolbtn:focus {
 	background: #fa8;
 	color: #ffe;
 	transition: none;
 }
-.are-toolbtn.disable {
+.are4are-toolbtn.are4are-disable {
 	color: #aaa;
 }
 
 /* util */
-.fade-effect {
+.are4are-fade-effect {
 	transition: opacity .3s;
 }
-.transparent {
+.are4are-transparent {
 	opacity: 0 !important;
 	pointer-events: none;
 }
-.slide-out-h {
+.are4are-slide-out-h {
 	background: transparent !important;
 	color: transparent !important;
 	max-width: 0 !important;
 	padding: 0 !important;
 	width: 0 !important;
 }
-.user-select-none {
+.are4are-user-select-none {
 	user-select: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 }
 
-/* others */
-.are-toast {
+/* toast */
+.are4are-toast {
 	background: #800;
 	border-radius: 3pt;
 	bottom: 20%;
@@ -87,21 +87,16 @@ body {
 	width: 80%;
 	z-index: 100;
 }
-.are-toast.fade-effect {
+.are4are-toast.are4are-fade-effect {
 	transition: opacity 1s;
 }
-.are-toast::before {
-	background-image: url(../icons/are4are-32.png);
+.are4are-toast::before {
+	background-image: url(../icons/are4are4are-32.png);
 	background-size: 1.2em 1.2em;
 	content: " ";
 	display: inline-block;
 	height: 1em;
 	margin: 0 4pt 0 -4pt;
 	width: 1.2em;
-}
-
-.options-page-link {
-	display: block;
-	margin: 1em 0;
 }
 

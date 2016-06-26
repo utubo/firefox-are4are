@@ -1,78 +1,8 @@
-#catalogModeCurrent {
-	color: #e00;
-}
-
-.catalog-table {
-	border: none;
-	font-size:70%;
-	text-align: center;
-}
-.auto-fix>tbody>tr {
-	display: inline;
-}
-.auto-fix>tbody>tr>td {
-	display: inline-block;
-	width: 54px;
-}
-.auto-fix>tbody>tr>td>a {
-	display: inline-block;
-	height: 54px;
-}
-.catalog-table>tbody>tr>td {
-	background: #f0e0d6;
-	border: none;
-	margin-bottom: 2px;
-	text-align: left;
-	vertical-align: top;
-}
 td>a>img {
 	border: 2pt solid #f0e0d6;
 }
 td>a:visited>img {
 	border-color: #800;
-}
-
-.res-count {
-	position: relative;
-}
-.res-count-delta {
-	opacity: .5;
-}
-br+.res-count {
-	display: inline-block;
-	width: 100%;
-}
-br+.res-count .res-count-delta {
-	position: absolute;
-	right: 1pt;
-}
-
-.thumbnail {
-	background: rgba(0, 0, 0, .5);
-	display: block;
-	height: 100%;
-	left: 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-}
-.thumbnail-link {
-	display: block;
-	left: 50%;
-	max-height: 80%;
-	max-width: 80%;
-	position: absolute;
-	text-align: center;
-	top: calc(50% - 13pt);
-	transform: translate(-50%, -50%) scale(1.2);
-}
-.thumbnail-img {
-	display: block;
-	max-height: 100%;
-	max-width: 100%;
-}
-#are-toolbtn-threadImgBtn {
-	max-width: 5em;
 }
 
 #tit {
@@ -87,10 +17,92 @@ div[style^="width:336px"] {
 	overflow: scroll;
 }
 
-/* catalog setting page */
-.catalog-setting input {
+/* ------------------------ */
+/*       my extension       */
+/* ------------------------ */
+.are4are-current:visited,
+.are4are-current:focus,
+.are4are-current {
+	color: #e00;
+}
+
+.are4are-catalog-table {
+	border: none;
+	font-size:70%;
+	text-align: center;
+}
+.are4are-catalog-table>tbody>tr>td {
+	background: #f0e0d6;
+	border: none;
+	margin-bottom: 2px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.are4are-auto-fix>tbody>tr {
+	display: inline;
+}
+.are4are-auto-fix>tbody>tr>td {
+	display: inline-block;
+}
+.are4are-auto-fix>tbody>tr>td>a {
+	display: inline-block;
+	width: 54px;
+	height: 54px;
+}
+
+.are4are-res-count {
+	position: relative;
+}
+.are4are-res-count-delta {
+	opacity: .5;
+}
+br+.are4are-res-count {
+	display: inline-block;
+	width: 100%;
+}
+br+.are4are-res-count .are4are-res-count-delta {
+	position: absolute;
+	right: 1pt;
+}
+
+.are4are-thumbnail {
+	background: rgba(0, 0, 0, .5);
+	display: block;
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+.are4are-thumbnail-link {
+	display: block;
+	left: 50%;
+	max-height: 80%;
+	max-width: 80%;
+	position: absolute;
+	text-align: center;
+	top: calc(50% - 13pt);
+	transform: translate(-50%, -50%) scale(1.2);
+}
+.are4are-thumbnail-img {
+	display: block;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.are4are-toolbtn-threadImgBtn {
+	max-width: 5em;
+}
+
+.are4are-catalog-setting input {
 	margin-bottom: 1em;
 	margin-right: .5em;
 	padding: .5em;
+}
+.are4are-options-page-link {
+	display: block;
+	margin: 1em 0;
 }
 

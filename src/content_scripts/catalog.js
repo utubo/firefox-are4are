@@ -12,10 +12,10 @@ CATALOG_CACHE_SIZE: 1000,
 // Event ///////////////////////////////
 catalogModeOnClick: function(e) {
 	e.preventDefault();
-	let current = this.id('catalogModeCurrent');
+	let current = this.firstClass(this.toolbar, 'are4are-current');
 	if (current.href !== e.target.href) {
-		current.id = '';
-		e.target.id = 'catalogModeCurrent';
+		current.classList.remove('are4are-current');
+		e.target.classList.add('are4are-current');
 		this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
 	}
 	this.refreshCatalog(e.target.href);
@@ -41,7 +41,7 @@ bodyOnTouchend: function(e) {
 	if (this.handleTouchend) {
 		e.preventDefault();
 		this.handleTouchend = false;
-		this.body.classList.remove('user-select-none');
+		this.body.classList.remove('are4are-user-select-none');
 	}
 },
 setLongtap: function(elm, func, msec) {
@@ -51,7 +51,7 @@ setLongtap: function(elm, func, msec) {
 		if (this.longtapLink) {
 			this.longtapLink.removeAttribute('href');
 		}
-		this.body.classList.add('user-select-none');
+		this.body.classList.add('are4are-user-select-none');
 		this.handleTouchend = true;
 		func.call(this);
 	}, msec);
@@ -71,21 +71,21 @@ hideThumbnail: function(visible) {
 	if (this.isThumbnailVisible) {
 		this.isThumbnailVisible = false;
 		this.fadeOut(this.thumbnail);
-		this.threadImgBtn.classList.add('slide-out-h');
+		this.threadImgBtn.classList.add('are4are-slide-out-h');
 	}
 },
 thumbnaiImgOnLoad: function() {
 	this.fadeIn(this.thumbnail);
-	this.threadImgBtn.classList.remove('slide-out-h');
+	this.threadImgBtn.classList.remove('are4are-slide-out-h');
 	this.isThumbnailVisible = true;
 },
 showThumbnail: function() {
 	let img = this.firstTag(this.threadLink, 'IMG');
 	// create thumbnail
 	if (!this.thumbnail) {
-		this.create('DIV', { id: 'thumbnail', 'class': 'thumbnail transparent' })
-		.appendChild(this.create('A', { id: 'thumbnailLink', 'class': 'thumbnail-link', target: '_blank' }))
-		.appendChild(this.create('IMG', { id: 'thumbnailImg', 'class': 'thumbnail-img' }));
+		this.create('DIV', { id: 'are4are_thumbnail', 'class': 'are4are-thumbnail are4are-transparent' })
+		.appendChild(this.create('A', { id: 'are4are_thumbnailLink', 'class': 'are4are-thumbnail-link', target: '_blank' }))
+		.appendChild(this.create('IMG', { id: 'are4are_thumbnailImg', 'class': 'are4are-thumbnail-img' }));
 		this.on(this.thumbnail, 'click', 'hideThumbnail');
 		this.on(this.thumbnailImg, 'load', 'thumbnaiImgOnLoad');
 		this.body.appendChild(this.thumbnail);
@@ -127,22 +127,20 @@ threadImgBtnOnClick: function() {
 // Fix table layout ///////////////////////
 autoFix: function(table) {
 	if (!this.isAutoFix) return;
-	table.classList.add('auto-fix');
+	table.classList.add('are4are-auto-fix');
 },
 autoFixWidth: function() {
 	if (!this.isAutoFix) return;
-	let width = 0;
-	Array.forEach(this.catalogTable.querySelectorAll('TD>A>IMG'), img => {
-		width = Math.max(width, img.width);
-	});
-	this.doc.styleSheets[0].insertRule(`.catalog-table td { width:${width + 4}px !important; }`, 0);
-	this.doc.styleSheets[0].insertRule(`.catalog-table td>a { height:${width + 4}px !important; }`, 0);
+	let img = this.first('.are4are-auto-fix>TBODY>TR>TD>A>IMG');
+	if (!img) return;
+	let s = `${Math.max(img.width, img.height) + 4}px`;
+	this.arrayLast(this.doc.styleSheets).insertRule(`.are4are-auto-fix>tbody>tr>td>a:first-child { width:${s}; height:${s}; }`, 0);
 },
 
 // RefreshCatalog ///////////////////////
 appendCatalogCountDelta: function(tablePalent) {
 	let work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
-	work.classList.add('catalog-table');
+	work.classList.add('are4are-catalog-table');
 	this.autoFix(work);
 	// add count delta
 	let searchMin = 0;
@@ -151,7 +149,7 @@ appendCatalogCountDelta: function(tablePalent) {
 	Array.forEach(work.getElementsByTagName('TD'), td => { try {
 		let href = this.firstTag(td, 'A').href;
 		let countElm = this.firstTag(td, 'FONT');
-		countElm.classList.add('res-count');
+		countElm.classList.add('are4are-res-count');
 		let count = parseInt(countElm.textContent);
 		if (doAppend) {
 			let delta = '?';
@@ -166,7 +164,7 @@ appendCatalogCountDelta: function(tablePalent) {
 				break;
 			}
 			if (delta) {
-				countElm.appendChild(this.create('SPAN', { class: 'res-count-delta' }, `+${delta}`));
+				countElm.appendChild(this.create('SPAN', { class: 'are4are-res-count-delta' }, `+${delta}`));
 			}
 		}
 		this.catalogData.unshift({href:href, count:count});
@@ -199,19 +197,19 @@ exec: function() {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
 		if (a.parentNode.tagName === 'B') {
-			a.id = 'catalogModeCurrent';
+			a.classList.add('are4are-current');
 		}
 		if (this.catalogTable) {
 			this.on(a, 'click', 'catalogModeOnClick');
 		}
-		a.classList.add('are-toolbtn');
+		a.classList.add('are4are-toolbtn');
 		this.toolbar.appendChild(a);
 		addedHref.push(a.href);
 	});
 
 	// Setting page
 	if (this.doc.location.href.indexOf('mode=catset') !== -1) {
-		this.body.classList.add('catalog-setting');
+		this.body.classList.add('are4are-catalog-setting');
 		Array.forEach(this.all('INPUT[name="mode"]'), input => {
 			input.form.action += "?mode=" + input.value;
 		});
@@ -222,7 +220,7 @@ exec: function() {
 		td.appendChild(this.create(
 			'A', {
 			href: chrome.extension.getURL('common/options.html#tabpage'),
-			'class': 'options-page-link'
+			'class': 'are4are-options-page-link'
 			},
 			this.format('__MSG_extensionName__ - __MSG_options__')
 		));
@@ -231,11 +229,11 @@ exec: function() {
 
 	// Catalog
 	if (!this.catalogTable) return;
-	this.create('A', { id: 'threadImgBtn', 'class': 'are-toolbtn slide-out-h' }, this.format('__MSG_threadImg__'));
+	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-slide-out-h' }, this.format('__MSG_threadImg__'));
 	this.on(this.threadImgBtn, 'mousedown touchstart', 'threadImgBtnOnTouchstart');
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);
-	this.catalogTable.classList.add('catalog-table');
+	this.catalogTable.classList.add('are4are-catalog-table');
 	this.isAutoFix =  this.win.innerWidth < this.catalogTable.clientWidth;
 	this.autoFix(this.catalogTable);
 	this.autoFixWidth();

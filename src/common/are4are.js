@@ -63,7 +63,7 @@ Are4Are.prototype = {
 				elm.setAttribute(attr, attrs[attr]);
 			}
 			if (attrs.id) {
-				this[attrs.id] = elm;
+				this[attrs.id.replace(/^are4are_/, '')] = elm;
 			}
 		}
 		if (text) {
@@ -167,11 +167,11 @@ Are4Are.prototype = {
 	},
 	// Fade
 	fadeOut: function(elm) {
-		elm.classList.add('fade-effect', 'transparent');
+		elm.classList.add('are4are-fade-effect', 'are4are-transparent');
 	},
 	fadeIn: function(elm) {
-		elm.classList.add('fade-effect');
-		elm.classList.remove('transparent');
+		elm.classList.add('are4are-fade-effect');
+		elm.classList.remove('are4are-transparent');
 	},
 	// Toast
 	toast: function() {
@@ -185,7 +185,7 @@ Are4Are.prototype = {
 		let btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.href = 'javascript:void(0);';
-		btn.classList.add('are-toolbtn', `are-toolbtn-${label}`);
+		btn.classList.add('are4are-toolbtn', `are4are-toolbtn-${label}`);
 		if (onclick) {
 			this.on(btn, 'click', onclick);
 		}
@@ -219,12 +219,13 @@ Are4Are.prototype = {
 		this.on(this.body, 'touchmove', 'scrollendEventTrigger');
 
 		// Toast
-		this.toastDiv = this.create('DIV', {'class': 'are-toast transparent'});
+		this.toastDiv = this.create('DIV', {'class': 'are4are-toast are4are-transparent'});
 		this.body.appendChild(this.toastDiv);
 
 		// Toolbar
 		this.toolbar = this.create('DIV', {
-			'class': 'are-toolbar',
+			id: 'are4are_toolbar',
+			'class': 'are4are-toolbar',
 			style: 'display:none'
 		});
 		this.body.appendChild(this.toolbar);

@@ -39,19 +39,19 @@ appendMinThumbnail: function() {
 	}
 	if (!threadImage) return;
 	threadImage.align = '';
-	threadImage.classList.add('thread-image');
+	threadImage.classList.add('are4are-thread-image');
 
 	// make minThumbnail
 	let img = this.create('IMG', {
 		src: threadImage.src,
-		id: 'minThumbnailImg',
-		'class': 'min-thumbnail-img'
+		id: 'are4are_minThumbnailImg',
+		'class': 'are4are-min-thumbnail-img'
 	});
 	this.create('A', {
 		href: href,
 		target: '_blank',
-		id: 'minThumbnail',
-		'class': 'transparent'
+		id: 'are4are_minThumbnail',
+		'class': 'are4are-transparent'
 	});
 	this.minThumbnail.appendChild(img);
 	// waite for FTBucket
@@ -155,13 +155,13 @@ hideBackBtn: function(e) {
 	if (e.force || this.backY && this.backY <= this.win.scrollY) {
 		this.backY = 0;
 		this.win.removeEventListener('scrollend', this.bindFunc('hideBackBtn'));
-		this.backBtn.classList.add('slide-out-h');
+		this.backBtn.classList.add('are4are-slide-out-h');
 	}
 },
 showBackBtn: function() {
 	if (this.backY) return;
 	this.backY = this.win.scrollY;
-	this.backBtn.classList.remove('slide-out-h');
+	this.backBtn.classList.remove('are4are-slide-out-h');
 	this.win.addEventListener('scrollend', this.bindFunc('hideBackBtn'));
 },
 findRes: function(reg, from) {
@@ -186,7 +186,7 @@ quoteTextOnClick: function(e) {
 	let found = this.findRes(new RegExp(this.regEscape(text)), e.target);
 	// fuzzy
 	if (!found && 10 < text.length) {
-		fuzzyClass = 'found-fuzzy';
+		fuzzyClass = 'are4are-found-fuzzy';
 		let halfLength = Math.round(text.length / 2);
 		let fuzzy = `.{${halfLength - 3},${halfLength + 3}}`;
 		let fuzzyReg = new RegExp(
@@ -206,20 +206,20 @@ quoteTextOnClick: function(e) {
 	}
 	// bookmark
 	if (this.found) {
-		this.found.classList.remove('bookmark', 'found', 'found-fuzzy', 'not-fuzzy');
+		this.found.classList.remove('are4are-bookmark', 'are4are-found', 'are4are-found-fuzzy', 'are4are-not-fuzzy');
 	}
 	this.found = found;
 	if (this.backY < this.parentTag(e.target, 'TABLE').offsetTop) {
 		this.backY = 0;
 	}
 	if (!this.backY) {
-		this.foundFrom && this.foundFrom.classList.remove('bookmark');
+		this.foundFrom && this.foundFrom.classList.remove('are4are-bookmark');
 		this.foundFrom = this.parentTag(e.target, 'BLOCKQUOTE');
-		this.foundFrom.classList.add('bookmark');
+		this.foundFrom.classList.add('are4are-bookmark');
 	}
 	// scroll
 	this.showBackBtn();
-	this.scrollTo(y, () => { found.classList.add('bookmark', 'found', fuzzyClass); }, 'quoteText');
+	this.scrollTo(y, () => { found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass); }, 'quoteText');
 },
 
 // Modify Blockquotes ////////////////
@@ -285,15 +285,15 @@ modifyBq: function(bq) {
 	// auto link
 	this.autoLinkTextNode(bq);
 	Array.forEach(bq.getElementsByTagName('font'), font => { this.autoLinkTextNode(font); });
-	// Mail
+	// res header
 	let a = bq;
-	for (let i = 0; i < 10; i ++) { // when over 10, it's may be HOKANKO...
+	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
 		a = a.previousSibling;
+		if (!a) break;
 		if (a.nodeType !== 1) continue;
-		if (!a || a.value === 'delete') {
-			// find Delete-Checkbox
-			break;
-		}
+		// delete-checkbox
+		if (a.value === 'delete') break;
+		// mail
 		if (a.href && /^mailto:/.test(a.href)) {
 			a.parentNode.insertBefore(this.create('SPAN', null, a.textContent), a);
 			a.textContent = a.getAttribute('href').replace('mailto:', ' ') + ' ';
@@ -346,12 +346,12 @@ hideForm: function() {
 	this.fadeOut(this.ftbl);
 },
 onSubmit: function(e) {
-	if (this.areIframe.contentDocument.URL.indexOf('http') !== 0) return;
-	this.areIframe.contentDocument.defaultView.stop();
-	let msg = this.areIframe.contentDocument.getElementsByTagName('DIV')[0] || this.areIframe.contentDocument.body;
+	if (this.iframe.contentDocument.URL.indexOf('http') !== 0) return;
+	this.iframe.contentDocument.defaultView.stop();
+	let msg = this.iframe.contentDocument.getElementsByTagName('DIV')[0] || this.iframe.contentDocument.body;
 	this.toast(msg ? msg.textContent.replace(/リロード$/, '') : '__MSG_writeError__');
-	this.areIframe.contentDocument.location.href = 'about:blank';
-	if (this.areIframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
+	this.iframe.contentDocument.location.href = 'about:blank';
+	if (this.iframe.contentDocument.querySelector('META[http-equiv="refresh"]')) {
 		this.ftxa.value = '';
 		(this.first('INPUT[name="upfile"]') || {}).value = '';
 		this.hideForm();
@@ -361,25 +361,25 @@ onSubmit: function(e) {
 modifyForm: function() {
 	this.ftxa = this.id('ftxa');
 	if (!this.ftxa) {
-		this.writeBtn.classList.add('disable');
+		this.writeBtn.classList.add('are4are-disable');
 		return;
 	}
 	this.ftbl = this.id('ftbl');
 	if (!this.ftbl) {
-		this.writeBtn.classList.add('disable');
+		this.writeBtn.classList.add('are4are-disable');
 		return;
 	}
 	// change id
 	this.ftbl.id = 'ftblFixed';
 	this.ftbl.style = '';
-	this.ftbl.classList.add('transparent');
+	this.ftbl.classList.add('are4are-transparent');
 	// dummy #ftbl
-	this.create('DIV', {id: 'dummyFtbl', 'class': 'transparent' });
+	this.create('DIV', {id: 'are4are_dummyFtbl', 'class': 'are4are-transparent' });
 	this.dummyFtbl.setAttribute('id', 'ftbl');
 	this.body.appendChild(this.dummyFtbl);
 	// writeBtn
 	this.on(this.writeBtn, 'click', () => {
-		if (this.ftbl.classList.contains('transparent')) {
+		if (this.ftbl.classList.contains('are4are-transparent')) {
 			this.showForm();
 		} else {
 			this.hideForm();
@@ -387,16 +387,16 @@ modifyForm: function() {
 	});
 
 	// Post with iFrame
-	this.ftxa.form.setAttribute('target', 'areIframe');
+	this.ftxa.form.setAttribute('target', 'are4are_iframe');
 	this.create(
 		'IFRAME', {
-		id: 'areIframe',
-		name: 'areIframe',
+		id: 'are4are_iframe',
+		name: 'are4are_iframe',
 		style: 'display:none',
 		src: 'about:blank'
 	});
-	this.on(this.areIframe, 'load', 'onSubmit');
-	this.body.appendChild(this.areIframe);
+	this.on(this.iframe, 'load', 'onSubmit');
+	this.body.appendChild(this.iframe);
 
 	// Quote
 	this.on(this.body, 'mousedown touchstart', 'showQuoteBtn');
@@ -404,12 +404,12 @@ modifyForm: function() {
 showQuoteBtn: function() {
 	this.timeout('showQuoteBtn', () => {
 		if (!this.doc.getSelection().toString()) return;
-		this.quoteBtn.classList.remove('slide-out-h');
+		this.quoteBtn.classList.remove('are4are-slide-out-h');
 	}, 1000);
 },
 quoteBtnOnClick: function() {
 	let text = this.doc.getSelection().toString();
-	this.quoteBtn.classList.add('slide-out-h');
+	this.quoteBtn.classList.add('are4are-slide-out-h');
 	if (!text) return;
 	text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
 	if (!text) return;
@@ -419,7 +419,7 @@ quoteBtnOnClick: function() {
 
 // Others ////////////////////////////
 scrollToThreadImage: function() {
-	let i = this.firstClass(this.doc, 'thread-image');
+	let i = this.firstClass(this.doc, 'are4are-thread-image');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.scrollTo(i.offsetTop); }
@@ -435,9 +435,9 @@ exec: function() {
 
 	// ToolButtons
 	this.backBtn = this.addToolButton('back', 'backBtnOnClick');
-	this.backBtn.classList.add('slide-out-h');
+	this.backBtn.classList.add('are4are-slide-out-h');
 	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick');
-	this.quoteBtn.classList.add('slide-out-h');
+	this.quoteBtn.classList.add('are4are-slide-out-h');
 	this.writeBtn = this.addToolButton('write');
 	this.addToolButton('reload', 'reloadBtnOnClick');
 	this.pageDownBtn = this.addToolButton('pagedown');
@@ -455,7 +455,7 @@ exec: function() {
 	this.on(this.win, 'scrollend', 'modifyTablesFromPageLeftTop');
 
 	// Newer Border
-	this.create('DIV', { id: 'newerBorder' });
+	this.create('DIV', { id: 'are4are_newerBorder' });
 	this.body.appendChild(this.newerBorder);
 
 	// Modify Form
