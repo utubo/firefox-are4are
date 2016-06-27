@@ -10,9 +10,6 @@ blockquote {
 	margin-left: 0 !important;
 	word-wrap: break-all;
 }
-.rtd>a>img[hspace="20"] {
-	float: none;
-}
 
 /* width */
 table, blockquote, .ama, .ftbl {
@@ -88,6 +85,9 @@ blockquote {
 	color: #800000;
 	margin: .9em 2pt !important;
 	position: relative;
+}
+img[hspace="20"] {
+	float: none;
 }
 .sod {
 	color: #B66;
