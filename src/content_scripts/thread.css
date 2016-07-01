@@ -174,13 +174,13 @@ div[style^="width:680px"] {
 /* ------------------------ */
 /*       logging site        */
 /* ------------------------ */
+/* tsumanne */
+.are4are-bookmark {
+	overflow: visible;
+}
 /* 2chin */
 .col-xs-12 {
 	padding: 0;
-}
-/* succhi */
-.are4are-bookmark {
-	overflow: visible;
 }
 
 /* ------------------------ */
