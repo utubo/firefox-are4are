@@ -426,8 +426,11 @@ scrollToThreadImage: function() {
 	if (i) { this.scrollTo(i.offsetTop); }
 },
 afterRepainted: function() {
-	this.scrollToThreadImage();
-	this.modifyTablesFromPageLeftTop();
+	if (this.win.scrollY === 0) {
+		this.scrollToThreadImage();
+	} else {
+		this.modifyTablesFromPageLeftTop();
+	}
 },
 
 // Main ////////////////////////////////
