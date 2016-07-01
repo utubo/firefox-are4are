@@ -9,6 +9,7 @@ blockquote {
 	font-size: 10pt;
 	margin-left: 0 !important;
 	word-wrap: break-all;
+	overflow-wrap: break-word;
 }
 
 /* width */
@@ -176,6 +177,10 @@ div[style^="width:680px"] {
 /* 2chin */
 .col-xs-12 {
 	padding: 0;
+}
+/* succhi */
+.are4are-bookmark {
+	overflow: visible;
 }
 
 /* ------------------------ */
