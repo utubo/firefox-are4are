@@ -51,6 +51,10 @@ div[style^="width:336px"] {
 	height: 54px;
 }
 
+.are4are-old {
+	border-color: #f00;
+}
+
 .are4are-res-count {
 	position: relative;
 }

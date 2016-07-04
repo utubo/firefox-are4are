@@ -143,17 +143,18 @@ appendCatalogCountDelta: function(tablePalent) {
 	work.classList.add('are4are-catalog-table');
 	this.autoFix(work);
 	// add count delta
-	let searchMin = 0;
+	let threadCount = 0;
 	let searchMax = this.catalogData.length;
-	let doAppend = searchMax !== 0;
+	let appendDelta = searchMax !== 0;
+	let hrefs = [];
 	Array.forEach(work.getElementsByTagName('TD'), td => { try {
-		let href = this.firstTag(td, 'A').href;
+		let href = this.firstTag(td, 'A').getAttribute('href');
 		let countElm = this.firstTag(td, 'FONT');
 		countElm.classList.add('are4are-res-count');
 		let count = parseInt(countElm.textContent);
-		if (doAppend) {
+		if (appendDelta) {
 			let delta = '?';
-			for (let i = searchMin; i < searchMax; i ++) {
+			for (let i = threadCount; i < searchMax; i ++) {
 				let old = this.catalogData[i];
 				if (old.href !== href) {
 					continue;
@@ -168,11 +169,20 @@ appendCatalogCountDelta: function(tablePalent) {
 			}
 		}
 		this.catalogData.unshift({href:href, count:count});
-		searchMin ++;
+		hrefs.push(href);
+		threadCount ++;
 		searchMax ++;
 	} catch (e) { /*nop*/ } });
 	this.catalogData.splice(this.CATALOG_CACHE_SIZE);
-	if (doAppend) {
+	// red-border
+	hrefs = hrefs.sort((a,b) => (a.length > b.length || a > b));
+	for (var i = 0; i < 5; i ++) {
+		let href = hrefs[i];
+		if (!href) break;
+		work.querySelector(`a[href="${href}"] img`).classList.add('are4are-old');
+	}
+	// complete
+	if (appendDelta) {
 		this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
 		this.catalogTable = this.first('TABLE[border="1"][align="center"]');
 	}
