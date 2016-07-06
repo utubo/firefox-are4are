@@ -33,11 +33,11 @@ Are4Are.prototype = {
 	id: function(_id) {
 		return this.doc.getElementById(_id);
 	},
-	firstTag: function(elm, tagName) {
-		return elm.getElementsByTagName(tagName)[0];
+	firstTag: function(elm, tag) {
+		return !tag ? this.doc.getElementsByTagName(elm)[0] : elm.getElementsByTagName(tag)[0];
 	},
 	firstClass: function(elm, className) {
-		return elm.getElementsByClassName(className)[0];
+		return !className ? this.doc.getElementsByClassName(elm)[0] : elm.getElementsByClassName(className)[0];
 	},
 	first: function(query) {
 		return this.doc.querySelector(query);
@@ -77,7 +77,7 @@ Are4Are.prototype = {
 			type: 'text/css',
 			href: chrome.extension.getURL(cssFile)
 		});
-		this.firstTag(this.doc, 'HEAD').appendChild(cssLink);
+		this.firstTag('HEAD').appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
 		if (typeof func === 'string') {
@@ -204,7 +204,7 @@ Are4Are.prototype = {
 		this.body = this.doc.body;
 
 		// Viewport
-		let head = this.firstTag(this.doc, 'HEAD');
+		let head = this.firstTag('HEAD');
 		let viewport = this.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'

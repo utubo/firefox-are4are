@@ -24,7 +24,7 @@ showMinTumbnail: function(e) {
 appendMinThumbnail: function() {
 	// find thread-image
 	let threadImage, href;
-	for (threadImage = this.firstTag(this.doc, 'BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
+	for (threadImage = this.firstTag('BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
 		if (
 			threadImage.tagName === 'A' &&
 			threadImage.firstChild &&
@@ -66,7 +66,7 @@ appendMinThumbnail: function() {
 },
 modifyFavicon: function() {
 	let faviconLink = this.create('LINK', { rel: 'shortcut icon', href: this.minThumbnailImg.src });
-	this.firstTag(this.doc, 'HEAD').appendChild(faviconLink);
+	this.firstTag('HEAD').appendChild(faviconLink);
 },
 
 // Newer Border ///////////////////////
@@ -172,7 +172,7 @@ findRes: function(reg, from) {
 			return table;
 		}
 	}
-	let bq = this.firstTag(this.doc, 'BLOCKQUOTE');
+	let bq = this.firstTag('BLOCKQUOTE');
 	if (reg.test(bq.textContent)) {
 		return bq;
 	}
@@ -420,7 +420,7 @@ quoteBtnOnClick: function() {
 
 // Others ////////////////////////////
 scrollToThreadImage: function() {
-	let i = this.firstClass(this.doc, 'are4are-thread-image');
+	let i = this.firstClass('are4are-thread-image');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.scrollTo(i.offsetTop); }
@@ -437,7 +437,7 @@ afterRepainted: function() {
 exec: function() {
 	// StyleSheet
 	this.addCssFile('content_scripts/thread.css');
-	if (!this.doc.getElementsByClassName('rts')[0]) {
+	if (!this.firstClass('rts')) {
 		this.addCssFile('content_scripts/legacy_thread.css');
 	}
 
@@ -458,7 +458,7 @@ exec: function() {
 	this.on(this.win, 'scrollend', 'showMinTumbnail');
 
 	// Modify Blockquote (visible)
-	this.modifyBq(this.firstTag(this.doc, 'BLOCKQUOTE'));
+	this.modifyBq(this.firstTag('BLOCKQUOTE'));
 	this.modifyTables(this.first('TABLE[border="0"]'));
 	this.on(this.win, 'scrollend', 'modifyTablesFromPageLeftTop');
 

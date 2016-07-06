@@ -16,7 +16,7 @@ catalogModeOnClick: function(e) {
 	if (current.href !== e.target.href) {
 		current.classList.remove('are4are-current');
 		e.target.classList.add('are4are-current');
-		this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
+		this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	}
 	this.refreshCatalog(e.target.href);
 },
@@ -201,7 +201,7 @@ exec: function() {
 	//// StyleSheet
 	//this.addCssFile('content_scripts/catalog.css');
 
-	this.firstTag(this.doc, 'BODY').classList.add('are4are-initialized');
+	this.firstTag('BODY').classList.add('are4are-initialized');
 
 	// Toolbar
 	let addedHref = [];
@@ -241,23 +241,25 @@ exec: function() {
 
 	// Catalog
 	if (!this.catalogTable) return;
+	// thread-image-button
 	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-slide-out-h' }, this.format('__MSG_threadImg__'));
 	this.on(this.threadImgBtn, 'mousedown touchstart', 'threadImgBtnOnTouchstart');
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);
+	// modify catalog
 	this.catalogTable.classList.add('are4are-catalog-table');
 	this.isAutoFix =  this.win.innerWidth < this.catalogTable.clientWidth;
 	this.autoFix(this.catalogTable);
 	this.autoFixWidth();
-	this.win.scrollTo(0, this.firstTag(this.doc, 'TABLE').offsetTop);
+	this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	this.appendCatalogCountDelta(this.body);
+	// events
 	this.on(this.body, 'mousedown touchstart', 'bodyOnTouchstart');
 	this.on(this.body, 'mouseup touchend', 'bodyOnTouchend');
 	this.on(this.win, 'scroll', 'bodyOnScroll');
-
-	// Catalog title
+	// title
 	if (this.doc.location.href.indexOf('/b/futaba.php') !== -1) {
-		let title = this.firstTag(this.doc, 'TITLE');
+		let title = this.firstTag('TITLE');
 		title.textContent = this.doc.location.hostname.replace(/\..+$/, ' - ') + title.textContent;
 	}
 }
