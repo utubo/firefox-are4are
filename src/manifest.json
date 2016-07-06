@@ -30,7 +30,7 @@
 		},
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"js": ["common/are4are.js", "content_scripts/thread.js"],
+			"js": ["common/are4are.js", "common/thread.js", "content_scripts/all_urls.js"],
 			"run_at": "document_start"
 		}
 	],
@@ -38,11 +38,11 @@
 	"options_ui": { "page": "common/options.html" },
 
 	"web_accessible_resources": [
-		"content_scripts/thread.css",
-		"content_scripts/legacy_thread.css",
-		"content_scripts/catalog.css",
 		"common/are4are.css",
 		"common/options.html",
+		"common/thread.css",
+		"content_scripts/catalog.css",
+		"content_scripts/legacy_thread.css",
 		"icons/are4are-32.png"
 	],
 

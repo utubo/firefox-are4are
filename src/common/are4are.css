@@ -46,6 +46,7 @@ body {
 }
 .are4are-toolbtn.are4are-disable {
 	color: #aaa;
+	pointer-events: none;
 }
 
 /* util */

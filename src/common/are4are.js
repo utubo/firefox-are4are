@@ -181,11 +181,13 @@ Are4Are.prototype = {
 		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv); }, 3000);
 	},
 	// ToolBar
-	addToolButton: function(label, onclick) {
+	addToolButton: function(label, onclick, ...clazz) {
 		let btn = this.create('A');
 		btn.textContent = chrome.i18n.getMessage(label);
 		btn.href = 'javascript:void(0);';
-		btn.classList.add('are4are-toolbtn', `are4are-toolbtn-${label}`);
+		clazz.push('are4are-toolbtn');
+		clazz.push(`are4are-toolbtn-${label}`);
+		btn.classList.add.apply(btn.classList, clazz);
 		if (onclick) {
 			this.on(btn, 'click', onclick);
 		}

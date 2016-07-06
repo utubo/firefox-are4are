@@ -1,8 +1,8 @@
+function Are4AreThread() {}
 (function() {
 
 'use strict';
 
-function Are4AreThread() {}
 Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,
 
@@ -40,6 +40,9 @@ appendMinThumbnail: function() {
 	if (!threadImage) return;
 	threadImage.align = '';
 	threadImage.classList.add('are4are-thread-image');
+
+	// 1stPage
+	if (this.is1stPage) return;
 
 	// make minThumbnail
 	let img = this.create('IMG', {
@@ -302,8 +305,6 @@ modifyBq: function(bq) {
 			}
 		}
 	}
-	// find Qutoted Res
-	Array.forEach(bq.querySelectorAll('FONT[color="#789922"]'), font => { font.classList.add('quote-text'); });
 },
 modifyTables: function(table) {
 	if (!table) return;
@@ -361,14 +362,13 @@ onSubmit: function(e) {
 modifyForm: function() {
 	this.ftxa = this.id('ftxa');
 	if (!this.ftxa) {
-		this.writeBtn.classList.add('are4are-disable');
 		return;
 	}
 	this.ftbl = this.id('ftbl');
 	if (!this.ftbl) {
-		this.writeBtn.classList.add('are4are-disable');
 		return;
 	}
+	this.writeBtn.classList.remove('are4are-disable');
 	// change id
 	this.ftbl.id = 'are4are_ftblFixed';
 	this.ftbl.style = '';
@@ -436,18 +436,20 @@ afterRepainted: function() {
 // Main ////////////////////////////////
 exec: function() {
 	// StyleSheet
-	this.addCssFile('content_scripts/thread.css');
+	this.addCssFile('common/thread.css');
 	if (!this.firstClass('rts')) {
 		this.addCssFile('content_scripts/legacy_thread.css');
 	}
 
 	// ToolButtons
-	this.backBtn = this.addToolButton('back', 'backBtnOnClick');
-	this.backBtn.classList.add('are4are-slide-out-h');
-	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick');
-	this.quoteBtn.classList.add('are4are-slide-out-h');
-	this.writeBtn = this.addToolButton('write');
-	this.addToolButton('reload', 'reloadBtnOnClick');
+	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-slide-out-h');
+	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick', 'are4are-slide-out-h');
+	this.writeBtn = this.addToolButton('write', null, 'are4are-disable');
+	if (this.is1stPage) {
+		this.addToolButton('reload', null, 'are4are-disable');
+	} else {
+		this.addToolButton('reload', 'reloadBtnOnClick');
+	}
 	this.pageDownBtn = this.addToolButton('pagedown');
 	this.on(this.pageDownBtn, 'touchstart mousedown', 'pageDownBtnOnTouchstart');
 	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
@@ -474,7 +476,7 @@ exec: function() {
 		if (!e.target) return;
 		if (e.target.classList.contains('noref')) {
 			this.norefOnClick(e);
-		} else if (e.target.classList.contains('quote-text')) {
+		} else if (e.target.textContent && e.target.textContent.startsWith('>')) {
 			this.quoteTextOnClick(e);
 		}
 	});
@@ -486,23 +488,6 @@ exec: function() {
 		this.on(this.win, 'load', 'afterRepainted');
 	}
 }
-}; // end of my extension
-
-// Start ///////////////////////////////
-chrome.storage.local.get('urls', r => {
-	// Check URL
-	let href = document.location.href;
-	if (href.indexOf('mode=cat') === -1 && href.match(/^http:\/\/([a-z]+)\.2chan\.net\/[^\/]+\/(res\/[0-9]+|futaba\.php)/)) {
-		// default URL
-	} else {
-		// addtional URL
-		if (!(r.urls)) return;
-		let reg = new RegExp(r.urls.replace(/\n/g, '|'));
-		if (!href.replace(/[#\?].*$/, '').match(reg)) return;
-	}
-	// url matched
-	let myExt = new Are4AreThread();
-	myExt.start(window);
-});
+};
 })();
 
