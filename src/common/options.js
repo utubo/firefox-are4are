@@ -78,6 +78,12 @@ function restoreOptions() {
 
 // urls //////////////////////////////
 function addUrl(url) {
+	url= url.replace(/^\s+|\s+$/g, '');
+	if (!url) return;
+	form.urls.value += (form.urls.value.match(/\n$/) ? '' : "\n") + url;
+	correctValues();
+}
+function makeRegex(url) {
 	let urlReg = url.replace(/^\s+|\s+$/g, '');
 	if (!urlReg) return;
 	urlReg = urlReg
@@ -105,21 +111,22 @@ function addUrl(url) {
 		let paths = urlReg.split("/");
 		urlReg = paths[0] + `//${paths[2]}/.+${FTBUCKET_SUFIX}`;
 	}
-
-	form.urls.value += (form.urls.value.match(/\n$/) ? '' : "\n") + urlReg;
-	correctValues();
+	return urlReg;
 }
 function urlsOnPaste(e) {
 	let text = e.clipboardData.getData('text');
 	if (text.indexOf('\\') === -1 && text.indexOf('http') === 0) {
 		e.preventDefault();
-		addUrl(e.clipboardData.getData('text'));
+		addUrl(makeRegex(text));
+	} else if (text.match(/^\^.+\$$/)) {
+		e.preventDefault();
+		addUrl(text);
 	}
 }
 
 // tabs selectbox ////////////////////
 function tabsOnChange(e) {
-	addUrl(e.target.value);
+	addUrl(makeRegex(e.target.value));
 }
 function addOption(sel, value, label) {
 	let o = document.createElement('option');
