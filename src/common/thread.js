@@ -6,6 +6,11 @@ function Are4AreThread() {}
 Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,
 
+// Util //////////////////////////////
+findTableOrBlockquote: function(bq) {
+	return bq === null ? null : this.parentTag(bq, 'TABLE') || bq;
+},
+
 // MinThumbnail //////////////////////
 MINTHUMBNAIL_SIZE: 60,
 MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
@@ -109,9 +114,6 @@ backBtnOnClick: function() {
 },
 
 // Reload  ///////////////////////////
-findTableOrBlockquote: function(bq) {
-	return bq === null ? null : this.parentTag(bq, 'TABLE') || bq;
-},
 onReloaded: function(doc) {
 	// update contdisp
 	let oldContdisp = this.id('contdisp');

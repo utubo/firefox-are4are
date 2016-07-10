@@ -162,7 +162,7 @@ Are4Are.prototype = {
 		let y = Math.min(targetY, this.scrollMax());
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
-		if (this.win.scrollY === y) {
+		if (Math.round(this.win.scrollY) === Math.round(y)) {
 			if (func) { func.call(this); }
 		} else {
 			this.win.scrollTo(0, y);
