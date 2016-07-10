@@ -93,9 +93,14 @@ pageDownBtnOnTouchend: function(e) {
 	this.pageDownBtn.classList.remove('active');
 	this.pageDownY = null;
 },
+scrollMax: function() {
+	let lastTable = this.findTableOrBlockquote(this.arrayLast(this.all('BLOCKQUOTE')));
+	let margin = 5 + Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
+	return lastTable.offsetTop + lastTable.offsetHeight - this.win.innerHeight + this.toolbar.offsetHeight + margin;
+},
 bottomBtnOnClick: function(e) {
 	this.activateToolBar();
-	this.scrollToNoMargin(this.body.clientHeight - this.win.innerHeight, null, 'pageDownBtn');
+	this.scrollToNoMargin(this.scrollMax(), null, 'pageDownBtn');
 	this.noactivateToolBar();
 },
 backBtnOnClick: function() {
@@ -104,32 +109,28 @@ backBtnOnClick: function() {
 },
 
 // Reload  ///////////////////////////
-findTableOrBlockquote: function(checkbox) {
-	return checkbox ? (this.parentTag(checkbox, 'TABLE') || this.next(checkbox, 'BLOCKQUOTE')) : null;
+findTableOrBlockquote: function(bq) {
+	return bq === null ? null : this.parentTag(bq, 'TABLE') || bq;
 },
 onReloaded: function(doc) {
 	// update contdisp
-	let contdisp = this.id('contdisp');
-	let newContdisp = contdisp && doc.getElementById('contdisp');
+	let oldContdisp = this.id('contdisp');
+	let newContdisp = oldContdisp && doc.getElementById('contdisp');
 	if (newContdisp) {
-		contdisp.textContent = newContdisp.textContent;
+		oldContdisp.textContent = newContdisp.textContent;
 	}
 	// find last Res
-	let checkboxs = this.all('INPUT[type="checkbox"][value="delete"]');
-	let lastCheckbox = this.arrayLast(checkboxs);
-	let lastResNumber = lastCheckbox.name;
-	let lastResMarker = this.next(this.findTableOrBlockquote(lastCheckbox), 'DIV');
+	let oldBqs = this.all('BLOCKQUOTE');
+	let oldBqCount = oldBqs.length;
 	// new reses
 	let newReses = this.doc.createDocumentFragment();
 	let count = 0;
-	let table = doc.querySelector(`INPUT[type="checkbox"][value="delete"][name="${lastResNumber}"]`);
-	table = this.findTableOrBlockquote(table);
-	table = table && table.nextSibling;
+	let table = this.findTableOrBlockquote(doc.querySelectorAll('BLOCKQUOTE').item(oldBqCount));
 	while (table) {
 		let next = table.nextSibling;
 		if (table.nodeType !== 1) {
 			// skip
-		} else if (table.tagName === 'TABLE' && table.querySelector('INPUT[type="checkbox"][value="delete"]')) {
+		} else if (table.tagName === 'TABLE' && table.querySelector('BLOCKQUOTE')) {
 			count ++;
 			newReses.appendChild(table);
 		} else if (table.tagName === 'DIV' && table.style.clear === 'left') {
@@ -142,9 +143,10 @@ onReloaded: function(doc) {
 		return;
 	}
 	this.modifyTables(newReses.querySelector('TABLE'));
-	let newerBorderY = lastResMarker.offsetTop;
+	let lastTable = this.findTableOrBlockquote(oldBqs.item(oldBqCount - 1));
+	let newerBorderY = lastTable.offsetTop + lastTable.offsetHeight;
 	this.newerBorder.style.top = newerBorderY + 'px';
-	lastResMarker.parentNode.insertBefore(newReses, lastResMarker);
+	lastTable.parentNode.insertBefore(newReses, lastTable.nextSibling);
 	this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
 },
 reloadBtnOnClick: function(e) {
@@ -294,8 +296,7 @@ modifyBq: function(bq) {
 		a = a.previousSibling;
 		if (!a) break;
 		if (a.nodeType !== 1) continue;
-		// delete-checkbox
-		if (a.value === 'delete') break;
+		if (a.value === 'delete') break; // delete-checkbox
 		// mail
 		if (a.href && /^mailto:/.test(a.href)) {
 			a.parentNode.insertBefore(this.create('SPAN', null, a.textContent), a);
@@ -309,10 +310,7 @@ modifyBq: function(bq) {
 modifyTables: function(table) {
 	if (!table) return;
 	for (let i = 0; i < 20 && table; i ++) {
-		let rtd = this.firstClass(table, 'rtd');
-		if (rtd) {
-			this.modifyBq(this.firstTag(rtd, 'BLOCKQUOTE'));
-		}
+		this.modifyBq(table.querySelector('BLOCKQUOTE'));
 		table = this.next(table, 'TABLE');
 	}
 },
@@ -326,8 +324,7 @@ modifyTablesFromPageLeftTop: function() {
 			table = this.parentTag(table, 'TABLE');
 			if (!table) continue;
 		}
-		let rtd = this.firstClass(table, 'rtd');
-		if (rtd && this.parentTag(rtd, 'TABLE') === table) {
+		if (table.querySelector('BLOCKQUOTE')) {
 			this.modifyTables(table);
 			return;
 		}
@@ -360,11 +357,11 @@ onSubmit: function(e) {
 	}
 },
 modifyForm: function() {
-	this.ftxa = this.id('ftxa');
+	this.ftxa = this.id('ftxa') || this.firstTag('TEXTAREA');
 	if (!this.ftxa) {
 		return;
 	}
-	this.ftbl = this.id('ftbl');
+	this.ftbl = this.id('ftbl') || this.parentTag(this.ftxa, 'TABLE');
 	if (!this.ftbl) {
 		return;
 	}

@@ -155,8 +155,11 @@ Are4Are.prototype = {
 	scrollTo: function(y, func, triggerSrc) {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
 	},
+	scrollMax: function() {
+		return this.body.clientHeight - this.win.innerHeight - (this.toolbar ? this.toolbar.offsetHeight : 0);
+	},
 	scrollToNoMargin: function(targetY, func, triggerSrc) {
-		let y = Math.min(targetY, this.body.clientHeight - this.win.innerHeight);
+		let y = Math.min(targetY, this.scrollMax());
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
 		if (this.win.scrollY === y) {

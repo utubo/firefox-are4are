@@ -1,4 +1,5 @@
 /* "..." */
+#threadsbox th, /* for futaboard */
 table[border="0"] tbody tr td[align="right"][valign="top"][nowrap]:first-child {
 	display: none;
 }
