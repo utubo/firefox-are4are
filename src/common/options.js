@@ -84,7 +84,7 @@ function addUrl(url) {
 		.replace(/\\/, '\\\\')
 		.replace(/([\^\$\*\+\?\.\(\)\{\}])/g, '\\$1') // escape meta
 		.replace(/(\b|_)(tmp|dat|zip|cgi|may|nov|img|jun|www|dec)(_|\b)/g, '$1[a-z]{3}$3') // server name without 'up' and 'ipv6'
-		.replace(/([\/_])\d\d+(\\\.html?|\/|$)/, '$1\\d+$2') // thread number
+		.replace(/([\/_=])\d\d+(\\\.html?|\/|$)/, '$1\\d+$2') // thread number
 		.replace( // date
 			/\/([\d\/\-]+)\//g,
 			m1 => {
