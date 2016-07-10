@@ -8,8 +8,8 @@ small, #ddel, .chui, #contdisp {
 blockquote {
 	font-size: 10pt;
 	margin-left: 0 !important;
-	word-wrap: break-all;
 	overflow-wrap: break-word;
+	white-space: normal;
 }
 
 /* width */
