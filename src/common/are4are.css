@@ -50,19 +50,15 @@ body {
 }
 
 /* util */
+.are4are-hide {
+	display: none !important;
+}
 .are4are-fade-effect {
 	transition: opacity .3s;
 }
 .are4are-transparent {
 	opacity: 0 !important;
 	pointer-events: none;
-}
-.are4are-slide-out-h {
-	background: transparent !important;
-	color: transparent !important;
-	max-width: 0 !important;
-	padding: 0 !important;
-	width: 0 !important;
 }
 .are4are-user-select-none {
 	user-select: none;

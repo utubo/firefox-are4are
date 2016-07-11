@@ -71,12 +71,12 @@ hideThumbnail: function(visible) {
 	if (this.isThumbnailVisible) {
 		this.isThumbnailVisible = false;
 		this.fadeOut(this.thumbnail);
-		this.threadImgBtn.classList.add('are4are-slide-out-h');
+		this.threadImgBtn.classList.add('are4are-hide');
 	}
 },
 thumbnaiImgOnLoad: function() {
 	this.fadeIn(this.thumbnail);
-	this.threadImgBtn.classList.remove('are4are-slide-out-h');
+	this.threadImgBtn.classList.remove('are4are-hide');
 	this.isThumbnailVisible = true;
 },
 showThumbnail: function() {
@@ -242,7 +242,7 @@ exec: function() {
 	// Catalog
 	if (!this.catalogTable) return;
 	// thread-image-button
-	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-slide-out-h' }, this.format('__MSG_threadImg__'));
+	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-hide' }, this.format('__MSG_threadImg__'));
 	this.on(this.threadImgBtn, 'mousedown touchstart', 'threadImgBtnOnTouchstart');
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);

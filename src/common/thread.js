@@ -8,14 +8,19 @@ __proto__ : Are4Are.prototype,
 
 // Util //////////////////////////////
 findTableOrBlockquote: function(bq) {
-	return bq === null ? null : this.parentTag(bq, 'TABLE') || bq;
+	return !bq ? null : this.parentTag(bq, 'TABLE') || bq;
 },
+// find BlockQuote(s)
+firstBQ: elm => elm.getElementsByTagName('BLOCKQUOTE')[0],
+allBQ: elm => elm.getElementsByTagName('BLOCKQUOTE'),
+parentBQ: function(elm) { return this.parentTag(elm, 'BLOCKQUOTE'); },
 
 // MinThumbnail //////////////////////
 MINTHUMBNAIL_SIZE: 60,
 MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
 showMinTumbnail: function(e) {
-	let y = this.win.scrollY;
+	if (!this.minThumbnail) return;
+	let y = this.scrollY();
 	if (
 		y < this.MINTHUMBNAIL_HIDE_SCROLLTOP ||
 		e.detail && e.detail.triggerSrc !== 'pageDownBtn' &&
@@ -29,7 +34,7 @@ showMinTumbnail: function(e) {
 appendMinThumbnail: function() {
 	// find thread-image
 	let threadImage, href;
-	for (threadImage = this.firstTag('BLOCKQUOTE'); threadImage; threadImage = threadImage.previousSibling) {
+	for (threadImage = this.firstBQ(this.doc); threadImage; threadImage = threadImage.previousSibling) {
 		if (
 			threadImage.tagName === 'A' &&
 			threadImage.firstChild &&
@@ -85,11 +90,22 @@ hideNewerBorder: function() {
 	this.newerBorder.style = `top:${this.newerBorder.style.top};`;
 },
 
-// Common-tool-buttons ///////////////////////
+// Scroll-buttons ////////////////////////////
+_scrollMax: null,
+scrollMax: function() {
+	if (this._scrollMax) return this._scrollMax;
+	let lastTable = this.findTableOrBlockquote(this.arrayLast(this.allBQ(this.doc)));
+	let margin = 5 + Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
+	this._scrollMax = lastTable.offsetTop + lastTable.offsetHeight - this.win.innerHeight + this.toolbar.offsetHeight + margin;
+	return this._scrollMax;
+},
+resetScrollMax: function() {
+	this._scrollMax = null;
+},
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
 	this.pageDownBtn.classList.add('active');
-	this.pageDownY = this.win.scrollY + Math.round(this.win.innerHeight / 2);
+	this.pageDownY = this.scrollY() + Math.round(this.win.innerHeight / 2);
 	this.scrollToNoMargin(this.pageDownY, null, 'pageDownBtn');
 	this.timeout('RePageDown', 'pageDownBtnOnTouchstart', 1000);
 },
@@ -97,11 +113,6 @@ pageDownBtnOnTouchend: function(e) {
 	this.clearTimeout('RePageDown');
 	this.pageDownBtn.classList.remove('active');
 	this.pageDownY = null;
-},
-scrollMax: function() {
-	let lastTable = this.findTableOrBlockquote(this.arrayLast(this.all('BLOCKQUOTE')));
-	let margin = 5 + Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
-	return lastTable.offsetTop + lastTable.offsetHeight - this.win.innerHeight + this.toolbar.offsetHeight + margin;
 },
 bottomBtnOnClick: function(e) {
 	this.activateToolBar();
@@ -114,25 +125,25 @@ backBtnOnClick: function() {
 },
 
 // Reload  ///////////////////////////
-onReloaded: function(doc) {
+onReloaded: function(newDoc) {
 	// update contdisp
 	let oldContdisp = this.id('contdisp');
-	let newContdisp = oldContdisp && doc.getElementById('contdisp');
+	let newContdisp = oldContdisp && newDoc.getElementById('contdisp');
 	if (newContdisp) {
 		oldContdisp.textContent = newContdisp.textContent;
 	}
 	// find last Res
-	let oldBqs = this.all('BLOCKQUOTE');
-	let oldBqCount = oldBqs.length;
+	let oldBQs = this.allBQ(this.doc);
+	let oldBQCount = oldBQs.length;
 	// new reses
 	let newReses = this.doc.createDocumentFragment();
 	let count = 0;
-	let table = this.findTableOrBlockquote(doc.querySelectorAll('BLOCKQUOTE').item(oldBqCount));
+	let table = this.findTableOrBlockquote(this.allBQ(newDoc)[oldBQCount]);
 	while (table) {
 		let next = table.nextSibling;
 		if (table.nodeType !== 1) {
 			// skip
-		} else if (table.tagName === 'TABLE' && table.querySelector('BLOCKQUOTE')) {
+		} else if (table.tagName === 'TABLE' && this.firstBQ(table)) {
 			count ++;
 			newReses.appendChild(table);
 		} else if (table.tagName === 'DIV' && table.style.clear === 'left') {
@@ -144,11 +155,12 @@ onReloaded: function(doc) {
 		this.toast('__MSG_notModified__');
 		return;
 	}
-	this.modifyTables(newReses.querySelector('TABLE'));
-	let lastTable = this.findTableOrBlockquote(oldBqs.item(oldBqCount - 1));
+	this.modifyTables(newReses.querySelector('TABLE')); // DocumentFragment doesn't have getElementsByTagName.
+	let lastTable = this.findTableOrBlockquote(oldBQs[oldBQCount - 1]);
 	let newerBorderY = lastTable.offsetTop + lastTable.offsetHeight;
 	this.newerBorder.style.top = newerBorderY + 'px';
 	lastTable.parentNode.insertBefore(newReses, lastTable.nextSibling);
+	this.resetScrollMax();
 	this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
 },
 reloadBtnOnClick: function(e) {
@@ -159,16 +171,15 @@ reloadBtnOnClick: function(e) {
 
 // FindRes ///////////////////////////
 hideBackBtn: function(e) {
-	if (e.force || this.backY && this.backY <= this.win.scrollY) {
+	if (e.force || this.backY && this.backY <= this.scrollY()) {
 		this.backY = 0;
-		this.win.removeEventListener('scrollend', this.bindFunc('hideBackBtn'));
-		this.backBtn.classList.add('are4are-slide-out-h');
+		this.backBtn.classList.add('are4are-hide');
 	}
 },
 showBackBtn: function() {
 	if (this.backY) return;
 	this.backY = this.win.scrollY;
-	this.backBtn.classList.remove('are4are-slide-out-h');
+	this.backBtn.classList.remove('are4are-hide');
 	this.win.addEventListener('scrollend', this.bindFunc('hideBackBtn'));
 },
 findRes: function(reg, from) {
@@ -179,7 +190,7 @@ findRes: function(reg, from) {
 			return table;
 		}
 	}
-	let bq = this.firstTag('BLOCKQUOTE');
+	let bq = this.firstBQ(this.doc);
 	if (reg.test(bq.textContent)) {
 		return bq;
 	}
@@ -207,7 +218,7 @@ quoteTextOnClick: function(e) {
 	if (found.tagName === 'TABLE') {
 		this.modifyTables(found);
 		y = found.offsetTop;
-		found = this.firstTag(found, 'BLOCKQUOTE');
+		found = this.firstBQ(found);
 	} else {
 		y = this.prev(found, 'INPUT').offsetTop;
 	}
@@ -221,7 +232,7 @@ quoteTextOnClick: function(e) {
 	}
 	if (!this.backY) {
 		this.foundFrom && this.foundFrom.classList.remove('are4are-bookmark');
-		this.foundFrom = this.parentTag(e.target, 'BLOCKQUOTE');
+		this.foundFrom = this.parentBQ(e.target);
 		this.foundFrom.classList.add('are4are-bookmark');
 	}
 	// scroll
@@ -286,7 +297,7 @@ norefOnClick: function(e) {
 	let html = this.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
 	this.win.open(`data:text/html; charset=utf-8,${encodeURIComponent(html)}`);
 },
-modifyBq: function(bq) {
+modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
 	// auto link
@@ -312,7 +323,7 @@ modifyBq: function(bq) {
 modifyTables: function(table) {
 	if (!table) return;
 	for (let i = 0; i < 20 && table; i ++) {
-		this.modifyBq(table.querySelector('BLOCKQUOTE'));
+		this.modifyBQ(this.firstBQ(table));
 		table = this.next(table, 'TABLE');
 	}
 },
@@ -326,7 +337,7 @@ modifyTablesFromPageLeftTop: function() {
 			table = this.parentTag(table, 'TABLE');
 			if (!table) continue;
 		}
-		if (table.querySelector('BLOCKQUOTE')) {
+		if (this.firstBQ(table)) {
 			this.modifyTables(table);
 			return;
 		}
@@ -335,7 +346,7 @@ modifyTablesFromPageLeftTop: function() {
 
 // Modify Form ///////////////////////
 showForm: function() {
-	this.writeBtnY = this.win.scrollY;
+	this.writeBtnY = this.scrollY();
 	this.writeBtn.classList.add('active');
 	this.fadeIn(this.ftbl);
 	this.ftxa.focus();
@@ -404,12 +415,12 @@ modifyForm: function() {
 showQuoteBtn: function() {
 	this.timeout('showQuoteBtn', () => {
 		if (!this.doc.getSelection().toString()) return;
-		this.quoteBtn.classList.remove('are4are-slide-out-h');
+		this.quoteBtn.classList.remove('are4are-hide');
 	}, 1000);
 },
 quoteBtnOnClick: function() {
 	let text = this.doc.getSelection().toString();
-	this.quoteBtn.classList.add('are4are-slide-out-h');
+	this.quoteBtn.classList.add('are4are-hide');
 	if (!text) return;
 	text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
 	if (!text) return;
@@ -425,11 +436,17 @@ scrollToThreadImage: function() {
 	if (i) { this.scrollTo(i.offsetTop); }
 },
 afterRepainted: function() {
-	if (this.win.scrollY === 0) {
+	if (this.scrollY() === 0) {
 		this.scrollToThreadImage();
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
+	this.queue('resetScrollMax');
+},
+scrollend: function(e) {
+	this.showMinTumbnail(e);
+	this.modifyTablesFromPageLeftTop(e);
+	this.hideBackBtn(e);
 },
 
 // Main ////////////////////////////////
@@ -441,8 +458,8 @@ exec: function() {
 	}
 
 	// ToolButtons
-	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-slide-out-h');
-	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick', 'are4are-slide-out-h');
+	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-hide');
+	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick', 'are4are-hide');
 	this.writeBtn = this.addToolButton('write', null, 'are4are-disable');
 	if (this.is1stPage) {
 		this.addToolButton('reload', null, 'are4are-disable');
@@ -452,16 +469,15 @@ exec: function() {
 	this.pageDownBtn = this.addToolButton('pagedown');
 	this.on(this.pageDownBtn, 'touchstart mousedown', 'pageDownBtnOnTouchstart');
 	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
-	this.addToolButton('bottom', 'bottomBtnOnClick');
+	this.bottomBtn = this.addToolButton('bottom', 'bottomBtnOnClick');
 
 	// MinThumbnail
 	this.appendMinThumbnail();
-	this.on(this.win, 'scrollend', 'showMinTumbnail');
 
-	// Modify Blockquote (visible)
-	this.modifyBq(this.firstTag('BLOCKQUOTE'));
-	this.modifyTables(this.first('TABLE[border="0"]'));
-	this.on(this.win, 'scrollend', 'modifyTablesFromPageLeftTop');
+	// Modify Blockquotes (visible)
+	let b = this.allBQ(this.doc);
+	this.modifyBQ(b[0]);
+	this.modifyTables(this.findTableOrBlockquote(b[1]));
 
 	// Newer Border
 	this.create('DIV', { id: 'are4are_newerBorder' });
@@ -486,6 +502,10 @@ exec: function() {
 	} else {
 		this.on(this.win, 'load', 'afterRepainted');
 	}
+
+	// other events
+	this.on(this.win, 'resize', 'resetScrollMax');
+	this.on(this.win, 'scrollend', 'scrollend');
 }
 };
 })();

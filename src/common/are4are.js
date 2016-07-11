@@ -142,6 +142,7 @@ Are4Are.prototype = {
 	// Scrollend event
 	scrollendEventTrigger: function() {
 		this.timeout('scrollend', () => {
+			this._scrollY = null;
 			try {
 				if (this.scrollendFunc) { this.scrollendFunc(); }
 				this.win.dispatchEvent(new CustomEvent('scrollend', { detail: this.scrollendDetail }));
@@ -152,13 +153,19 @@ Are4Are.prototype = {
 		}, 200);
 	},
 	// Scroll
-	scrollTo: function(y, func, triggerSrc) {
-		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
+	scrollY : function() {
+		if (this._scrollY) return this._scrollY;
+		this._scrollY = this.win.scrollY;
+		return this._scrollY;
 	},
 	scrollMax: function() {
 		return this.body.clientHeight - this.win.innerHeight - (this.toolbar ? this.toolbar.offsetHeight : 0);
 	},
+	scrollTo: function(y, func, triggerSrc) {
+		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
+	},
 	scrollToNoMargin: function(targetY, func, triggerSrc) {
+		this._scrollY = null;
 		let y = Math.min(targetY, this.scrollMax());
 		this.scrollendFunc = func;
 		this.scrollendDetail = { y: targetY, triggerSrc: triggerSrc};
