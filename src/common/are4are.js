@@ -268,7 +268,7 @@ Are4Are.prototype = {
 
 		// after modfied
 		this.removeCover();
-		this.body.style.scrollBehavior = 'smooth';
+		this.queue(() => { this.body.style.scrollBehavior = 'smooth'; }); // wait for Ms.MHT
 	},
 
 	// Start ///////////////////////////////

@@ -437,7 +437,8 @@ scrollToThreadImage: function() {
 },
 afterModified: function() {
 	if (this.scrollY() === 0) {
-		this.scrollToThreadImage();
+		this.scrollToThreadImage(); // for futaba
+		this.queue('scrollToThreadImage'); // for Ms.MHT
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
