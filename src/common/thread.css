@@ -7,9 +7,6 @@ small, #ddel, .chui, #contdisp {
 }
 blockquote {
 	font-size: 10pt;
-	margin-left: 0 !important;
-	overflow-wrap: break-word;
-	white-space: normal;
 }
 
 /* width */
@@ -85,7 +82,10 @@ hr {
 blockquote {
 	color: #800000;
 	margin: .9em 2pt !important;
+	overflow-wrap: break-word;
 	position: relative;
+	white-space: normal;
+	word-break: break-all;
 }
 img[hspace="20"] {
 	display: block;
