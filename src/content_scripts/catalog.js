@@ -194,14 +194,9 @@ refreshCatalog: function(href) {
 
 // Main ////////////////////////////////
 exec: function() {
+	this.firstTag('BODY').classList.add('are4are-initialized');
 	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
 	this.catalogData = [];
-
-	// load by manifest.json
-	//// StyleSheet
-	//this.addCssFile('content_scripts/catalog.css');
-
-	this.firstTag('BODY').classList.add('are4are-initialized');
 
 	// Toolbar
 	let addedHref = [];

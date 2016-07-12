@@ -435,7 +435,7 @@ scrollToThreadImage: function() {
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.scrollTo(i.offsetTop); }
 },
-afterRepainted: function() {
+afterModified: function() {
 	if (this.scrollY() === 0) {
 		this.scrollToThreadImage();
 	} else {
@@ -450,9 +450,9 @@ scrollend: function(e) {
 },
 
 // Main ////////////////////////////////
+cssFile: 'common/thread.css',
 exec: function() {
-	// StyleSheet
-	this.addCssFile('common/thread.css');
+	// CSS
 	if (!this.firstClass('rts')) {
 		this.addCssFile('content_scripts/legacy_thread.css');
 	}
@@ -496,16 +496,10 @@ exec: function() {
 		}
 	});
 
-	// After repainted
-	if (this.doc.readyState === 'complete') {
-		afterRepainted();
-	} else {
-		this.on(this.win, 'load', 'afterRepainted');
-	}
-
 	// other events
 	this.on(this.win, 'resize', 'resetScrollMax');
 	this.on(this.win, 'scrollend', 'scrollend');
+	this.afterModified();
 }
 };
 })();

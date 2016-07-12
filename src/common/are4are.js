@@ -104,7 +104,7 @@ Are4Are.prototype = {
 		this.timeoutIds[id] = null;
 	},
 	queue: function(func) {
-		this.timeout(null, func, 100);
+		this.timeout(null, func, 10);
 	},
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func) {
@@ -211,20 +211,40 @@ Are4Are.prototype = {
 		this.toolbar.classList.remove('active');
 	},
 
+	// Cover ///////////////////////////////
+	coverSS: null,
+	coverBody: function () {
+		try {
+			let cover = `body::before {
+				background: #fff;
+				content: " ";
+				display: block;
+				height: 100%;
+				left: 0;
+				opacity: 1;
+				pointer-events: none;
+				position: fixed;
+				top: 0;
+				transition: opacity .3s ease-in;
+				width: 100%;
+				z-index: 99;
+			}`;
+			this.doc.documentElement.appendChild(this.create('STYLE'));
+			this.coverSS = this.arrayLast(this.doc.styleSheets);
+			this.coverSS.insertRule(cover, 0);
+			// Show body
+			this.on(this.win, 'load', 'removeCover');
+		} catch (e) {
+			// nop
+		}
+	},
+	removeCover: function() {
+		this.win.removeEventListener('load', this.bindFunc('removeCover'));
+		this.queue(() => { this.coverSS.insertRule('body::before { opacity: 0 !important; }', 0); });
+	},
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
 		this.body = this.doc.body;
-
-		// Viewport
-		let head = this.firstTag('HEAD');
-		let viewport = this.create('META', {
-			name: 'viewport',
-			content: 'width=device-width'
-		});
-		head.insertBefore(viewport, head.firstChild);
-
-		// CSS
-		this.addCssFile('common/are4are.css');
 
 		// Scrollend Event
 		this.on(this.win, 'scroll', 'scrollendEventTrigger');
@@ -245,6 +265,10 @@ Are4Are.prototype = {
 
 		// modify ThreadPage, CatalogPage, etc ...
 		this.exec();
+
+		// after modfied
+		this.removeCover();
+		this.body.style.scrollBehavior = 'smooth';
 	},
 
 	// Start ///////////////////////////////
@@ -252,36 +276,20 @@ Are4Are.prototype = {
 		this.win = window;
 		this.doc = this.win.document;
 		//this.body = this.doc.document.body; // document.body don't exist yet.
-
+		// cover body
 		if (this.doc.readyState !== 'complete') {
-			try {
-				// Hide body
-				let cover =
-					`body::before {
-						background: #fff;
-						content: " ";
-						display: block;
-						height: 100%;
-						left: 0;
-						opacity: 1;
-						pointer-events: none;
-						position: fixed;
-						top: 0;
-						width: 100%;
-						z-index: 99;
-					}`;
-				this.doc.documentElement.appendChild(this.create('STYLE'));
-				let ss = this.arrayLast(this.doc.styleSheets);
-				ss.insertRule(cover, 0);
-				// Show body
-				this.win.addEventListener('load', () => {
-					ss.insertRule('body::before { opacity: 0 !important; transition: all .3s; }', 0);
-				});
-			} catch (e) {
-				// nop
-			}
+			this.coverBody();
 		}
-
+		// Viewport
+		let head = this.firstTag('HEAD');
+		let viewport = this.create('META', {
+			name: 'viewport',
+			content: 'width=device-width'
+		});
+		head.insertBefore(viewport, head.firstChild);
+		// CSS
+		this.addCssFile('common/are4are.css');
+		if (this.cssFile) this.addCssFile(this.cssFile);
 		// Modify futaba
 		if (this.doc.readyState === 'interactive' || this.doc.readyState === 'complete') {
 			this.onDOMContentLoaded();

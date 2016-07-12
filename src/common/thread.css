@@ -90,6 +90,7 @@ blockquote {
 img[hspace="20"] {
 	display: block;
 	float: none !important; /* 'important' for futaboard */
+	margin: auto;
 }
 .sod {
 	color: #B66;
@@ -189,10 +190,6 @@ div[style^="width:680px"] {
 /* ------------------------ */
 .are4are-toolbtn-back {
 	max-width: 4em;
-}
-.are4are-thread-image {
-	display: block;
-	margin: auto;
 }
 
 /* find res */
