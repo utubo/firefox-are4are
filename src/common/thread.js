@@ -67,7 +67,7 @@ appendMinThumbnail: function() {
 		'class': 'are4are-transparent'
 	});
 	this.minThumbnail.appendChild(img);
-	// waite for FTBucket
+	// wait for FTBucket
 	this.on(this.win, 'load', () => { this.body.appendChild(this.minThumbnail); });
 
 	// favicon
@@ -82,25 +82,23 @@ modifyFavicon: function() {
 	this.firstTag('HEAD').appendChild(faviconLink);
 },
 
-// Newer Border ///////////////////////
-showNewerBorder: function() {
-	this.newerBorder.style = `opacity: 1; width: 100%; top:${this.newerBorder.style.top};`;
-},
-hideNewerBorder: function() {
-	this.newerBorder.style = `top:${this.newerBorder.style.top};`;
-},
-
 // Scroll-buttons ////////////////////////////
 _scrollMax: null,
-scrollMax: function() {
-	if (this._scrollMax) return this._scrollMax;
-	let lastTable = this.findTableOrBlockquote(this.arrayLast(this.allBQ(this.doc)));
-	let margin = 5 + Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
-	this._scrollMax = lastTable.offsetTop + lastTable.offsetHeight - this.win.innerHeight + this.toolbar.offsetHeight + margin;
-	return this._scrollMax;
-},
-resetScrollMax: function() {
-	this._scrollMax = null;
+clientHeight: function() {
+	try {
+		let lastTable = this.findTableOrBlockquote(this.arrayLast(this.allBQ(this.doc)));
+		let y = lastTable.offsetTop + lastTable.offsetHeight;
+		while (!y) {
+			lastTable = lastTable.previousSibling;
+			if (!lastTable) return this.body.clientHeight;
+			y = lastTable.offsetTop + lastTable.offsetHeight;
+		}
+		y += Math.round(this.win.getComputedStyle(lastTable).getPropertyValue('margin-bottom').replace('px', ''));
+		y += Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
+		return y;
+	} catch (e) {
+		return this.body && this.body.clientHeight || this.win.innerHeight;
+	}
 },
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
@@ -122,6 +120,14 @@ bottomBtnOnClick: function(e) {
 backBtnOnClick: function() {
 	this.scrollTo(this.backY);
 	this.hideBackBtn({force: true});
+},
+
+// Newer Border ///////////////////////
+showNewerBorder: function() {
+	this.newerBorder.style = `opacity: 1; width: 100%; top:${this.newerBorder.style.top};`;
+},
+hideNewerBorder: function() {
+	this.newerBorder.style = `top:${this.newerBorder.style.top};`;
 },
 
 // Reload  ///////////////////////////
@@ -433,16 +439,14 @@ scrollToThreadImage: function() {
 	let i = this.firstClass('are4are-thread-image');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
-	if (i) { this.scrollTo(i.offsetTop); }
+	if (i) { this.win.scrollTo(0, i.offsetTop); }
 },
 afterModified: function() {
 	if (this.scrollY() === 0) {
-		this.scrollToThreadImage(); // for futaba
-		this.queue('scrollToThreadImage'); // for Ms.MHT
+		this.queue('scrollToThreadImage'); // wait for Ms.MHT
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
-	this.queue('resetScrollMax');
 },
 scrollend: function(e) {
 	this.showMinTumbnail(e);
@@ -498,7 +502,6 @@ exec: function() {
 	});
 
 	// other events
-	this.on(this.win, 'resize', 'resetScrollMax');
 	this.on(this.win, 'scrollend', 'scrollend');
 	this.afterModified();
 }

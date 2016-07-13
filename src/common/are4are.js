@@ -4,6 +4,9 @@ function Are4Are() { }
 'use strict';
 
 Are4Are.prototype = {
+	// CONST ///////////////////////////////
+	BODY_PADDING_BOTTOM: 55,
+
 	// Field ///////////////////////////////
 	win: null,
 	doc: null,
@@ -139,7 +142,7 @@ Are4Are.prototype = {
 	},
 
 	// UI //////////////////////////////////
-	// Scrollend event
+	// Scroll
 	scrollendEventTrigger: function() {
 		this.timeout('scrollend', () => {
 			this._scrollY = null;
@@ -152,14 +155,23 @@ Are4Are.prototype = {
 			}
 		}, 200);
 	},
-	// Scroll
-	scrollY : function() {
+	scrollY: function() {
 		if (this._scrollY) return this._scrollY;
 		this._scrollY = this.win.scrollY;
 		return this._scrollY;
 	},
+	clientHeight: function() {
+		return this.body && this.body.clientHeight || this.win.innerHeight;
+	},
+	_scrollMax: null,
+	resetScrollMax: function() {
+		this._scrollMax = null;
+	},
 	scrollMax: function() {
-		return this.body.clientHeight - this.win.innerHeight - (this.toolbar ? this.toolbar.offsetHeight : 0);
+		if (this._scrollMax) return this._scrollMax;
+		this._scrollMax = this.clientHeight() - this.win.innerHeight + this.BODY_PADDING_BOTTOM;
+		this.timeout(null, 'resetScrollMax', 5000);
+		return this._scrollMax;
 	},
 	scrollTo: function(y, func, triggerSrc) {
 		this.scrollToNoMargin(Math.max(y - 2, 0), func, triggerSrc);
@@ -240,7 +252,7 @@ Are4Are.prototype = {
 	},
 	removeCover: function() {
 		this.win.removeEventListener('load', this.bindFunc('removeCover'));
-		this.queue(() => { this.coverSS.insertRule('body::before { opacity: 0 !important; }', 0); });
+		this.coverSS.insertRule('body::before { opacity: 0 !important; }', 0);
 	},
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
@@ -261,14 +273,19 @@ Are4Are.prototype = {
 			style: 'display:none'
 		});
 		this.body.appendChild(this.toolbar);
-		this.queue(() => { this.toolbar.style = ''; });
 
 		// modify ThreadPage, CatalogPage, etc ...
 		this.exec();
 
 		// after modfied
-		this.removeCover();
-		this.queue(() => { this.body.style.scrollBehavior = 'smooth'; }); // wait for Ms.MHT
+		this.queue(() => {
+			this.toolbar.style = '';
+			this.body.style.scrollBehavior = 'smooth';
+			this.removeCover();
+		});
+
+		// other events
+		this.on(this.win, 'resize', 'resetScrollMax');
 	},
 
 	// Start ///////////////////////////////
