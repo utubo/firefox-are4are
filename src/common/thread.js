@@ -85,6 +85,7 @@ modifyFavicon: function() {
 // Scroll-buttons ////////////////////////////
 _scrollMax: null,
 clientHeight: function() {
+	if (this.is1stPage) return this.body && this.body.clientHeight || this.win.innerHeight;
 	try {
 		let lastTable = this.findTableOrBlockquote(this.arrayLast(this.allBQ(this.doc)));
 		let y = lastTable.offsetTop + lastTable.offsetHeight;

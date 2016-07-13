@@ -106,7 +106,7 @@ function makeRegex(url) {
 		.replace(/^/, '^')
 		.replace(/(html?|\/)$/, '$1$');
 	// FTBucket
-	let FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_b_res_\\d+/index\\.htm$';
+	let FTBUCKET_SUFIX = '/cont/[a-z]{3}\\.2chan\\.net_[a-z\d]+_res_\\d+/index\\.htm$';
 	if (urlReg.endsWith(FTBUCKET_SUFIX)) {
 		let paths = urlReg.split("/");
 		urlReg = paths[0] + `//${paths[2]}/.+${FTBUCKET_SUFIX}`;
