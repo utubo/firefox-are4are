@@ -9,13 +9,13 @@ AndroidのFirefoxのアドオンです
 
 ##インストール(現状)
 1. Firefoxβをインストール
-1. about:configを開いて`xpinstall.signatures.required`を`false`に設定
+1. `about:config`を開いて`xpinstall.signatures.required`を`false`に設定
 1. 以下のどれかをインストール  
  - おすすめ(githubにプッシュしたやつ)  
 <http://x123.x0.to/~rawgit/are.xpi>
  - 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
- - 承認済みだけど古い
+ - 承認済みだけど古い  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
 
 ##外部URLの登録
@@ -35,7 +35,7 @@ AndroidのFirefoxのアドオンです
 ダメなときは正規表現を修正してね
 
 ##承認済みバージョンとの違い
-(var 4.3)
+(var4.2 → var4.3)
 * 機能追加
  * 設定無しでもFTBucketに適用するようにしました
  * 1ページ目に対応しました
@@ -45,5 +45,8 @@ AndroidのFirefoxのアドオンです
  * 一番下までスクロールするときにページ全体の一番下ではなく最後のレスにスクロールするようにしました
  * 外部板入力欄にURLを貼り付けるとき「^」で始まって「$」で終わる場合は最後に追記するようにしました
  * futaboardでもそれなりに動くようにしました
-* バグをいくつか修正しました
+ * バグをいくつか修正しました
+
+(var3.0.1 → var4.X)
+* 全面的に作り直し(Webextensionsで)
 
