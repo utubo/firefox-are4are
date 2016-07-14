@@ -261,7 +261,6 @@ exec: function() {
 }; // end of my extension
 
 // Start ///////////////////////////////
-if (window.document.getElementsByClassName('are4are-initialized')[0]) return;
 let myExt = new Are4AreCatalog();
 myExt.start(window);
 })();

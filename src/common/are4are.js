@@ -254,6 +254,7 @@ Are4Are.prototype = {
 		this.win.removeEventListener('load', this.bindFunc('removeCover'));
 		this.coverSS.insertRule('body::before { opacity: 0 !important; }', 0);
 	},
+
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
 		this.body = this.doc.body;
@@ -289,8 +290,9 @@ Are4Are.prototype = {
 	},
 
 	// Start ///////////////////////////////
-	start : function(window) {
-		this.win = window;
+	start : function(win) {
+		if (win.document.getElementById('are4are_viewport')) return;
+		this.win = win;
 		this.doc = this.win.document;
 		//this.body = this.doc.document.body; // document.body don't exist yet.
 		// cover body
@@ -303,6 +305,7 @@ Are4Are.prototype = {
 			name: 'viewport',
 			content: 'width=device-width'
 		});
+		viewport.id = 'are4are_viewport';
 		head.insertBefore(viewport, head.firstChild);
 		// CSS
 		this.addCssFile('common/are4are.css');
