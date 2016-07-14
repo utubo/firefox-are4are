@@ -17,9 +17,6 @@ table, blockquote, .ama, .ftbl {
 td, {
 	max-width: 100%;
 }
-input {
-	max-width: 50%;
-}
 textarea {
 	width: 90% !important;
 }
@@ -49,13 +46,6 @@ textarea {
 #ftxa {
 	max-height: 6em;
 }
-input[type=submit] {
-	margin: .5em .2em;
-	padding: .5em;
-}
-input[type=text] {
-	padding: .5em;
-}
 
 /* "..." */
 .rts {
@@ -63,7 +53,7 @@ input[type=text] {
 }
 
 /* res */
-.thre table {
+.thre>table {
 	min-width: 0 !important;
 }
 td {
@@ -144,37 +134,21 @@ img {
 }
 
 /* AD (resize for device-width) */
-#rightad {
-	max-height: 2em;
-	overflow: scroll;
-	text-align: right;
-	width: 80%;
-}
-#rightad:hover {
-	float: none !important;
-	max-height: 800px;
-}
 .tue,
+#rightad,
+iframe[width="728px"],
 div[style^="width:728px"],
 div[style^="width:468px"],
 div[style^="width:336px"],
 div[style^="width:680px"] {
 	margin: 0 auto;
-	max-height: 2em;
-	max-width: 80%;
+	max-height: 4em;
+	max-width: 90%;
 	overflow: scroll;
-}
-#ufm+div[align="center"] {
-	border: 2px dotted #ea8;
-	margin: 4px auto;
-	max-height: 1.5em;
-	overflow: hidden;
-	padding: 2px;
-	width: 95%;
 }
 
 /* ------------------------ */
-/*       logging site        */
+/*       logging site       */
 /* ------------------------ */
 /* tsumanne */
 .are4are-bookmark {
@@ -266,7 +240,6 @@ div[style^="width:680px"] {
 	background-color: rgba(255,255,238,.8);
 	border: none;
 	display: block;
-	font-size: 16px;
 	height: unset;
 	left: 0;
 	margin: 0 auto;
@@ -274,12 +247,16 @@ div[style^="width:680px"] {
 	max-width: 100%;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding: 2pt;
+	padding-bottom: 1em;
 	position: fixed !important;
 	top: 0;
 	z-index: 4;
 }
 .are4are-ftblFixed-tbody {
 	display: unset !important;
+}
+.are4are-form-button {
+	margin: .5em .2em;
+	padding: .5em;
 }
 

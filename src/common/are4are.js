@@ -5,7 +5,7 @@ function Are4Are() { }
 
 Are4Are.prototype = {
 	// CONST ///////////////////////////////
-	BODY_PADDING_BOTTOM: 55,
+	BODY_PADDING_BOTTOM: 40,
 
 	// Field ///////////////////////////////
 	win: null,
@@ -32,6 +32,7 @@ Are4Are.prototype = {
 		}
 		return func;
 	},
+
 	// DOM & HTML Util /////////////////////
 	id: function(_id) {
 		return this.doc.getElementById(_id);
@@ -109,6 +110,7 @@ Are4Are.prototype = {
 	queue: function(func) {
 		this.timeout(null, func, 10);
 	},
+
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func) {
 		this.activateToolBar();
@@ -294,7 +296,7 @@ Are4Are.prototype = {
 		if (win.document.getElementById('are4are_viewport')) return;
 		this.win = win;
 		this.doc = this.win.document;
-		//this.body = this.doc.document.body; // document.body don't exist yet.
+		//this.body = this.doc.document.body; // document.body doesn't exist yet.
 		// cover body
 		if (this.doc.readyState !== 'complete') {
 			this.coverBody();

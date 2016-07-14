@@ -385,7 +385,6 @@ modifyForm: function() {
 	if (!this.ftbl) {
 		return;
 	}
-	this.writeBtn.classList.remove('are4are-disable');
 	// change id
 	this.ftbl.id = 'are4are_ftblFixed';
 	this.ftbl.style = '';
@@ -395,7 +394,13 @@ modifyForm: function() {
 	this.create('DIV', {id: 'are4are_dummyFtbl', 'class': 'are4are-transparent' });
 	this.dummyFtbl.setAttribute('id', 'ftbl');
 	this.body.appendChild(this.dummyFtbl);
-	// writeBtn
+	// form-button
+	let submit = this.ftbl.querySelector('INPUT[type="submit"]');
+	if (submit) {
+		submit.classList.add('are4are-form-button');
+	}
+	// writeBtn (toolbar)
+	this.writeBtn.classList.remove('are4are-disable');
 	this.on(this.writeBtn, 'click', () => {
 		if (this.ftbl.classList.contains('are4are-transparent')) {
 			this.showForm();
