@@ -94,8 +94,9 @@ clientHeight: function() {
 			if (!lastTable) return this.body.clientHeight;
 			y = lastTable.offsetTop + lastTable.offsetHeight;
 		}
-		y += Math.round(this.win.getComputedStyle(lastTable).getPropertyValue('margin-bottom').replace('px', ''));
-		y += Math.round(this.win.getComputedStyle(this.body).getPropertyValue('line-height').replace('px', ''));
+		y += parseInt(this.win.getComputedStyle(lastTable).getPropertyValue('margin-bottom'), 10);
+		y += parseInt(this.win.getComputedStyle(this.body).getPropertyValue('line-height'), 10);
+		y += 5;
 		return y;
 	} catch (e) {
 		return this.body && this.body.clientHeight || this.win.innerHeight;
@@ -258,21 +259,21 @@ SIO_PREFIX: {
 	f:  'http://dec.2chan.net/up/src/',
 	fu: 'http://dec.2chan.net/up2/src/'
 },
-// 1:URL, 2:Filename, 3:SioPrefix, 4:SioNumber, 5:Ext
+// 1:URL(normal), 2:Filename, 3:SioPrefix, 4:Number, 5:Ext
 autoLinkRegexp: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi,
-autoLinkNode: function(node, after) {
-	let text = after || node.nodeValue;
+autoLinkTextNode: function(node, nextText) {
+	let text = nextText || node.nodeValue;
 	let m = this.autoLinkRegexp.exec(text);
 	if (!m) {
-		if (node && after) {
-			node.appendChild(this.doc.createTextNode(after));
+		if (node && nextText) {
+			node.appendChild(this.doc.createTextNode(nextText));
 		}
-		return false;
+		return null;
 	}
-	if (!after) {
+	if (!nextText) {
 		node = this.doc.createDocumentFragment();
 	}
-	// before
+	// prevText
 	node.appendChild(this.doc.createTextNode(text.substring(0, m.index)));
 	// link
 	if (m[1]) {
@@ -280,16 +281,16 @@ autoLinkNode: function(node, after) {
 	} else {
 		node.appendChild(this.create('A', { href: this.SIO_PREFIX[m[3]] + m[2], target: '_blank' }, m[2]));
 	}
-	// after
-	this.autoLinkNode(node, text.substring(m.index + m[0].length));
+	// nextText
+	this.autoLinkTextNode(node, text.substring(m.index + m[0].length));
 	return node;
 },
-autoLinkTextNode: function(elm) {
+autoLink: function(elm) {
 	let textNode = elm.lastChild;
 	while (textNode) {
 		let prev = textNode.previousSibling;
 		if (textNode.nodeType === 3) {
-			let fragment = this.autoLinkNode(textNode);
+			let fragment = this.autoLinkTextNode(textNode);
 			if (fragment) {
 				textNode.nodeValue = '';
 				elm.insertBefore(fragment, textNode);
@@ -300,16 +301,15 @@ autoLinkTextNode: function(elm) {
 },
 norefOnClick: function(e) {
 	e.preventDefault();
-	let href = e.target.href;
-	let html = this.format('<html><head><meta http-equiv="Refresh" content="0; url={0}"></head><body></body></html>', href);
+	let html = `<html><head><meta http-equiv="Refresh" content="0; url=${e.target.href}"></head><body></body></html>`;
 	this.win.open(`data:text/html; charset=utf-8,${encodeURIComponent(html)}`);
 },
 modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
 	// auto link
-	this.autoLinkTextNode(bq);
-	Array.forEach(bq.getElementsByTagName('font'), font => { this.autoLinkTextNode(font); });
+	this.autoLink(bq);
+	Array.forEach(bq.getElementsByTagName('font'), font => { this.autoLink(font); });
 	// res header
 	let a = bq;
 	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...

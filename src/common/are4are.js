@@ -4,9 +4,6 @@ function Are4Are() { }
 'use strict';
 
 Are4Are.prototype = {
-	// CONST ///////////////////////////////
-	BODY_PADDING_BOTTOM: 40,
-
 	// Field ///////////////////////////////
 	win: null,
 	doc: null,
@@ -171,7 +168,7 @@ Are4Are.prototype = {
 	},
 	scrollMax: function() {
 		if (this._scrollMax) return this._scrollMax;
-		this._scrollMax = this.clientHeight() - this.win.innerHeight + this.BODY_PADDING_BOTTOM;
+		this._scrollMax = this.clientHeight() - this.toolbar.offsetTop;
 		this.timeout(null, 'resetScrollMax', 5000);
 		return this._scrollMax;
 	},
@@ -198,8 +195,8 @@ Are4Are.prototype = {
 		elm.classList.remove('are4are-transparent');
 	},
 	// Toast
-	toast: function() {
-		let text = this.format.apply(this, arguments);
+	toast: function(...args) {
+		let text = this.format.apply(this, args);
 		this.toastDiv.textContent = text;
 		this.fadeIn(this.toastDiv);
 		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv); }, 3000);

@@ -151,7 +151,7 @@ appendCatalogCountDelta: function(tablePalent) {
 		let href = this.firstTag(td, 'A').getAttribute('href');
 		let countElm = this.firstTag(td, 'FONT');
 		countElm.classList.add('are4are-res-count');
-		let count = parseInt(countElm.textContent);
+		let count = parseInt(countElm.textContent, 10);
 		if (appendDelta) {
 			let delta = '?';
 			for (let i = threadCount; i < searchMax; i ++) {
