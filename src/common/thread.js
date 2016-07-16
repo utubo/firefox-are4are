@@ -7,109 +7,97 @@ Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,
 
 // Util //////////////////////////////
-findTableOrBQ: function(bq) {
-	return !bq ? null : this.parentTag(bq, 'TABLE') || bq;
-},
 // find BlockQuote(s)
 firstBQ: elm => elm.getElementsByTagName('BLOCKQUOTE')[0],
 allBQ: elm => elm.getElementsByTagName('BLOCKQUOTE'),
 parentBQ: function(elm) { return this.parentTag(elm, 'BLOCKQUOTE'); },
+findTableOrBQ: function(bq) { return !bq ? null : this.parentTag(bq, 'TABLE') || bq; },
 
-// MinThumbnail //////////////////////
-minThumbnailInfo: null,
-calcMinThumbnailInfo: function() {
-	if (this.minThumbnailInfo) return this.minThumbnailInfo;
-	this.minThumbnailInfo = {
-		size: this.computedPx(this.minThumbnail, 'height'),
+// Favicon //////////////////////
+// Favicon ///////////////////////////
+faviconInfo: null,
+calcFaviconInfo: function() {
+	if (this.faviconInfo) return this.faviconInfo;
+	this.faviconInfo = {
+		size: this.computedPx(this.favicon, 'height'),
 		hideY: this.firstBQ(this.doc).offsetTop
 	};
-	this.timeout(null, () => { this.minThumbnailInfo = null; }, 5000);
-	return this.minThumbnailInfo;
+	this.timeout(null, () => { this.faviconInfo = null; }, 5000);
+	return this.faviconInfo;
 },
-showMinTumbnail: function(e) {
-	if (!this.minThumbnail) return;
-	let info = this.calcMinThumbnailInfo();
+showFavicon: function(e) {
+	if (!this.favicon) return;
+	let info = this.calcFaviconInfo();
 	let y = this.scrollY();
 	if (
 		y < info.hideY ||
 		e.detail && e.detail.triggerSrc !== 'pageDownBtn' &&
 		e.detail.y && e.detail.y - y < info.size
 	) {
-		this.fadeOut(this.minThumbnail);
+		this.fadeOut(this.favicon);
 	} else {
-		this.fadeIn(this.minThumbnail);
+		this.fadeIn(this.favicon);
 	}
 },
-appendMinThumbnail: function() {
+appendFavicon: function() {
 	// find thread-image
-	let threadImage, href;
-	for (threadImage = this.firstBQ(this.doc); threadImage; threadImage = threadImage.previousSibling) {
+	let threadImg, href;
+	for (threadImg = this.firstBQ(this.doc); threadImg; threadImg = threadImg.previousSibling) {
 		if (
-			threadImage.tagName === 'A' &&
-			threadImage.firstChild &&
-			threadImage.firstChild.tagName === 'IMG'
+			threadImg.tagName === 'A' &&
+			threadImg.firstChild &&
+			threadImg.firstChild.tagName === 'IMG'
 		) {
-			href = threadImage.href;
-			threadImage = threadImage.firstChild;
+			href = threadImg.href;
+			threadImg = threadImg.firstChild;
 			break;
-		} else if (threadImage.tagName === 'HR') {
+		} else if (threadImg.tagName === 'HR') {
 			break;
 		}
 	}
-	if (!threadImage) return;
-	threadImage.align = '';
-	threadImage.classList.add('are4are-thread-image');
+	if (!threadImg) return;
+	threadImg.align = '';
+	threadImg.classList.add('are4are-thread-img');
 
 	// 1stPage
 	if (this.is1stPage) return;
 
-	// make minThumbnail
+	// make favicon
 	let img = this.create('IMG', {
-		src: threadImage.src,
-		id: 'are4are_minThumbnailImg',
-		'class': 'are4are-min-thumbnail-img'
+		src: threadImg.src,
+		'class': 'are4are-favicon-img'
 	});
 	this.create('A', {
 		href: href,
 		target: '_blank',
-		id: 'are4are_minThumbnail',
+		id: 'are4are_favicon',
 		'class': 'are4are-transparent'
 	});
-	this.minThumbnail.appendChild(img);
-	// wait for FTBucket
-	this.on(this.win, 'load', () => { this.body.appendChild(this.minThumbnail); });
-
-	// favicon
-	if (this.minThumbnailImg.complete) {
-		this.modifyFavicon();
-	} else {
-		this.on(this.minThumbnailImg, 'load', 'modifyFavicon');
-	}
-},
-modifyFavicon: function() {
-	let faviconLink = this.create('LINK', { rel: 'shortcut icon', href: this.minThumbnailImg.src });
-	this.firstTag('HEAD').appendChild(faviconLink);
+	this.favicon.appendChild(img);
+	this.on(this.win, 'load', () => { this.body.appendChild(this.favicon); }); // wait for FTBucket
+	this.firstTag('HEAD').appendChild(this.create('LINK', { rel: 'shortcut icon', href: img.src }));
 },
 
 // Scroll-buttons ////////////////////////////
 _scrollMax: null,
-clientHeight: function() {
-	if (this.is1stPage) return this.body && this.body.clientHeight || this.win.innerHeight;
+lastResBottom: function() {
+	if (this.is1stPage) return 0;
 	try {
 		let lastTable = this.findTableOrBQ(this.arrayLast(this.allBQ(this.doc)));
 		let y = lastTable.offsetTop + lastTable.offsetHeight;
 		while (!y) {
 			lastTable = lastTable.previousSibling;
-			if (!lastTable) return this.body.clientHeight;
+			if (!lastTable) return 0;
 			y = lastTable.offsetTop + lastTable.offsetHeight;
 		}
 		y += this.computedPx(lastTable, 'margin-bottom');
 		y += this.computedPx(this.body, 'line-height');
 		y += 5;
 		return y;
-	} catch (e) {
-		return this.body && this.body.clientHeight || this.win.innerHeight;
-	}
+	} catch (e) { return 0; }
+},
+clientHeight: function() {
+	return this.lastResBottom() || this.body && this.body.clientHeight || this.win.innerHeight;
 },
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
@@ -450,7 +438,7 @@ quoteBtnOnClick: function() {
 },
 
 // Others ////////////////////////////
-scrollToThreadImage: function() {
+scrollToThreadImg: function() {
 	let i = this.firstClass('are4are-thread-image');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
@@ -458,13 +446,13 @@ scrollToThreadImage: function() {
 },
 afterModified: function() {
 	if (this.scrollY() === 0) {
-		this.queue('scrollToThreadImage'); // wait for Ms.MHT
+		this.queue('scrollToThreadImg'); // wait for Ms.MHT
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
 },
 scrollend: function(e) {
-	this.showMinTumbnail(e);
+	this.showFavicon(e);
 	this.modifyTablesFromPageLeftTop(e);
 	this.hideBackBtn(e);
 },
@@ -491,8 +479,8 @@ exec: function() {
 	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
 	this.bottomBtn = this.addToolButton('bottom', 'bottomBtnOnClick');
 
-	// MinThumbnail
-	this.appendMinThumbnail();
+	// Favicon
+	this.appendFavicon();
 
 	// Modify Blockquotes (visible)
 	let b = this.allBQ(this.doc);
