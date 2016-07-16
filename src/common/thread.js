@@ -257,7 +257,7 @@ SIO_PREFIX: {
 	fu: 'http://dec.2chan.net/up2/src/'
 },
 // 1:URL(normal), 2:Filename, 3:SioPrefix, 4:Number, 5:Ext
-autoLinkRegexp: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/gi,
+autoLinkRegexp: /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)|\b((s[usapq]|fu?)([0-9]{4,})((\.[_a-zA-Z0-9]+)?))/i,
 autoLinkTextNode: function(node, nextText) {
 	let text = nextText || node.nodeValue;
 	let m = this.autoLinkRegexp.exec(text);
@@ -316,11 +316,10 @@ modifyBQ: function(bq) {
 		if (a.value === 'delete') break; // delete-checkbox
 		// mail
 		if (a.href && /^mailto:/.test(a.href)) {
-			a.parentNode.insertBefore(this.create('SPAN', null, a.textContent), a);
-			a.textContent = a.getAttribute('href').replace('mailto:', ' ') + ' ';
-			if (a.href.indexOf('mailto:http') === 0) {
-				a.href = a.href.replace('mailto:', '');
-			}
+			a.classList.add('are4are-mail');
+			let s = this.create('SPAN', { 'class': 'are4are-shown-mail' }, a.getAttribute('href').replace(/^mailto:/, ''));
+			s = this.autoLink(s) || s;
+			a.parentNode.insertBefore(s, a.nextSibling);
 		}
 	}
 },

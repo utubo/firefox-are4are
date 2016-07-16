@@ -166,6 +166,16 @@ div[style^="width:680px"] {
 	max-width: 4em;
 }
 
+/* res */
+.are4are-mail {
+	color: #800;
+	text-decoration: none;
+}
+.are4are-shown-mail {
+	color: #00f;
+	margin: 0 2pt;
+},
+
 /* find res */
 .are4are-bookmark::before {
 	animation: are4are-fade-in-animation 1s;
