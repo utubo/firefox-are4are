@@ -40,7 +40,7 @@ showFavicon: function(e) {
 	}
 },
 appendFavicon: function() {
-	// find thread-image
+	// find thread-img
 	let threadImg, href;
 	for (threadImg = this.firstBQ(this.doc); threadImg; threadImg = threadImg.previousSibling) {
 		if (
@@ -439,7 +439,7 @@ quoteBtnOnClick: function() {
 
 // Others ////////////////////////////
 scrollToThreadImg: function() {
-	let i = this.firstClass('are4are-thread-image');
+	let i = this.firstClass('are4are-thread-img');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
 	if (i) { this.win.scrollTo(0, i.offsetTop); }
