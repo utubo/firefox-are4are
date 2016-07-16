@@ -107,6 +107,9 @@ Are4Are.prototype = {
 	queue: function(func) {
 		this.timeout(null, func, 10);
 	},
+	computedPx: function(elm, prop) {
+		return parseInt(this.win.getComputedStyle(elm).getPropertyValue(prop), 10);
+	},
 
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func) {

@@ -7,7 +7,7 @@ Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,
 
 // Util //////////////////////////////
-findTableOrBlockquote: function(bq) {
+findTableOrBQ: function(bq) {
 	return !bq ? null : this.parentTag(bq, 'TABLE') || bq;
 },
 // find BlockQuote(s)
@@ -16,15 +16,24 @@ allBQ: elm => elm.getElementsByTagName('BLOCKQUOTE'),
 parentBQ: function(elm) { return this.parentTag(elm, 'BLOCKQUOTE'); },
 
 // MinThumbnail //////////////////////
-MINTHUMBNAIL_SIZE: 60,
-MINTHUMBNAIL_HIDE_SCROLLTOP: 300,
+minThumbnailInfo: null,
+calcMinThumbnailInfo: function() {
+	if (this.minThumbnailInfo) return this.minThumbnailInfo;
+	this.minThumbnailInfo = {
+		size: this.computedPx(this.minThumbnail, 'height'),
+		hideY: this.firstBQ(this.doc).offsetTop
+	};
+	this.timeout(null, () => { this.minThumbnailInfo = null; }, 5000);
+	return this.minThumbnailInfo;
+},
 showMinTumbnail: function(e) {
 	if (!this.minThumbnail) return;
+	let info = this.calcMinThumbnailInfo();
 	let y = this.scrollY();
 	if (
-		y < this.MINTHUMBNAIL_HIDE_SCROLLTOP ||
+		y < info.hideY ||
 		e.detail && e.detail.triggerSrc !== 'pageDownBtn' &&
-		e.detail.y && e.detail.y - y < this.MINTHUMBNAIL_SIZE
+		e.detail.y && e.detail.y - y < info.size
 	) {
 		this.fadeOut(this.minThumbnail);
 	} else {
@@ -87,15 +96,15 @@ _scrollMax: null,
 clientHeight: function() {
 	if (this.is1stPage) return this.body && this.body.clientHeight || this.win.innerHeight;
 	try {
-		let lastTable = this.findTableOrBlockquote(this.arrayLast(this.allBQ(this.doc)));
+		let lastTable = this.findTableOrBQ(this.arrayLast(this.allBQ(this.doc)));
 		let y = lastTable.offsetTop + lastTable.offsetHeight;
 		while (!y) {
 			lastTable = lastTable.previousSibling;
 			if (!lastTable) return this.body.clientHeight;
 			y = lastTable.offsetTop + lastTable.offsetHeight;
 		}
-		y += parseInt(this.win.getComputedStyle(lastTable).getPropertyValue('margin-bottom'), 10);
-		y += parseInt(this.win.getComputedStyle(this.body).getPropertyValue('line-height'), 10);
+		y += this.computedPx(lastTable, 'margin-bottom');
+		y += this.computedPx(this.body, 'line-height');
 		y += 5;
 		return y;
 	} catch (e) {
@@ -146,7 +155,7 @@ onReloaded: function(newDoc) {
 	// new reses
 	let newReses = this.doc.createDocumentFragment();
 	let count = 0;
-	let table = this.findTableOrBlockquote(this.allBQ(newDoc)[oldBQCount]);
+	let table = this.findTableOrBQ(this.allBQ(newDoc)[oldBQCount]);
 	while (table) {
 		let next = table.nextSibling;
 		if (table.nodeType !== 1) {
@@ -164,7 +173,7 @@ onReloaded: function(newDoc) {
 		return;
 	}
 	this.modifyTables(newReses.querySelector('TABLE')); // DocumentFragment doesn't have getElementsByTagName.
-	let lastTable = this.findTableOrBlockquote(oldBQs[oldBQCount - 1]);
+	let lastTable = this.findTableOrBQ(oldBQs[oldBQCount - 1]);
 	let newerBorderY = lastTable.offsetTop + lastTable.offsetHeight;
 	this.newerBorder.style.top = newerBorderY + 'px';
 	lastTable.parentNode.insertBefore(newReses, lastTable.nextSibling);
@@ -488,7 +497,7 @@ exec: function() {
 	// Modify Blockquotes (visible)
 	let b = this.allBQ(this.doc);
 	this.modifyBQ(b[0]);
-	this.modifyTables(this.findTableOrBlockquote(b[1]));
+	this.modifyTables(this.findTableOrBQ(b[1]));
 
 	// Newer Border
 	this.create('DIV', { id: 'are4are_newerBorder' });
