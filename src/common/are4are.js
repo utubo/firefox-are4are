@@ -110,6 +110,14 @@ Are4Are.prototype = {
 	computedPx: function(elm, prop) {
 		return parseInt(this.win.getComputedStyle(elm).getPropertyValue(prop), 10);
 	},
+	y: function(elm) {
+		let y = 0;
+		while(elm) {
+			y += elm.offsetTop;
+			elm = elm.offsetParent;
+		}
+		return y;
+	},
 
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func) {
@@ -171,7 +179,7 @@ Are4Are.prototype = {
 	},
 	scrollMax: function() {
 		if (this._scrollMax) return this._scrollMax;
-		this._scrollMax = this.clientHeight() - this.toolbar.offsetTop;
+		this._scrollMax = this.clientHeight() - this.y(this.toolbar);
 		this.timeout(null, 'resetScrollMax', 5000);
 		return this._scrollMax;
 	},

@@ -20,7 +20,7 @@ calcFaviconInfo: function() {
 	if (this.faviconInfo) return this.faviconInfo;
 	this.faviconInfo = {
 		size: this.computedPx(this.favicon, 'height'),
-		hideY: this.firstBQ(this.doc).offsetTop
+		hideY: this.y(this.firstBQ(this.doc))
 	};
 	this.timeout(null, () => { this.faviconInfo = null; }, 5000);
 	return this.faviconInfo;
@@ -84,11 +84,11 @@ lastResBottom: function() {
 	if (this.is1stPage) return 0;
 	try {
 		let lastTable = this.findTableOrBQ(this.arrayLast(this.allBQ(this.doc)));
-		let y = lastTable.offsetTop + lastTable.offsetHeight;
+		let y = this.y(lastTable) + lastTable.offsetHeight;
 		while (!y) {
 			lastTable = lastTable.previousSibling;
 			if (!lastTable) return 0;
-			y = lastTable.offsetTop + lastTable.offsetHeight;
+			y = this.y(lastTable) + lastTable.offsetHeight;
 		}
 		y += this.computedPx(lastTable, 'margin-bottom');
 		y += this.computedPx(this.body, 'line-height');
@@ -162,7 +162,7 @@ onReloaded: function(newDoc) {
 	}
 	this.modifyTables(newReses.querySelector('TABLE')); // DocumentFragment doesn't have getElementsByTagName.
 	let lastTable = this.findTableOrBQ(oldBQs[oldBQCount - 1]);
-	let newerBorderY = lastTable.offsetTop + lastTable.offsetHeight;
+	let newerBorderY = this.y(lastTable) + lastTable.offsetHeight;
 	this.newerBorder.style.top = newerBorderY + 'px';
 	lastTable.parentNode.insertBefore(newReses, lastTable.nextSibling);
 	this.resetScrollMax();
@@ -222,17 +222,17 @@ quoteTextOnClick: function(e) {
 	let y;
 	if (found.tagName === 'TABLE') {
 		this.modifyTables(found);
-		y = found.offsetTop;
+		y = this.y(found);
 		found = this.firstBQ(found);
 	} else {
-		y = this.prev(found, 'INPUT').offsetTop;
+		y = this.y(this.prev(found, 'INPUT'));
 	}
 	// bookmark
 	if (this.found) {
 		this.found.classList.remove('are4are-bookmark', 'are4are-found', 'are4are-found-fuzzy', 'are4are-not-fuzzy');
 	}
 	this.found = found;
-	if (this.backY < this.parentTag(e.target, 'TABLE').offsetTop) {
+	if (this.backY < this.y(this.parentTag(e.target, 'TABLE'))) {
 		this.backY = 0;
 	}
 	if (!this.backY) {
@@ -441,7 +441,7 @@ scrollToThreadImg: function() {
 	let i = this.firstClass('are4are-thread-img');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
-	if (i) { this.win.scrollTo(0, i.offsetTop); }
+	if (i) { this.win.scrollTo(0, this.y(i)); }
 },
 afterModified: function() {
 	if (this.scrollY() === 0) {
