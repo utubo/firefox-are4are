@@ -75,7 +75,7 @@ appendFavicon: function() {
 	});
 	this.favicon.appendChild(img);
 	this.on(this.win, 'load', () => { this.body.appendChild(this.favicon); }); // wait for FTBucket
-	this.firstTag('HEAD').appendChild(this.create('LINK', { rel: 'shortcut icon', href: img.src }));
+	this.doc.head.appendChild(this.create('LINK', { rel: 'shortcut icon', href: img.src }));
 },
 
 // Scroll-buttons ////////////////////////////

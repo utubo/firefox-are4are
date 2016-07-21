@@ -5,23 +5,22 @@ for (let i of document.getElementById('myForm').elements) {
 
 // with new tab //////////////////////
 function setupAsNewTab() {
-	let head = document.querySelector('head');
 	// ViewPort
 	let viewPort = document.createElement('meta');
 	viewPort.name = 'viewport';
 	viewPort.content = 'width=device-width';
-	head.insertBefore(viewPort, head.firstChild);
+	document.head.insertBefore(viewPort, document.head.firstChild);
 	// CSS
 	let cssLink = document.createElement('link');
 	cssLink.rel = 'stylesheet';
 	cssLink.type = 'text/css';
 	cssLink.href = chrome.extension.getURL('common/options.css');
-	head.appendChild(cssLink);
+	document.head.appendChild(cssLink);
 	// Title
 	let extensionName = chrome.i18n.getMessage('extensionName');
 	let title = document.createElement('title');
 	title.textContent = extensionName;
-	head.appendChild(title);
+	document.head.appendChild(title);
 	let h1 = document.createElement('h1');
 	h1.textContent = extensionName;
 	document.body.insertBefore(h1, document.body.firstChild);

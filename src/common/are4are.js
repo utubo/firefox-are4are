@@ -78,7 +78,7 @@ Are4Are.prototype = {
 			type: 'text/css',
 			href: chrome.extension.getURL(cssFile)
 		});
-		this.firstTag('HEAD').appendChild(cssLink);
+		this.doc.head.appendChild(cssLink);
 	},
 	on: function(elm, names, func) {
 		if (typeof func === 'string') {
@@ -310,13 +310,12 @@ Are4Are.prototype = {
 			this.coverBody();
 		}
 		// Viewport
-		let head = this.firstTag('HEAD');
 		let viewport = this.create('META', {
 			name: 'viewport',
 			content: 'width=device-width'
 		});
 		viewport.id = 'are4are_viewport';
-		head.insertBefore(viewport, head.firstChild);
+		this.doc.head.insertBefore(viewport, this.doc.head.firstChild);
 		// CSS
 		this.addCssFile('common/are4are.css');
 		if (this.cssFile) this.addCssFile(this.cssFile);
