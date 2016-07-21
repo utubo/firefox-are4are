@@ -249,6 +249,7 @@ div[style^="width:680px"] {
 #are4are_ftblFixed {
 	background-color: rgba(255,255,238,.8);
 	border: none;
+	box-shadow: 0 5pt 5pt rgba(255,255,238,.8);
 	display: block;
 	height: unset;
 	left: 0;
@@ -268,5 +269,13 @@ div[style^="width:680px"] {
 .are4are-form-button {
 	margin: .5em .2em;
 	padding: .5em;
+}
+.are4are-toolbtn-write {
+	border-radius: 0 0 4pt 4pt !important;
+	border-top: 2.9pt solid transparent;
+	margin-top: 0 !important;
+}
+.active.are4are-toolbtn-write {
+	border-color: #fa8;
 }
 
