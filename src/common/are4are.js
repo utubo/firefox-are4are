@@ -136,8 +136,12 @@ Are4Are.prototype = {
 				default: this.toast(`__MSG_networkError__(${xhr.status})`);
 			}
 		};
-		xhr.onabort = xhr.onerror = xhr.ontimeout = () => {
+		xhr.ontimeout = () => {
 			this.toast('__MSG_networkError__(timeout)');
+			this.noactivateToolBar();
+		};
+		xhr.onabort = xhr.onerror = () => {
+			this.toast('__MSG_networkError__');
 			this.noactivateToolBar();
 		};
 		xhr.timeout = 15 * 1000;
@@ -310,10 +314,7 @@ Are4Are.prototype = {
 			this.coverBody();
 		}
 		// Viewport
-		let viewport = this.create('META', {
-			name: 'viewport',
-			content: 'width=device-width'
-		});
+		let viewport = this.create('META', { name: 'viewport', content: 'width=device-width' });
 		viewport.id = 'are4are_viewport';
 		this.doc.head.insertBefore(viewport, this.doc.head.firstChild);
 		// CSS
