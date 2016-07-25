@@ -18,11 +18,11 @@ body {
 	z-index:10;
 }
 .are4are-toolbar.active {
-	animation: are4are-toolbar-active-animation 3s ease-in .5s infinite alternate;
+	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
 }
 @keyframes are4are-toolbar-active-animation {
 	0% { border-color:#8cf; }
-	100% { border-color:#fa8; }
+	100% { border-color:#09f; }
 }
 .are4are-toolbtn,
 .are4are-toolbtn:active,
