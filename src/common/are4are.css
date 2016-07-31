@@ -17,28 +17,31 @@ body {
 	width:100%;
 	z-index:10;
 }
-.are4are-toolbar.active {
+.are4are-toolbar-active {
 	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
 }
 @keyframes are4are-toolbar-active-animation {
 	0% { border-color:#8cf; }
-	100% { border-color:#09f; }
+	60% { border-color:#8cf; }
+	100% { border-color:#fa8; }
 }
 .are4are-toolbtn,
-.are4are-toolbtn:active,
-.are4are-toolbtn:focus,
 .are4are-toolbtn:visited {
 	background: #ffe;
 	border-radius: 3pt;
+	cursor: pointer;
 	color: #00e;
 	display: inline-block;
 	margin: 2pt 0;
 	outline: none;
 	padding: 0 2pt;
+	text-decoration: underline;
 	transition: all .3s ease-in;
+	user-select: none;
+	-moz-user-select: none;
 }
-.are4are-toolbtn.active,
-.are4are-toolbar.active .are4are-toolbtn:focus {
+.are4are-toolbtn-down,
+.are4are-toolbtn-hold {
 	background: #fa8;
 	color: #ffe;
 	transition: none;

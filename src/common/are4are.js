@@ -85,6 +85,8 @@ Are4Are.prototype = {
 			func = this.bindFunc(func);
 		}
 		for (let name of names.split(' ')) {
+			if (name == 'touchstart' && !('ontouchstart' in this.win)) name = 'mousedown';
+			if (name == 'touchend' && !('ontouchend' in this.win)) name = 'mouseup';
 			elm.addEventListener(name, func);
 		}
 	},
@@ -218,9 +220,8 @@ Are4Are.prototype = {
 	},
 	// ToolBar
 	addToolButton: function(label, onclick, ...clazz) {
-		let btn = this.create('A');
+		let btn = this.create('SPAN');
 		btn.textContent = chrome.i18n.getMessage(label);
-		btn.href = 'javascript:void(0);';
 		clazz.push('are4are-toolbtn');
 		clazz.push(`are4are-toolbtn-${label}`);
 		btn.classList.add.apply(btn.classList, clazz);
@@ -230,11 +231,19 @@ Are4Are.prototype = {
 		this.toolbar.appendChild(btn, this.toolbar.firstChild);
 		return btn;
 	},
+	toolbarTouchstart: function(e) {
+		if (!e.target.classList.contains('are4are-toolbtn')) return;
+		e.target.classList.add('are4are-toolbtn-down');
+	},
+	toolbarTouchend: function(e) {
+		if (!e.target.classList.contains('are4are-toolbtn')) return;
+		e.target.classList.remove('are4are-toolbtn-down');
+	},
 	activateToolBar: function() {
-		this.toolbar.classList.add('active');
+		this.toolbar.classList.add('are4are-toolbar-active');
 	},
 	noactivateToolBar: function() {
-		this.toolbar.classList.remove('active');
+		this.toolbar.classList.remove('are4are-toolbar-active');
 	},
 
 	// Cover ///////////////////////////////
@@ -287,6 +296,8 @@ Are4Are.prototype = {
 			'class': 'are4are-toolbar',
 			style: 'display:none'
 		});
+		this.on(this.toolbar, 'touchstart', 'toolbarTouchstart');
+		this.on(this.toolbar, 'touchend', 'toolbarTouchend');
 		this.body.appendChild(this.toolbar);
 
 		// modify ThreadPage, CatalogPage, etc ...

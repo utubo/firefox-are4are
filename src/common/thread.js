@@ -101,20 +101,16 @@ clientHeight: function() {
 },
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
-	this.pageDownBtn.classList.add('active');
 	this.pageDownY = this.scrollY() + Math.round(this.win.innerHeight / 2);
 	this.scrollToNoMargin(this.pageDownY, null, 'pageDownBtn');
 	this.timeout('RePageDown', 'pageDownBtnOnTouchstart', 1000);
 },
 pageDownBtnOnTouchend: function(e) {
 	this.clearTimeout('RePageDown');
-	this.pageDownBtn.classList.remove('active');
 	this.pageDownY = null;
 },
 bottomBtnOnClick: function(e) {
-	this.activateToolBar();
 	this.scrollToNoMargin(this.scrollMax(), null, 'pageDownBtn');
-	this.noactivateToolBar();
 },
 backBtnOnClick: function() {
 	this.scrollTo(this.backY);
@@ -350,13 +346,13 @@ modifyTablesFromPageLeftTop: function() {
 // Modify Form ///////////////////////
 showForm: function() {
 	this.writeBtnY = this.scrollY();
-	this.writeBtn.classList.add('active');
+	this.writeBtn.classList.add('are4are-toolbtn-hold');
 	this.fadeIn(this.ftbl);
 	this.ftxa.focus();
 },
 hideForm: function() {
 	this.win.scrollTo(0, this.writeBtnY);
-	this.writeBtn.classList.remove('active');
+	this.writeBtn.classList.remove('are4are-toolbtn-hold');
 	this.fadeOut(this.ftbl);
 },
 onSubmit: function(e) {
@@ -418,7 +414,7 @@ modifyForm: function() {
 	this.body.appendChild(this.iframe);
 
 	// Quote
-	this.on(this.body, 'mousedown touchstart', 'showQuoteBtn');
+	this.on(this.body, 'touchstart', 'showQuoteBtn');
 },
 showQuoteBtn: function() {
 	this.timeout('showQuoteBtn', () => {
@@ -474,8 +470,8 @@ exec: function() {
 		this.addToolButton('reload', 'reloadBtnOnClick');
 	}
 	this.pageDownBtn = this.addToolButton('pagedown');
-	this.on(this.pageDownBtn, 'touchstart mousedown', 'pageDownBtnOnTouchstart');
-	this.on(this.pageDownBtn, 'touchend mouseup', 'pageDownBtnOnTouchend');
+	this.on(this.pageDownBtn, 'touchstart', 'pageDownBtnOnTouchstart');
+	this.on(this.pageDownBtn, 'touchend', 'pageDownBtnOnTouchend');
 	this.bottomBtn = this.addToolButton('bottom', 'bottomBtnOnClick');
 
 	// Favicon

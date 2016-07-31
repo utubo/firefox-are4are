@@ -238,7 +238,7 @@ exec: function() {
 	if (!this.catalogTable) return;
 	// thread-image-button
 	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-hide' }, this.format('__MSG_threadImg__'));
-	this.on(this.threadImgBtn, 'mousedown touchstart', 'threadImgBtnOnTouchstart');
+	this.on(this.threadImgBtn, 'touchstart', 'threadImgBtnOnTouchstart');
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);
 	// modify catalog
@@ -249,8 +249,8 @@ exec: function() {
 	this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	this.appendCatalogCountDelta(this.body);
 	// events
-	this.on(this.body, 'mousedown touchstart', 'bodyOnTouchstart');
-	this.on(this.body, 'mouseup touchend', 'bodyOnTouchend');
+	this.on(this.body, 'touchstart', 'bodyOnTouchstart');
+	this.on(this.body, 'touchend', 'bodyOnTouchend');
 	this.on(this.win, 'scroll', 'bodyOnScroll');
 	// title
 	if (this.doc.location.href.indexOf('/b/futaba.php') !== -1) {
