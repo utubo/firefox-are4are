@@ -8,15 +8,15 @@ AndroidのFirefoxのアドオンです
 でもフレームには対応してませんごめん
 
 ##インストール(現状)
-1. Firefoxβをインストール
-1. `about:config`を開いて`xpinstall.signatures.required`を`false`に設定
-1. 以下のどれかをインストール  
+以下のどれかをインストール  
  - おすすめ(githubにプッシュしたやつ)  
 <http://x123.x0.to/~rawgit/are.xpi>
  - 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
  - 承認済みだけど古い  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
+
+※未承認のアドオンをいれるにはFirefoxで`about:config`を開いて`xpinstall.signatures.required`を`false`に設定
 
 ##外部URLの登録
 ###手順
@@ -35,9 +35,9 @@ AndroidのFirefoxのアドオンです
 ダメなときは正規表現を修正してね
 
 ##承認済みバージョンとの違い
-(var4.3→var4.4)
+(どっちもvar4.4)
 - 機能追加
  - 無し
 - 機能修正
- - 幾つかバグを修正しました
+ - 無し
 
