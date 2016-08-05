@@ -280,6 +280,7 @@ Are4Are.prototype = {
 
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
+		this.win.removeEventListener('DOMContentLoaded', this.bindFunc('onDOMContentLoaded'));
 		this.body = this.doc.body;
 
 		// Scrollend Event
