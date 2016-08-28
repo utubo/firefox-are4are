@@ -11,6 +11,8 @@ chrome.storage.local.get('urls', r => {
 		is1stPage = href.indexOf('/res/') === -1;
 	} else if (href.match(/\/cont\/[a-z]{3}\.2chan\.net_[a-z\d]+_res_\d+\/index.htm$/)) {
 		// FTBucket
+	} else if (href.match(/\/futaba\.php\?res=\d+$/)) {
+		// hinanjo no hinanjo
 	} else {
 		// addtional URL
 		if (!(r.urls)) return;

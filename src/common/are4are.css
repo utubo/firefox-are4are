@@ -6,7 +6,6 @@ body {
 	background: #ffe;
 	border-top: 1pt solid #fa8;
 	bottom:0;
-	font-size: 12pt;
 	left:0;
 	line-height: 21pt;
 	max-width:100%;
@@ -32,6 +31,7 @@ body {
 	cursor: pointer;
 	color: #00e;
 	display: inline-block;
+	font-size: 12pt;
 	margin: 2pt 0;
 	outline: none;
 	padding: 0 2pt;
