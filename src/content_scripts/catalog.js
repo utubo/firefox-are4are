@@ -182,13 +182,15 @@ appendCatalogCountDelta: function(tablePalent) {
 		work.querySelector(`a[href="${href}"] img`).classList.add('are4are-old');
 	}
 	// complete
-	if (appendDelta) {
-		this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
-		this.catalogTable = this.first('TABLE[border="1"][align="center"]');
-	}
+	this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
+	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
+},
+setupCatalogData: function(href) {
+	this.catalogData = href.indexOf('sort=8') !== -1 ? this.catalogDataSodCount : this.catalogDataResCount;
 },
 refreshCatalog: function(href) {
 	this.hideThumbnail();
+	this.setupCatalogData(href);
 	this.getDoc(href, this.appendCatalogCountDelta);
 },
 
@@ -196,7 +198,9 @@ refreshCatalog: function(href) {
 exec: function() {
 	this.firstTag('BODY').classList.add('are4are-initialized');
 	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
-	this.catalogData = [];
+	this.catalogDataResCount = [];
+	this.catalogDataSodCount = [];
+	this.setupCatalogData(this.doc.location.href);
 
 	// Toolbar
 	let addedHref = [];
