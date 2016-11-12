@@ -108,7 +108,8 @@ threadImgBtnOnTouchstart: function() {
 	if (this.isThreadImgBtnLoaded) return;
 	this.threadImgBtn.focus();
 	this.getDoc(this.threadLink.href, doc => {
-		let img = doc.querySelector(`IMG[src="${this.thumbnailImg.src}"]`);
+		let thumbnailFilename = this.thumbnailImg.src.split('/').pop();
+		let img = doc.querySelector(`IMG[src$="${thumbnailFilename}"]`);
 		if (!img) {
 			this.toast('__MSG_networkError__');
 			return;
