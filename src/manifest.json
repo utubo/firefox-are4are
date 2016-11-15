@@ -18,12 +18,12 @@
 
 	"content_scripts": [
 		{
-			"matches": ["http://*.2chan.net/del.php?*"],
+			"matches": ["*://*.2chan.net/del.php?*"],
 			"js": ["content_scripts/futaba.js"],
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["http://*.2chan.net/*/futaba.php?mode=cat*"],
+			"matches": ["*://*.2chan.net/*/futaba.php?mode=cat*"],
 			"js": ["common/are4are.js", "content_scripts/catalog.js"],
 			"css": ["content_scripts/catalog.css"],
 			"run_at": "document_start"
@@ -34,7 +34,7 @@
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["http://*/*", "https://*/*"],
+			"matches": ["*://*/*"],
 			"js": ["common/are4are.js", "common/thread.js", "content_scripts/all_urls.js"],
 			"run_at": "document_start"
 		}
