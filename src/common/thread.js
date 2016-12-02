@@ -270,7 +270,7 @@ autoLinkTextNode: function(node, nextText) {
 	node.appendChild(this.doc.createTextNode(text.substring(0, m.index)));
 	// link
 	if (m[1]) {
-		node.appendChild(this.create('A', { href: m[1], target: '_blank', 'class': 'noref' }, m[1]));
+		node.appendChild(this.create('A', { href: m[1], target: '_blank', 'rel': 'noreferrer' }, m[1]));
 	} else {
 		node.appendChild(this.create('A', { href: this.SIO_PREFIX[m[3]] + m[2], target: '_blank' }, m[2]));
 	}
@@ -291,11 +291,6 @@ autoLink: function(elm) {
 		}
 		textNode = prev;
 	}
-},
-norefOnClick: function(e) {
-	e.preventDefault();
-	let html = `<html><head><meta http-equiv="Refresh" content="0; url=${e.target.href}"></head><body></body></html>`;
-	this.win.open(`data:text/html; charset=utf-8,${encodeURIComponent(html)}`);
 },
 modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
@@ -492,9 +487,7 @@ exec: function() {
 	// Click Events
 	this.on(this.body, 'click', e => {
 		if (!e.target) return;
-		if (e.target.classList.contains('noref')) {
-			this.norefOnClick(e);
-		} else if (e.target.textContent && e.target.textContent.startsWith('>')) {
+		if (e.target.textContent && e.target.textContent.startsWith('>')) {
 			this.quoteTextOnClick(e);
 		}
 	});
