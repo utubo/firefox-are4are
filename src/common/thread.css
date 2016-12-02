@@ -83,29 +83,32 @@ img[hspace="20"] {
 	margin: auto;
 }
 .sod {
-	color: #B66;
-	margin: 0;
-	padding: 0;
+	color: #B66 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 .del {
 	color: #B66 !important;
 	display: inline-block;
-	margin: 0;
+	margin: 0 4px;
 	overflow: hidden;
+	text-decoration: none;
 	vertical-align: bottom;
 }
 td>.del {
+	margin: 0;
 	opacity: 0;
 	transition: opacity .5s;
 	width: 0;
 }
 td:hover>.del {
+	margin: 0 4px;
 	opacity: 1;
 	width: auto;
 }
 input[value="delete"] {
 	height: 7pt;
-	margin: 0;
+	margin-right: 4px;
 	overflow: hidden;
 	width: 7pt;
 }
