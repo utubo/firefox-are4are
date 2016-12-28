@@ -73,7 +73,7 @@
 		"description": ""
 	},
 	"urlsTextAreaNote": {
-		"message": "(正規表現で指定, 改行で複数指定)",
+		"message": "(スレッドのURLを正規表現で指定, 改行で複数指定)",
 		"description": ""
 	},
 	"uriRegexWrong": {
