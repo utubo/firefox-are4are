@@ -340,6 +340,7 @@ modifyTablesFromPageLeftTop: function() {
 
 // Modify Form ///////////////////////
 showForm: function() {
+	this.quoteSelection();
 	this.writeBtnY = this.scrollY();
 	this.writeBtn.classList.add('are4are-toolbtn-hold');
 	this.fadeIn(this.ftbl);
@@ -407,31 +408,13 @@ modifyForm: function() {
 	});
 	this.on(this.iframe, 'load', 'onSubmit');
 	this.body.appendChild(this.iframe);
-
-	// Quote
-	if ('onselectionchange' in this.doc) {
-		this.on(this.doc, 'selectionchange', 'showQuoteBtn');
-	} else {
-		this.win.setInterval(this.bindFunc('showQuoteBtn'), 1000);
-	}
 },
-showQuoteBtn: function() {
-	this.timeout('showQuoteBtn', () => {
-		if (this.doc.getSelection().toString()) {
-			this.quoteBtn.classList.remove('are4are-hide');
-		} else {
-			this.quoteBtn.classList.add('are4are-hide');
-		}
-	}, 100);
-},
-quoteBtnOnClick: function() {
+quoteSelection: function() {
 	let text = this.doc.getSelection().toString();
-	this.quoteBtn.classList.add('are4are-hide');
 	if (!text) return;
 	text = text.replace(/^/mg, '>').replace(/^>\n/mg, '').replace(/\n+$/, '');
 	if (!text) return;
 	this.ftxa.value += (/[^\n]$/.test(this.ftxa.value) ? "\n" : '') + text + "\n";
-	this.showForm();
 },
 
 // Others ////////////////////////////
@@ -464,7 +447,6 @@ exec: function() {
 
 	// ToolButtons
 	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-hide');
-	this.quoteBtn = this.addToolButton('quote', 'quoteBtnOnClick', 'are4are-hide');
 	this.writeBtn = this.addToolButton('write', null, 'are4are-disable');
 	if (this.is1stPage) {
 		this.addToolButton('reload', null, 'are4are-disable');

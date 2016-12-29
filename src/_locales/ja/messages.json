@@ -12,10 +12,6 @@
 		"message": "戻る",
 		"description": "toolbar back button"
 	},
-	"quote": {
-		"message": "引用",
-		"description": "toolbar quote button"
-	},
 	"write": {
 		"message": "書き込む",
 		"description": "toolbar write button"

@@ -12,10 +12,6 @@
 		"message": "back",
 		"description": "toolbar back button"
 	},
-	"quote": {
-		"message": "quote",
-		"description": "toolbar quote button"
-	},
 	"write": {
 		"message": "Write",
 		"description": "toolbar write button"
