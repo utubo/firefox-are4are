@@ -64,8 +64,8 @@
 		"message": "設定",
 		"description": ""
 	},
-	"save": {
-		"message": "保存",
+	"saveOptions": {
+		"message": "設定を保存",
 		"description": ""
 	},
 	"urlsTextAreaLabel": {

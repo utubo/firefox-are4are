@@ -64,7 +64,7 @@
 		"message": "Options",
 		"description": ""
 	},
-	"save": {
+	"saveOptions": {
 		"message": "Save",
 		"description": ""
 	},
