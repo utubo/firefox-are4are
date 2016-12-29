@@ -233,11 +233,8 @@ div[style^="width:680px"] {
 
 /* load next */
 #are4are_newerBorder {
-	background:
-		linear-gradient( 45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%),
-		linear-gradient(-45deg, transparent 60%, #ea8 60%, #ea8 67%, transparent 0%);
-	background-size: 6pt 12pt;
-	height: 4pt;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='5' stroke='darksalmon' stroke-width='1.5'><line x1='0' y1='0' x2='5' y2='5'/><line x1='5' y1='5' x2='10' y2='0'/></svg>");
+	height: 5px;
 	left: 0;
 	margin-top:-2pt;
 	opacity: 0;

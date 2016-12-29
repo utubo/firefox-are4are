@@ -10,12 +10,11 @@ body {
 	justify-content: space-around;
 	left:0;
 	line-height: 21pt;
-	max-width:100%;
+	min-width:100%;
 	overflow: auto;
 	position: fixed;
 	text-align: center;
 	white-space: nowrap;
-	width: 100%;
 	z-index: 10;
 }
 .are4are-toolbar-active {
