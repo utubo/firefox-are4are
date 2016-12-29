@@ -409,13 +409,20 @@ modifyForm: function() {
 	this.body.appendChild(this.iframe);
 
 	// Quote
-	this.on(this.body, 'touchstart', 'showQuoteBtn');
+	if ('onselectionchange' in this.doc) {
+		this.on(this.doc, 'selectionchange', 'showQuoteBtn');
+	} else {
+		this.win.setInterval(this.bindFunc('showQuoteBtn'), 1000);
+	}
 },
 showQuoteBtn: function() {
 	this.timeout('showQuoteBtn', () => {
-		if (!this.doc.getSelection().toString()) return;
-		this.quoteBtn.classList.remove('are4are-hide');
-	}, 1000);
+		if (this.doc.getSelection().toString()) {
+			this.quoteBtn.classList.remove('are4are-hide');
+		} else {
+			this.quoteBtn.classList.add('are4are-hide');
+		}
+	}, 100);
 },
 quoteBtnOnClick: function() {
 	let text = this.doc.getSelection().toString();
