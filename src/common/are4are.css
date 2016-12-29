@@ -6,15 +6,17 @@ body {
 	background: #ffe;
 	border-top: 1pt solid #fa8;
 	bottom:0;
+	display: flex;
+	justify-content: space-around;
 	left:0;
 	line-height: 21pt;
 	max-width:100%;
-	overflow:scroll;
-	position:fixed;
-	text-align:center;
+	overflow: auto;
+	position: fixed;
+	text-align: center;
 	white-space: nowrap;
-	width:100%;
-	z-index:10;
+	width: 100%;
+	z-index: 10;
 }
 .are4are-toolbar-active {
 	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
@@ -90,7 +92,7 @@ body {
 	transition: opacity 1s;
 }
 .are4are-toast::before {
-	background-image: url(../icons/are4are4are-32.png);
+	background-image: url(../icons/are4are-32.png);
 	background-size: 1.2em 1.2em;
 	content: " ";
 	display: inline-block;
