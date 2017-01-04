@@ -48,7 +48,7 @@ body {
 	transition: none;
 }
 .are4are-toolbtn.are4are-disable {
-	color: #aaa;
+	opacity: .5;
 	pointer-events: none;
 }
 

@@ -270,7 +270,19 @@ div[style^="width:680px"] {
 	margin: .5em .2em;
 	padding: .5em;
 }
+.are4are-toolbtn {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 80% 80%;
+	color: transparent;
+	height: 18pt;
+	overflow: hidden;
+	user-select: none;
+	moz-user-select: none;
+	width: 18pt;
+}
 .are4are-toolbtn-write {
+	background-image: url('../icons/write.svg');
 	border-radius: 0 0 3pt 3pt !important;
 	border-top: 2.9pt solid transparent;
 	margin-top: 0 !important;
@@ -278,5 +290,17 @@ div[style^="width:680px"] {
 .active.are4are-toolbtn-write {
 	border-color: #fa8;
 	margin: 0 2pt;
+}
+.are4are-toolbtn-back {
+	background-image: url('../icons/back.svg');
+}
+.are4are-toolbtn-reload {
+	background-image: url('../icons/reload.svg');
+}
+.are4are-toolbtn-pagedown {
+	background-image: url('../icons/pagedown.svg');
+}
+.are4are-toolbtn-bottom {
+	background-image: url('../icons/bottom.svg');
 }
 

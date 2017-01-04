@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "__MSG_extensionName__",
 	"description": "__MSG_extensionDescription__",
-	"version": "4.10",
+	"version": "4.11",
 	"default_locale": "ja",
 
 	"icons": {
@@ -43,12 +43,11 @@
 	"options_ui": { "page": "common/options.html" },
 
 	"web_accessible_resources": [
-		"common/are4are.css",
+		"common/*.css",
 		"common/options.html",
-		"common/thread.css",
-		"content_scripts/catalog.css",
-		"content_scripts/legacy_thread.css",
-		"icons/are4are-32.png"
+		"content_scripts/*.css",
+		"icons/are4are-32.png",
+		"icons/*.svg"
 	],
 
 	"permissions": [
