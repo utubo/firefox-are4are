@@ -113,8 +113,7 @@ bottomBtnOnClick: function(e) {
 	this.scrollToNoMargin(this.scrollMax(), null, 'pageDownBtn');
 },
 backBtnOnClick: function() {
-	this.scrollTo(this.backY);
-	this.hideBackBtn({force: true});
+	this.scrollTo(this.backY, () => { this.hideBackBtn({force: true}); });
 },
 
 // Newer Border ///////////////////////
@@ -180,11 +179,6 @@ hideBackBtn: function(e) {
 		this.backBtn.classList.add('are4are-hide');
 	}
 },
-showBackBtn: function() {
-	if (this.backY) return;
-	this.backY = this.win.scrollY;
-	this.backBtn.classList.remove('are4are-hide');
-},
 findRes: function(reg, from) {
 	from = from && (from.tagName === 'TABLE' ? from : this.parentTag(from, 'TABLE'));
 	if (!from) return;
@@ -240,8 +234,11 @@ quoteTextOnClick: function(e) {
 	}
 	// scroll
 	if (y < this.scrollY()) {
-		this.showBackBtn();
-		this.scrollTo(y, () => { found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass); }, 'quoteText');
+		this.backY = this.win.scrollY;
+		this.scrollTo(y, () => {
+			found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
+			this.backBtn.classList.remove('are4are-hide');
+		}, 'quoteText');
 	} else {
 		found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
 	}
