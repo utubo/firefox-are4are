@@ -122,12 +122,13 @@ Are4Are.prototype = {
 	},
 
 	// Ajax ////////////////////////////////
-	getDoc: function(href, func) {
+	getDoc: function(href, func, funcFinally) {
 		this.activateToolBar();
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState !== 4) return;
 			this.noactivateToolBar();
+			funcFinally && funcFinally.call(this);
 			if (xhr.status === 200 && xhr.responseXML) {
 				func.call(this, xhr.responseXML);
 				return;
@@ -141,10 +142,12 @@ Are4Are.prototype = {
 		xhr.ontimeout = () => {
 			this.toast('__MSG_networkError__(timeout)');
 			this.noactivateToolBar();
+			funcFinally && funcFinally.call(this);
 		};
 		xhr.onabort = xhr.onerror = () => {
 			this.toast('__MSG_networkError__');
 			this.noactivateToolBar();
+			funcFinally && funcFinally.call(this);
 		};
 		xhr.timeout = 15 * 1000;
 		try {
@@ -154,6 +157,7 @@ Are4Are.prototype = {
 		} catch (e) {
 			this.toast(`__MSG_networkError__(${e.message})`);
 			this.noactivateToolBar();
+			funcFinally && funcFinally.call(this);
 		}
 	},
 
@@ -295,18 +299,16 @@ Are4Are.prototype = {
 		this.toolbar = this.create('DIV', {
 			id: 'are4are_toolbar',
 			'class': 'are4are-toolbar',
-			style: 'display:none'
 		});
 		this.on(this.toolbar, 'touchstart', 'toolbarTouchstart');
 		this.on(this.toolbar, 'touchend', 'toolbarTouchend');
-		this.body.appendChild(this.toolbar);
 
 		// modify ThreadPage, CatalogPage, etc ...
 		this.exec();
 
 		// after modfied
+		this.body.appendChild(this.toolbar);
 		this.queue(() => {
-			this.toolbar.style = '';
 			this.body.style.scrollBehavior = 'smooth';
 			this.removeCover();
 		});

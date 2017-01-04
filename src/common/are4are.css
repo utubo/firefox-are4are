@@ -3,17 +3,19 @@ body {
 	padding-bottom: 25pt;
 }
 .are4are-toolbar {
-	background: #ffe;
+	background-color: #ffe;
 	border-top: 1pt solid #fa8;
 	bottom:0;
 	display: flex;
 	justify-content: space-around;
 	left:0;
-	line-height: 21pt;
+	line-height: 22pt;
 	min-width:100%;
 	overflow: auto;
 	position: fixed;
 	text-align: center;
+	user-select: none;
+	-moz-user-select: none;
 	white-space: nowrap;
 	z-index: 10;
 }
@@ -27,7 +29,6 @@ body {
 }
 .are4are-toolbtn,
 .are4are-toolbtn:visited {
-	background: #ffe;
 	border-radius: 3pt;
 	cursor: pointer;
 	color: #00e;
@@ -37,13 +38,11 @@ body {
 	outline: none;
 	padding: 0 2pt;
 	text-decoration: underline;
-	transition: all .3s ease-in;
-	user-select: none;
-	-moz-user-select: none;
+	transition: background-color .3s ease-in;
 }
 .are4are-toolbtn-down,
 .are4are-toolbtn-hold {
-	background: #fa8;
+	background-color: #fa8;
 	color: #ffe;
 	transition: none;
 }

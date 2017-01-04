@@ -165,9 +165,12 @@ onReloaded: function(newDoc) {
 	this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
 },
 reloadBtnOnClick: function(e) {
-	this.activateToolBar();
 	this.hideNewerBorder();
-	this.getDoc(this.doc.location.href.replace(/#.*$/, ''), this.onReloaded);
+	this.reloadBtn.classList.add('are4are-spin');
+	this.getDoc(
+		this.doc.location.href.replace(/#.*$/, ''),
+		this.onReloaded, () => { this.reloadBtn.classList.remove('are4are-spin'); }
+	);
 },
 
 // FindRes ///////////////////////////
@@ -181,7 +184,6 @@ showBackBtn: function() {
 	if (this.backY) return;
 	this.backY = this.win.scrollY;
 	this.backBtn.classList.remove('are4are-hide');
-	this.win.addEventListener('scrollend', this.bindFunc('hideBackBtn'));
 },
 findRes: function(reg, from) {
 	from = from && (from.tagName === 'TABLE' ? from : this.parentTag(from, 'TABLE'));
@@ -229,7 +231,7 @@ quoteTextOnClick: function(e) {
 	}
 	this.found = found;
 	if (this.backY < this.y(this.parentTag(e.target, 'TABLE'))) {
-		this.backY = 0;
+		this.hideBackBtn({force: true});
 	}
 	if (!this.backY) {
 		this.foundFrom && this.foundFrom.classList.remove('are4are-bookmark');
@@ -237,8 +239,12 @@ quoteTextOnClick: function(e) {
 		this.foundFrom.classList.add('are4are-bookmark');
 	}
 	// scroll
-	this.showBackBtn();
-	this.scrollTo(y, () => { found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass); }, 'quoteText');
+	if (y < this.scrollY()) {
+		this.showBackBtn();
+		this.scrollTo(y, () => { found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass); }, 'quoteText');
+	} else {
+		found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
+	}
 },
 
 // Modify Blockquotes ////////////////
@@ -451,7 +457,7 @@ exec: function() {
 	if (this.is1stPage) {
 		this.addToolButton('reload', null, 'are4are-disable');
 	} else {
-		this.addToolButton('reload', 'reloadBtnOnClick');
+		this.reloadBtn = this.addToolButton('reload', 'reloadBtnOnClick');
 	}
 	this.pageDownBtn = this.addToolButton('pagedown');
 	this.on(this.pageDownBtn, 'touchstart', 'pageDownBtnOnTouchstart');

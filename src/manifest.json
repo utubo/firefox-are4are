@@ -46,8 +46,7 @@
 		"common/*.css",
 		"common/options.html",
 		"content_scripts/*.css",
-		"icons/are4are-32.png",
-		"icons/*.svg"
+		"icons/are4are-32.png"
 	],
 
 	"permissions": [

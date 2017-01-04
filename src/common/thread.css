@@ -271,18 +271,18 @@ div[style^="width:680px"] {
 	padding: .5em;
 }
 .are4are-toolbtn {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: 80% 80%;
 	color: transparent;
-	height: 18pt;
+	height: 23pt;
 	overflow: hidden;
-	user-select: none;
-	moz-user-select: none;
-	width: 18pt;
+	position:relative;
+	width: 23pt;
+}
+.are4are-toolbtn::before {
+	height: 23pt;
+	position:absolute;
+	width: 23pt;
 }
 .are4are-toolbtn-write {
-	background-image: url('../icons/write.svg');
 	border-radius: 0 0 3pt 3pt !important;
 	border-top: 2.9pt solid transparent;
 	margin-top: 0 !important;
@@ -291,16 +291,29 @@ div[style^="width:680px"] {
 	border-color: #fa8;
 	margin: 0 2pt;
 }
-.are4are-toolbtn-back {
-	background-image: url('../icons/back.svg');
+.are4are-toolbtn-back::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M2 29l0-5h16a5 5 1 1 0 0-10l-14 0 10-10v5h5a10 10 1 0 1 0 20z"/></svg>');
 }
-.are4are-toolbtn-reload {
-	background-image: url('../icons/reload.svg');
+.are4are-toolbtn-write::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M24 2l-4 4 6 6 4-4zm-6 6l-16 16v6h6l16-16"/></svg>');
 }
-.are4are-toolbtn-pagedown {
-	background-image: url('../icons/pagedown.svg');
+.are4are-toolbtn-pagedown::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 2h2v19h5l-8 8-8-8h5v-19z"/></svg>');
 }
-.are4are-toolbtn-bottom {
-	background-image: url('../icons/bottom.svg');
+.are4are-toolbtn-bottom::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 1h2v16h5l-8 8-8-8h5v-16zM4 24h24v5h-24"/></svg>');
+}
+.are4are-toolbtn-reload::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M14.5 5a11 11 0 1 0 10 4l-4 3a6 6 0 1 1-5-2v3l7-6-7-6v4z"/></svg>');
+	margin: 2pt 0;
+	transform: rotate(1deg);
+	transition: transform 1s;
+}
+.are4are-spin::before {
+	animation: are4are-spin 1s linear infinite;
+}
+@keyframes are4are-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
 
