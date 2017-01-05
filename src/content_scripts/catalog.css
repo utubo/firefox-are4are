@@ -20,12 +20,6 @@ div[style^="width:336px"] {
 /* ------------------------ */
 /*       my extension       */
 /* ------------------------ */
-.are4are-current:visited,
-.are4are-current:focus,
-.are4are-current {
-	color: #e00;
-}
-
 .are4are-catalog-table {
 	border: none;
 	font-size:70%;
@@ -96,8 +90,9 @@ br+.are4are-res-count .are4are-res-count-delta {
 	max-width: 100%;
 }
 
-.are4are-toolbtn-threadImgBtn {
-	max-width: 5em;
+.are4are-toolbtn {
+	flex: auto;
+	justify-content: center;
 }
 
 .are4are-catalog-setting input {

@@ -57,7 +57,7 @@ textarea {
 	min-width: 0 !important;
 }
 td {
-	border-radius: 3pt;
+	/* border-radius: 3pt; */
 	color:#B66;
 }
 hr {
@@ -270,58 +270,21 @@ div[style^="width:680px"] {
 	margin: .5em .2em;
 	padding: .5em;
 }
-.are4are-toolbtn {
-	border: 3pt solid #ffe;
-	color: transparent;
-	flex: 1;
-	height: 23pt;
-	margin: 0;
-	overflow: hidden;
-	position:relative;
-	transition: all .2s;
-}
-.are4are-toolbtn.are4are-hide {
-	border-width: 3pt 0;
-	display: inline-block !important;
-	flex: .00001;
-	opacity: 0;
-	padding: 0;
-}
-.are4are-toolbtn::before {
-	height: 23pt;
-	left: 0;
-	margin:auto;
-	position:absolute;
-	right: 0;
-	width: 23pt;
-}
-.are4are-toolbtn-write {
-	border-radius: 0 0 8pt 8pt;
-	margin-top: -3pt;
-	padding-top: 3pt;
-}
-.are4are-toolbtn-back::before {
+
+/* toolbtn */
+.are4are-toolbtn--back::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M2 28l0-5h16a5 5 1 1 0 0-10l-14 0 10-10v5h5a10 10 1 0 1 0 20z"/></svg>');
 }
-.are4are-toolbtn-write::before {
+.are4are-toolbtn--write::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M24 2l-4 4 6 6 4-4zm-6 6l-16 16v6h6l16-16"/></svg>');
 }
-.are4are-toolbtn-pagedown::before {
+.are4are-toolbtn--pagedown::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 2h2v19h5l-8 8-8-8h5v-19z"/></svg>');
 }
-.are4are-toolbtn-bottom::before {
+.are4are-toolbtn--bottom::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 1h2v16h5l-8 8-8-8h5v-16zM4 24h24v5h-24"/></svg>');
 }
-.are4are-toolbtn-reload::before {
+.are4are-toolbtn--reload::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M14.5 5a11 11 0 1 0 10 4l-4 3a6 6 0 1 1-5-2v3l7-6-7-6v4z"/></svg>');
-	transform: rotate(1deg);
-	transition: transform 1s;
-}
-.are4are-spin::before {
-	animation: are4are-spin 1s linear infinite;
-}
-@keyframes are4are-spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
 }
 

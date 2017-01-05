@@ -8,27 +8,6 @@
 		"description": "Description of the extension."
 	},
 
-	"back": {
-		"message": "back",
-		"description": "toolbar back button"
-	},
-	"write": {
-		"message": "Write",
-		"description": "toolbar write button"
-	},
-	"reload": {
-		"message": "Reload",
-		"description": "toolbar reload button"
-	},
-	"pagedown": {
-		"message": "PageDown",
-		"description": "toolbar pagedown button"
-	},
-	"bottom": {
-		"message": "Bottom",
-		"description": "toolbar go to bottom button"
-	},
-
 	"notFound": {
 		"message": "not found.",
 		"description": "404 error"

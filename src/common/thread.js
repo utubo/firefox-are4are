@@ -165,7 +165,7 @@ onReloaded: function(newDoc) {
 },
 reloadBtnOnClick: function(e) {
 	this.hideNewerBorder();
-	this.reloadBtn.classList.add('are4are-spin');
+	this.reloadBtn.classList.add('are4are-spin', 'are4are-spinend');
 	this.getDoc(
 		this.doc.location.href.replace(/#.*$/, ''),
 		this.onReloaded, () => { this.reloadBtn.classList.remove('are4are-spin'); }
@@ -176,7 +176,7 @@ reloadBtnOnClick: function(e) {
 hideBackBtn: function(e) {
 	if (e.force || this.backY && this.backY <= this.scrollY()) {
 		this.backY = 0;
-		this.backBtn.classList.add('are4are-hide');
+		this.flexOut(this.backBtn);
 	}
 },
 findRes: function(reg, from) {
@@ -237,7 +237,7 @@ quoteTextOnClick: function(e) {
 		this.backY = this.win.scrollY;
 		this.scrollTo(y, () => {
 			found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
-			this.backBtn.classList.remove('are4are-hide');
+			this.flexIn(this.backBtn);
 		}, 'quoteText');
 	} else {
 		found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
@@ -449,8 +449,8 @@ exec: function() {
 	}
 
 	// ToolButtons
-	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-hide');
-	this.writeBtn = this.addToolButton('write', null, 'are4are-disable');
+	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-flexout');
+	this.writeBtn = this.addToolButton('write', null, 'are4are-disable', 'are4are-toolbtn-tab');
 	if (this.is1stPage) {
 		this.addToolButton('reload', null, 'are4are-disable');
 	} else {

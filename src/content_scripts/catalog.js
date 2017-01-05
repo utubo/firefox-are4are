@@ -12,10 +12,10 @@ CATALOG_CACHE_SIZE: 1000,
 // Event ///////////////////////////////
 catalogModeOnClick: function(e) {
 	e.preventDefault();
-	let current = this.firstClass(this.toolbar, 'are4are-current');
+	let current = this.firstClass(this.toolbar, 'are4are-toolbtn-hold');
 	if (current.href !== e.target.href) {
-		current.classList.remove('are4are-current');
-		e.target.classList.add('are4are-current');
+		current.classList.remove('are4are-toolbtn-hold');
+		e.target.classList.add('are4are-toolbtn-hold');
 		this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	}
 	this.refreshCatalog(e.target.href);
@@ -71,12 +71,12 @@ hideThumbnail: function(visible) {
 	if (this.isThumbnailVisible) {
 		this.isThumbnailVisible = false;
 		this.fadeOut(this.thumbnail);
-		this.threadImgBtn.classList.add('are4are-hide');
+		this.flexOut(this.threadImgBtn);
 	}
 },
 thumbnaiImgOnLoad: function() {
 	this.fadeIn(this.thumbnail);
-	this.threadImgBtn.classList.remove('are4are-hide');
+	this.flexIn(this.threadImgBtn);
 	this.isThumbnailVisible = true;
 },
 showThumbnail: function() {
@@ -209,12 +209,12 @@ exec: function() {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
 		if (a.parentNode.tagName === 'B') {
-			a.classList.add('are4are-current');
+			a.classList.add('are4are-toolbtn-hold');
 		}
 		if (this.catalogTable) {
 			this.on(a, 'click', 'catalogModeOnClick');
 		}
-		a.classList.add('are4are-toolbtn');
+		a.classList.add('are4are-toolbtn', 'are4are-toolbtn-tab');
 		this.toolbar.appendChild(a);
 		addedHref.push(a.href);
 	});
@@ -242,7 +242,7 @@ exec: function() {
 	// Catalog
 	if (!this.catalogTable) return;
 	// thread-image-button
-	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-hide' }, this.format('__MSG_threadImg__'));
+	this.create('A', { id: 'are4are_threadImgBtn', 'class': 'are4are-toolbtn are4are-flexout' }, this.format('__MSG_threadImg__'));
 	this.on(this.threadImgBtn, 'touchstart', 'threadImgBtnOnTouchstart');
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);

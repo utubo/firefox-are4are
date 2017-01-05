@@ -223,17 +223,23 @@ Are4Are.prototype = {
 		this.timeout('fadeOutToast', () => { this.fadeOut(this.toastDiv); }, 3000);
 	},
 	// ToolBar
-	addToolButton: function(label, onclick, ...clazz) {
+	addToolButton: function(name, onclick, ...clazz) {
 		let btn = this.create('SPAN');
-		btn.textContent = chrome.i18n.getMessage(label);
 		clazz.push('are4are-toolbtn');
-		clazz.push(`are4are-toolbtn-${label}`);
+		clazz.push(`are4are-toolbtn--${name}`);
 		btn.classList.add.apply(btn.classList, clazz);
 		if (onclick) {
 			this.on(btn, 'click', onclick);
 		}
 		this.toolbar.appendChild(btn, this.toolbar.firstChild);
 		return btn;
+	},
+	flexIn: function(e) {
+		e.classList.add('are4are-flex-effect');
+		e.classList.remove('are4are-flexout');
+	},
+	flexOut: function(e) {
+		e.classList.add('are4are-flex-effect', 'are4are-flexout');
 	},
 	toolbarTouchstart: function(e) {
 		if (!e.target.classList.contains('are4are-toolbtn')) return;

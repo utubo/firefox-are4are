@@ -8,27 +8,6 @@
 		"description": "Description of the extension."
 	},
 
-	"back": {
-		"message": "戻る",
-		"description": "toolbar back button"
-	},
-	"write": {
-		"message": "書き込む",
-		"description": "toolbar write button"
-	},
-	"reload": {
-		"message": "続きを読む",
-		"description": "toolbar reload button"
-	},
-	"pagedown": {
-		"message": "半画面下",
-		"description": "toolbar pagedown button"
-	},
-	"bottom": {
-		"message": "最下",
-		"description": "toolbar go to bottom button"
-	},
-
 	"notFound": {
 		"message": "ファイルが無いよ",
 		"description": "404 error"

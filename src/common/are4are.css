@@ -3,17 +3,15 @@ body {
 	padding-bottom: 25pt;
 }
 .are4are-toolbar {
+	align-items: stretch;
 	background-color: #ffe;
 	border-top: 1pt solid #fa8;
 	bottom:0;
 	display: flex;
 	justify-content: space-around;
 	left:0;
-	line-height: 22pt;
-	min-width:100%;
-	overflow: auto;
+	width:100%;
 	position: fixed;
-	text-align: center;
 	user-select: none;
 	-moz-user-select: none;
 	white-space: nowrap;
@@ -27,41 +25,75 @@ body {
 	60% { border-color:#8cf; }
 	100% { border-color:#fa8; }
 }
-.are4are-toolbtn,
-.are4are-toolbtn:visited {
-	border-radius: 3pt;
+.are4are-toolbtn {
+	align-items: center;
 	cursor: pointer;
-	color: #00e;
-	display: inline-block;
+	display: flex;
+	flex: 1;
 	font-size: 12pt;
-	margin: 2pt 0;
+	height: 23pt;
+	margin: 2pt 1pt;
 	outline: none;
-	padding: 0 2pt;
-	text-decoration: underline;
-	transition: background-color .3s ease-in;
+	overflow: hidden;
+	position:relative;
 }
+.are4are-toolbtn:active,
 .are4are-toolbtn-down,
 .are4are-toolbtn-hold {
 	background-color: #fa8;
-	color: #ffe;
+	color: #ffe !important;
+	transition: none;
+}
+.are4are-toolbtn-tab {
+	border-radius: 0 0 8pt 8pt;
+	margin-top: 0;
+	padding-top: 2pt;
 	transition: none;
 }
 .are4are-toolbtn.are4are-disable {
 	opacity: .5;
 	pointer-events: none;
 }
+.are4are-spin::before {
+	animation: are4are-spin 1s linear infinite;
+}
+@keyframes are4are-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+.are4are-spinend::before {
+	transition: transform 1s;
+}
+.are4are-toolbtn::before {
+	height: 23pt;
+	left: 0;
+	margin:auto;
+	position:absolute;
+	right: 0;
+	top: 0;
+	width: 23pt;
+}
 
-/* util */
+/* hide */
 .are4are-hide {
 	display: none !important;
-}
-.are4are-fade-effect {
-	transition: opacity .3s;
 }
 .are4are-transparent {
 	opacity: 0 !important;
 	pointer-events: none;
 }
+.are4are-fade-effect {
+	transition: opacity .3s;
+}
+.are4are-flexout {
+	margin: 2pt 0 !important;
+	flex: .00001 !important;
+}
+.are4are-flex-effect {
+	transition: all .2s linear;
+}
+
+/* util */
 .are4are-user-select-none {
 	user-select: none;
 	-moz-user-select: none;
