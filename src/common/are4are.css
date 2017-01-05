@@ -61,6 +61,7 @@ body {
 	100% { transform: rotate(360deg); }
 }
 .are4are-spinend::before {
+	transform: rotate(1deg);
 	transition: transform 1s;
 }
 .are4are-toolbtn::before {
