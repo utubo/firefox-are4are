@@ -94,6 +94,9 @@ br+.are4are-res-count .are4are-res-count-delta {
 	flex: auto;
 	justify-content: center;
 }
+.are4are-current {
+	color: #e00;
+}
 
 .are4are-catalog-setting input {
 	margin-bottom: 1em;

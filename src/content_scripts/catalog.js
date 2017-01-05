@@ -12,10 +12,10 @@ CATALOG_CACHE_SIZE: 1000,
 // Event ///////////////////////////////
 catalogModeOnClick: function(e) {
 	e.preventDefault();
-	let current = this.firstClass(this.toolbar, 'are4are-toolbtn-hold');
+	let current = this.firstClass(this.toolbar, 'are4are-current');
 	if (current.href !== e.target.href) {
-		current.classList.remove('are4are-toolbtn-hold');
-		e.target.classList.add('are4are-toolbtn-hold');
+		current.classList.remove('are4are-current');
+		e.target.classList.add('are4are-current');
 		this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	}
 	this.refreshCatalog(e.target.href);
@@ -209,12 +209,12 @@ exec: function() {
 		if (a.href.indexOf('catset') !== -1) return;
 		if (addedHref.indexOf(a.href) !== -1) return;
 		if (a.parentNode.tagName === 'B') {
-			a.classList.add('are4are-toolbtn-hold');
+			a.classList.add('are4are-current');
 		}
 		if (this.catalogTable) {
 			this.on(a, 'click', 'catalogModeOnClick');
 		}
-		a.classList.add('are4are-toolbtn', 'are4are-toolbtn-tab');
+		a.classList.add('are4are-toolbtn');
 		this.toolbar.appendChild(a);
 		addedHref.push(a.href);
 	});

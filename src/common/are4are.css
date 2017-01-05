@@ -37,11 +37,10 @@ body {
 	overflow: hidden;
 	position:relative;
 }
-.are4are-toolbtn:active,
 .are4are-toolbtn-down,
 .are4are-toolbtn-hold {
 	background-color: #fa8;
-	color: #ffe !important;
+	color: #ffe;
 	transition: none;
 }
 .are4are-toolbtn-tab {
