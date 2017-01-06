@@ -8,6 +8,10 @@
 		"description": "Description of the extension."
 	},
 
+	"nNewReplies": {
+		"message": "{0} new replies.",
+		"description": "refresh message"
+	},
 	"notFound": {
 		"message": "not found.",
 		"description": "404 error"

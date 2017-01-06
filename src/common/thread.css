@@ -280,6 +280,9 @@ div[style^="width:680px"] {
 .are4are-toolbtn--bottom::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 1h2v16h5l-8 8-8-8h5v-16zM4 24h24v5h-24"/></svg>');
 }
+.are4are-toolbtn--newerborder::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M17 1h2v16h5l-8 8-8-8h5v-16zM4 27l3-3 3 3 3-3 3 3 3-3 3 3 3-3 2 2-5 5-3-3-3 3-3-3-3 3-5-5"/></svg>');
+}
 .are4are-toolbtn--reload::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M14.5 5a11 11 0 1 0 10 4l-4 3a6 6 0 1 1-5-2v3l7-6-7-6v4z"/></svg>');
 }

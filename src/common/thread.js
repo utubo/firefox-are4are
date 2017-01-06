@@ -109,8 +109,20 @@ pageDownBtnOnTouchend: function(e) {
 	this.clearTimeout('RePageDown');
 	this.pageDownY = null;
 },
+bottomBtnY: 0,
 bottomBtnOnClick: function(e) {
-	this.scrollToNoMargin(this.scrollMax(), null, 'pageDownBtn');
+	if (this.scrollY() < this.bottomBtnY) {
+		this.scrollTo(this.bottomBtnY);
+	} else {
+		this.scrollToNoMargin(this.scrollMax(), null, 'pageDownBtn');
+	}
+},
+resetBottomBtn: function(force) {
+	if (!this.bottomBtn) return;
+	if (force || this.bottomBtnY && this.bottomBtnY < this.scrollY() + this.win.innerHeight) {
+		this.bottomBtn.classList.remove('are4are-toolbtn--newerborder');
+		this.bottomBtnY = 0;
+	}
 },
 backBtnOnClick: function() {
 	this.scrollTo(this.backY, () => { this.hideBackBtn({force: true}); });
@@ -122,6 +134,7 @@ showNewerBorder: function() {
 },
 hideNewerBorder: function() {
 	this.newerBorder.style = `top:${this.newerBorder.style.top};`;
+	this.resetBottomBtn(true);
 },
 
 // Reload  ///////////////////////////
@@ -161,7 +174,16 @@ onReloaded: function(newDoc) {
 	this.newerBorder.style.top = newerBorderY + 'px';
 	lastTable.parentNode.insertBefore(newReses, lastTable.nextSibling);
 	this.resetScrollMax();
-	this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
+	if (newerBorderY < this.scrollY() + this.win.innerHeight) {
+		// auto scroll
+		this.queue(() => { this.scrollTo(newerBorderY, this.showNewerBorder); });
+	} else {
+		// show toast
+		this.toast('__MSG_nNewReplies__', count);
+		this.showNewerBorder();
+		this.bottomBtnY = newerBorderY;
+		this.bottomBtn.classList.add('are4are-toolbtn--newerborder');
+	}
 },
 reloadBtnOnClick: function(e) {
 	this.hideNewerBorder();
@@ -449,6 +471,7 @@ scrollend: function(e) {
 	this.showFavicon(e);
 	this.modifyTablesFromPageLeftTop(e);
 	this.hideBackBtn(e);
+	this.resetBottomBtn();
 },
 
 // Main ////////////////////////////////
