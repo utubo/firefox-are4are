@@ -234,7 +234,7 @@ quoteTextOnClick: function(e) {
 	}
 	// scroll
 	if (y < this.scrollY()) {
-		this.backY = this.win.scrollY;
+		this.backY = this.backY || this.win.scrollY;
 		this.scrollTo(y, () => {
 			found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
 			this.flexIn(this.backBtn);
