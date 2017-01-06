@@ -105,9 +105,9 @@ td:hover>.del {
 	width: auto;
 }
 input[value="delete"] {
+	float: left;
 	height: 7pt;
-	margin-right: 4px;
-	overflow: hidden;
+	margin: 1pt;
 	width: 7pt;
 }
 td>input[value="delete"] {
