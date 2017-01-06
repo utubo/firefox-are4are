@@ -163,10 +163,6 @@ div[style^="width:680px"] {
 /* ------------------------ */
 /*       my extension       */
 /* ------------------------ */
-.are4are-toolbtn-back {
-	max-width: 4em;
-}
-
 /* res */
 .are4are-mail {
 	color: #800;
@@ -175,6 +171,9 @@ div[style^="width:680px"] {
 .are4are-shown-mail {
 	color: #00f;
 	margin: 0 2pt;
+}
+.are4are-id {
+	color: #f00;
 }
 
 /* find res */

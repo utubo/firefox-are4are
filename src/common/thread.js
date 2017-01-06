@@ -306,15 +306,26 @@ modifyBQ: function(bq) {
 	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
 		a = a.previousSibling;
 		if (!a) break;
+		// id
+		if (a.nodeType == 3) {
+			let p = a.nodeValue.indexOf('ID:');
+			if (p === -1) continue;
+			let node = this.doc.createDocumentFragment();
+			node.appendChild(this.create('SPAN', { 'class': 'are4are-id' }, a.nodeValue.substring(p, p + 11)));
+			node.appendChild(this.doc.createTextNode(a.nodeValue.substring(p + 11, a.nodeValue.length)));
+			a.nodeValue = a.nodeValue.substring(0, p);
+			a.parentNode.insertBefore(node, a.nextSibling);
+		}
 		if (a.nodeType !== 1) continue;
 		if (a.value === 'delete') break; // delete-checkbox
 		// mail
-		if (a.href && /^mailto:/.test(a.href)) {
+		if (a.href && a.href.indexOf('mailto:') === 0) {
 			a.classList.add('are4are-mail');
 			let s = this.create('SPAN', { 'class': 'are4are-shown-mail' }, a.getAttribute('href').replace(/^mailto:/, ''));
 			s = this.autoLink(s) || s;
 			a.parentNode.insertBefore(s, a.nextSibling);
 		}
+
 	}
 },
 modifyTables: function(table) {
