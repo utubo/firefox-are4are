@@ -442,6 +442,7 @@ scrollend: function(e) {
 
 // Main ////////////////////////////////
 cssFile: 'common/thread.css',
+cssFileTransition: 'common/thread_transition.css',
 exec: function() {
 	// CSS
 	if (!this.firstClass('rts')) {

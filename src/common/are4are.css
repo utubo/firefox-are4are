@@ -62,7 +62,6 @@ body {
 }
 .are4are-spinend::before {
 	transform: rotate(1deg);
-	transition: transform 1s;
 }
 .are4are-toolbtn::before {
 	height: 23pt;
@@ -82,15 +81,9 @@ body {
 	opacity: 0 !important;
 	pointer-events: none;
 }
-.are4are-fade-effect {
-	transition: opacity .3s;
-}
 .are4are-flexout {
 	margin: 2pt 0 !important;
 	flex: .00001 !important;
-}
-.are4are-flex-effect {
-	transition: all .2s linear;
 }
 
 /* util */
@@ -117,9 +110,6 @@ body {
 	right: 0;
 	width: 80%;
 	z-index: 100;
-}
-.are4are-toast.are4are-fade-effect {
-	transition: opacity 1s;
 }
 .are4are-toast::before {
 	background-image: url(../icons/are4are-32.png);

@@ -1,0 +1,18 @@
+.are4are-spinend::before {
+	transition: transform 1s;
+}
+.are4are-fade-effect {
+	transition: opacity .3s;
+}
+.are4are-flex-effect {
+	transition: all .2s linear;
+}
+.are4are-user-select-none {
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+.are4are-toast.are4are-fade-effect {
+	transition: opacity 1s;
+}
+

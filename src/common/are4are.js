@@ -317,6 +317,9 @@ Are4Are.prototype = {
 		this.queue(() => {
 			this.body.style.scrollBehavior = 'smooth';
 			this.removeCover();
+			// CSS (transitions)
+			this.addCssFile('common/are4are_transition.css');
+			if (this.cssFileTransition) this.addCssFile(this.cssFileTransition);
 		});
 
 		// other events

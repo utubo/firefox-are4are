@@ -67,7 +67,6 @@ hr {
 	content: counter(resnumber);
 	counter-increment: resnumber;
 	padding: 0 1pt;
-	transition: color;
 }
 blockquote {
 	color: #800000;
@@ -98,7 +97,6 @@ img[hspace="20"] {
 td>.del {
 	margin: 0;
 	opacity: 0;
-	transition: opacity .5s;
 	width: 0;
 }
 td:hover>.del {
@@ -240,7 +238,6 @@ div[style^="width:680px"] {
 	opacity: 0;
 	position: absolute;
 	top: 0;
-	transition: width .3s, opacity;
 	width: 0;
 	z-index: 1;
 }

@@ -1,0 +1,10 @@
+.rtd::before {
+	transition: color;
+}
+td>.del {
+	transition: opacity .5s;
+}
+#are4are_newerBorder {
+	transition: width .3s, opacity;
+}
+
