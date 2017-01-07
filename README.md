@@ -9,11 +9,11 @@ AndroidのFirefoxのアドオンです
 
 ##インストール
 以下のどれかをインストール  
- - おすすめ(githubにプッシュしたやつ)  
-<http://x123.x0.to/~rawgit/are.xpi>
+ - おすすめ(↓のare.xpi)  
+<https://github.com/utubo/are4are/releases/latest>
  - 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>
- - 承認済みだけど古い  
+ - Mozillaさんち(承認済みだけど古い)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
 
 ※未承認のアドオンをいれるにはFirefoxで`about:config`を開いて`xpinstall.signatures.required`を`false`に設定
@@ -29,15 +29,4 @@ AndroidのFirefoxのアドオンです
 1. 外部板の欄にURLをペーストする(自動で正規表現になります)
 1. 「保存」を押す
 1. スレッドを再読み込みすれば適用されるよ(ダメなときは正規表現を修正してね)
-
-##承認済みバージョンとの違い
-(ver4.10→ver5.0)
- - 機能追加
-   - IDを赤色で表示するようにしました
-   - 更新ボタンクリック時に最後までスクロールしていない場合はオートスクロールしないようにしました
- - 機能修正
-   - ツールボタンを文字をやめてアイコンにしてみました
-   - その他ソース整理
- - バグ修正
-   - なし
 
