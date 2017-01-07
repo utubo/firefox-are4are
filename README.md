@@ -9,14 +9,14 @@ AndroidのFirefoxのアドオンです
 
 ##インストール
 以下のどれかをインストール  
- - おすすめ(↓のare.xpi)  
-<https://github.com/utubo/are4are/releases/latest>
- - 最新だけど超不安定バグあり(自宅サーバに上げてテストする用)  
-<http://utb.dip.jp:8001/~utb/temp/are.xpi>
- - Mozillaさんち(承認済みだけど古い)  
+ - ベータ版(おすすめ)  
+<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions>  
+ - 正式版(気が向いたときに更新するので古いです)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
+ - テスト用自宅サーバ未署名版(最新だけど超不安定バグあり)  
+<http://utb.dip.jp:8001/~utb/temp/are.xpi>
 
-※未承認のアドオンをいれるにはFirefoxで`about:config`を開いて`xpinstall.signatures.required`を`false`に設定
+※未署名のアドオンをいれるにはFirefoxで`about:config`を開いて`xpinstall.signatures.required`を`false`に設定
 
 ##外部URLの登録
 ###手順
