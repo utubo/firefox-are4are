@@ -95,7 +95,11 @@ body {
 
 /* toast */
 .are4are-toast {
-	background: #800;
+	background-color: #800;
+	background-image: url(../icons/are4are-32.png);
+	background-position: 0.3em center;
+	background-repeat: no-repeat;
+	background-size: 1.5em;
 	border-radius: 3pt;
 	bottom: 20%;
 	box-shadow: 0 0 3pt 3pt #ffe;
@@ -105,19 +109,10 @@ body {
 	left: 0;
 	margin-left: 5%;
 	margin-right: 5%;
-	padding: .5em 1em;
+	padding: .5em 1em .5em 2em;
 	position: fixed;
 	right: 0;
 	width: 80%;
 	z-index: 100;
-}
-.are4are-toast::before {
-	background-image: url(../icons/are4are-32.png);
-	background-size: 1.2em 1.2em;
-	content: " ";
-	display: inline-block;
-	height: 1em;
-	margin: 0 4pt 0 -4pt;
-	width: 1.2em;
 }
 

@@ -122,36 +122,27 @@ Are4Are.prototype = {
 	},
 
 	// Ajax ////////////////////////////////
-	getDoc: function(href, func, funcFinally) {
+	getDoc: function(href, func, funcLoadend) {
 		this.activateToolBar();
 		let xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = () => {
-			if (xhr.readyState !== 4) return;
+		xhr.onloadend = () => {
 			this.noactivateToolBar();
-			funcFinally && funcFinally.call(this);
-			if (xhr.status === 200 && xhr.responseXML) {
-				func.call(this, xhr.responseXML);
-				return;
-			}
+			funcLoadend && funcLoadend.call(this);
+		};
+		xhr.onload = () => {
 			switch (xhr.status) {
+				case 200: func.call(this, xhr.responseXML); break;
 				case 304: this.toast('__MSG_notModified__'); break;
 				case 404: this.toast('__MSG_notFound__'); break;
-				default: this.toast(`__MSG_networkError__(${xhr.status})`);
+				default: if (xhr.status) { this.toast(`__MSG_networkError__(${xhr.status})`); }
 			}
 		};
-		xhr.ontimeout = () => {
-			this.toast('__MSG_networkError__(timeout)');
-			this.noactivateToolBar();
-			funcFinally && funcFinally.call(this);
-		};
-		xhr.onabort = xhr.onerror = () => {
-			this.toast('__MSG_networkError__');
-			this.noactivateToolBar();
-			funcFinally && funcFinally.call(this);
-		};
+		xhr.onerror = () => { this.toast('__MSG_networkError__'); };
+		xhr.onabort = () => { this.toast('__MSG_networkError__(cancel)'); };
+		xhr.ontimeout = () => { this.toast('__MSG_networkError__(timeout)'); };
 		xhr.timeout = 15 * 1000;
 		try {
-			xhr.open("GET", href);
+			xhr.open('GET', href);
 			xhr.responseType = 'document';
 			xhr.send();
 		} catch (e) {
