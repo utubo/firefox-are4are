@@ -11,13 +11,12 @@ AndroidのFirefoxのアドオンです
 
 ##インストール
 以下のどれかをインストール  
- - ベータ版(おすすめ)  
-<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/versions>  
- - 正式版(気が向いたときに更新するので古いです)  
+ - ベータ版(おすすめ)(**アドオンの説明ページにリンクがあります**)  
+<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
+ - 正式版(気が向いたときに更新するので古いです)(緑色の「Firefoxへ追加」ボタン)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
  - テスト用自宅サーバ未署名版(最新だけど超不安定バグあり)  
-<http://utb.dip.jp:8001/~utb/temp/are.xpi>
-
+<http://utb.dip.jp:8001/~utb/temp/are.xpi>  
 ※未署名のアドオンをいれるにはFirefoxで`about:config`を開いて`xpinstall.signatures.required`を`false`に設定
 
 ##外部URLの登録
