@@ -11,7 +11,7 @@ AndroidのFirefoxのアドオンです
 
 ##インストール
 以下のどれかをインストール  
- - ベータ版(おすすめ)(**アドオンの説明ページにリンクがあります**)  
+ - ベータ版(おすすめ)(**アドオンの説明にリンクがあります**)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
  - 正式版(気が向いたときに更新するので**古いです**)(緑色の「Firefoxへ追加」ボタン)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
