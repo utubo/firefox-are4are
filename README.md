@@ -13,7 +13,7 @@ AndroidのFirefoxのアドオンです
 以下のどれかをインストール  
  - ベータ版(おすすめ)(**アドオンの説明ページにリンクがあります**)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
- - 正式版(気が向いたときに更新するので古いです)(緑色の「Firefoxへ追加」ボタン)  
+ - 正式版(気が向いたときに更新するので**古いです**)(緑色の「Firefoxへ追加」ボタン)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
  - テスト用自宅サーバ未署名版(最新だけど超不安定バグあり)  
 <http://utb.dip.jp:8001/~utb/temp/are.xpi>  
