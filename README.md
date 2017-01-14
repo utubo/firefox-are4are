@@ -1,6 +1,6 @@
 #![logo](https://github.com/utubo/are4are/raw/master/src/icons/are4are-32.png)アレを見やすくするアレ
 
-![screenshot](https://addons.cdn.mozilla.net/user-media/previews/full/181/181458.png)
+![screenshot](https://addons.cdn.mozilla.net/user-media/previews/full/181/181630.png)
 
 やっつけ
 
