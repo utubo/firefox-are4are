@@ -21,20 +21,6 @@ textarea {
 	width: 90% !important;
 }
 
-/* table */
-.ftbl {
-	border: 2pt dotted #ea8;
-	height: 1.5em;
-	margin-top: 1pt;
-	padding-top: 1.5em;
-}
-.ftbl>tbody {
-	display: none;
-}
-.ftbl:hover>tbody {
-	display: unset;
-}
-
 /* form */
 #ufm {
 	display: none;
@@ -143,7 +129,7 @@ div[style^="width:468px"],
 div[style^="width:336px"],
 div[style^="width:680px"] {
 	margin: 0 auto;
-	max-height: 4em;
+	max-height: 2em;
 	max-width: 90%;
 	overflow: scroll;
 }
