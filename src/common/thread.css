@@ -67,6 +67,14 @@ img[hspace="20"] {
 	float: none !important; /* 'important' for futaboard */
 	margin: auto;
 }
+.extendWebm {
+	margin-left: calc(50% + 2pt);
+	max-width: calc(100% - 9pt);
+	transform: translateX(-50%);
+}
+.cancelbk {
+	margin-left: calc(50% - 13px);
+}
 .sod {
 	color: #B66 !important;
 	margin: 0 !important;
