@@ -1,4 +1,4 @@
-#![logo](https://github.com/utubo/are4are/raw/master/src/icons/are4are-32.png)アレを見やすくするアレ
+#![](https://github.com/utubo/are4are/raw/master/src/icons/are4are-32.png)アレを見やすくするアレ
 
 ![screenshot](https://addons.cdn.mozilla.net/user-media/previews/full/181/181630.png)
 
@@ -11,8 +11,8 @@ AndroidのFirefoxのアドオンです
 
 ##インストール
 以下のどれかをインストール  
- - ベータ版(おすすめ)(**アドオンの説明にリンクがあります**)  
-<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
+ - ベータ版(おすすめ)  
+<https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/addon-642710-latest.xpi?src=dp-btn-devchannel>  
  - 正式版(気が向いたときに更新するので**古いです**)(緑色の「Firefoxへ追加」ボタン)  
 <https://addons.mozilla.org/ja/firefox/addon/アレを見やすくするアレ/>  
  - テスト用自宅サーバ未署名版(最新だけど超不安定バグあり)  
