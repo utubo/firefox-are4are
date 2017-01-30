@@ -66,7 +66,7 @@ cancelLongtap: function() {
 	}
 },
 
-// Thumbnail //////////////////////////////
+// Thumbnail ///////////////////////////
 hideThumbnail: function(visible) {
 	if (this.isThumbnailVisible) {
 		this.isThumbnailVisible = false;
@@ -103,7 +103,7 @@ showThumbnail: function() {
 	}
 },
 
-// Thread image ///////////////////////////
+// Thread image ////////////////////////
 threadImgBtnOnTouchstart: function() {
 	if (this.isThreadImgBtnLoaded) return;
 	this.threadImgBtn.focus();
@@ -125,7 +125,7 @@ threadImgBtnOnClick: function() {
 	}
 },
 
-// Fix table layout ///////////////////////
+// Fix table layout ////////////////////
 autoFix: function(table) {
 	if (!this.isAutoFix) return;
 	table.classList.add('are4are-auto-fix');
@@ -138,7 +138,7 @@ autoFixWidth: function() {
 	this.arrayLast(this.doc.styleSheets).insertRule(`.are4are-auto-fix>tbody>tr>td>a:first-child { width:${s}; height:${s}; }`, 0);
 },
 
-// RefreshCatalog ///////////////////////
+// RefreshCatalog //////////////////////
 appendCatalogCountDelta: function(tablePalent) {
 	let work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
 	work.classList.add('are4are-catalog-table');

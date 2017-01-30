@@ -6,15 +6,14 @@ function Are4AreThread() {}
 Are4AreThread.prototype = {
 __proto__ : Are4Are.prototype,
 
-// Util //////////////////////////////
+// Util ////////////////////////////////
 // find BlockQuote(s)
 firstBQ: elm => elm.getElementsByTagName('BLOCKQUOTE')[0],
 allBQ: elm => elm.getElementsByTagName('BLOCKQUOTE'),
 parentBQ: function(elm) { return this.parentTag(elm, 'BLOCKQUOTE'); },
 findTableOrBQ: function(bq) { return !bq ? null : this.parentTag(bq, 'TABLE') || bq; },
 
-// Favicon //////////////////////
-// Favicon ///////////////////////////
+// Favicon /////////////////////////////
 faviconInfo: null,
 calcFaviconInfo: function() {
 	if (this.faviconInfo) return this.faviconInfo;
@@ -78,7 +77,7 @@ appendFavicon: function() {
 	this.doc.head.appendChild(this.create('LINK', { rel: 'shortcut icon', href: img.src }));
 },
 
-// Scroll-buttons ////////////////////////////
+// Scroll-buttons //////////////////////
 _scrollMax: null,
 lastResBottom: function() {
 	if (this.is1stPage) return 0;
@@ -128,7 +127,7 @@ backBtnOnClick: function() {
 	this.scrollTo(this.backY, () => { this.hideBackBtn({force: true}); });
 },
 
-// Newer Border ///////////////////////
+// Newer Border ////////////////////////
 showNewerBorder: function() {
 	this.newerBorder.style = `opacity: 1; width: 100%; top:${this.newerBorder.style.top};`;
 },
@@ -137,7 +136,7 @@ hideNewerBorder: function() {
 	this.resetBottomBtn(true);
 },
 
-// Reload  ///////////////////////////
+// Reload  /////////////////////////////
 onReloaded: function(newDoc) {
 	// update contdisp
 	let oldContdisp = this.id('contdisp');
@@ -194,7 +193,7 @@ reloadBtnOnClick: function(e) {
 	);
 },
 
-// FindRes ///////////////////////////
+// FindRes /////////////////////////////
 hideBackBtn: function(e) {
 	if (e.force || this.backY && this.backY <= this.scrollY()) {
 		this.backY = 0;
@@ -266,7 +265,7 @@ quoteTextOnClick: function(e) {
 	}
 },
 
-// Modify Blockquotes ////////////////
+// Modify Blockquotes //////////////////
 // auto link
 SIO_PREFIX: {
 	su: 'http://www.nijibox5.com/futabafiles/tubu/src/',
@@ -379,7 +378,7 @@ modifyTablesFromPageLeftTop: function() {
 	}
 },
 
-// Modify Form ///////////////////////
+// Modify Form /////////////////////////
 showForm: function() {
 	this.quoteSelection();
 	this.writeBtnY = this.scrollY();
@@ -458,7 +457,7 @@ quoteSelection: function() {
 	this.ftxa.value += (/[^\n]$/.test(this.ftxa.value) ? "\n" : '') + text + "\n";
 },
 
-// Others ////////////////////////////
+// Others //////////////////////////////
 scrollToThreadImg: function() {
 	let i = this.firstClass('are4are-thread-img');
 	// 'SMALL' is for Ms.MHT
