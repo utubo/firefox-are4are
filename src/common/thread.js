@@ -98,15 +98,31 @@ lastResBottom: function() {
 clientHeight: function() {
 	return this.lastResBottom() || this.body && this.body.clientHeight || this.win.innerHeight;
 },
+pageDownId: null,
+doPageDown: function() {
+	let pageDownY = this.scrollY() + Math.round(this.win.innerHeight / 2);
+	this.scrollToNoMargin(pageDownY, null, 'pageDownBtn');
+},
+repeatPageDown: function() {
+	this.doPageDown();
+	this.pageDownId = this.win.setInterval(this.bindFunc('doPageDown'), 1000);
+},
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
-	this.pageDownY = this.scrollY() + Math.round(this.win.innerHeight / 2);
-	this.scrollToNoMargin(this.pageDownY, null, 'pageDownBtn');
-	this.timeout('RePageDown', 'pageDownBtnOnTouchstart', 1000);
+	if (this.pageDownId) {
+		this.win.clearInterval(this.pageDownId);
+		this.pageDownId = null;
+	}
+	this.timeout('repeatPageDown', 'repeatPageDown', 300);
 },
 pageDownBtnOnTouchend: function(e) {
-	this.clearTimeout('RePageDown');
-	this.pageDownY = null;
+	this.clearTimeout('repeatPageDown');
+	if (this.pageDownId) {
+		this.win.clearInterval(this.pageDownId);
+		this.pageDownId = null;
+	} else {
+		this.doPageDown();
+	}
 },
 bottomBtnY: 0,
 bottomBtnOnClick: function(e) {
