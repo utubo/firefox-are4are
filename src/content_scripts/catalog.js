@@ -192,11 +192,11 @@ setupCatalogData: function(href) {
 refreshCatalog: function(href) {
 	this.hideThumbnail();
 	this.setupCatalogData(href);
-	this.toolbar.classList.add('are4are-toolbar-active');
+	this.loading.classList.add('are4are-now-loading');
 	this.getDoc(
 		href,
 		this.appendCatalogCountDelta,
-		() => { this.toolbar.classList.remove('are4are-toolbar-active'); }
+		() => { this.loading.classList.remove('are4are-now-loading'); }
 	);
 },
 
@@ -258,6 +258,7 @@ exec: function() {
 	this.autoFixWidth();
 	this.win.scrollTo(0, this.firstTag('TABLE').offsetTop);
 	this.appendCatalogCountDelta(this.body);
+	this.body.appendChild(this.create('DIV', { id: 'are4are_loading', 'class': 'are4are-loading' }));
 	// events
 	this.on(this.body, 'touchstart', 'bodyOnTouchstart');
 	this.on(this.body, 'touchend', 'bodyOnTouchend');

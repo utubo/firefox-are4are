@@ -73,6 +73,22 @@ br+.are4are-res-count .are4are-res-count-delta {
 	top: 0;
 	width: 100%;
 }
+.are4are-loading {
+	background: rgba(255, 238, 238, .3);
+	display: block;
+	height: 100%;
+	left: 0;
+	opacity: 0;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	transition: opacity .3s;
+	width: 100%;
+}
+.are4are-now-loading {
+	opacity: 1;
+	transition: opacity .6s ease-in;
+}
 
 .are4are-thumbnail-link {
 	display: block;
@@ -96,15 +112,6 @@ br+.are4are-res-count .are4are-res-count-delta {
 }
 .are4are-current {
 	color: #e00;
-}
-
-.are4are-toolbar-active {
-	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
-}
-@keyframes are4are-toolbar-active-animation {
-	0% { border-color:#8cf; }
-	60% { border-color:#8cf; }
-	100% { border-color:#fa8; }
 }
 
 .are4are-catalog-setting input {
