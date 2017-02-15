@@ -192,7 +192,12 @@ setupCatalogData: function(href) {
 refreshCatalog: function(href) {
 	this.hideThumbnail();
 	this.setupCatalogData(href);
-	this.getDoc(href, this.appendCatalogCountDelta);
+	this.toolbar.classList.add('are4are-toolbar-active');
+	this.getDoc(
+		href,
+		this.appendCatalogCountDelta,
+		() => { this.toolbar.classList.remove('are4are-toolbar-active'); }
+	);
 },
 
 // Main ////////////////////////////////

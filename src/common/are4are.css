@@ -17,14 +17,6 @@ body {
 	white-space: nowrap;
 	z-index: 10;
 }
-.are4are-toolbar-active {
-	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
-}
-@keyframes are4are-toolbar-active-animation {
-	0% { border-color:#8cf; }
-	60% { border-color:#8cf; }
-	100% { border-color:#fa8; }
-}
 .are4are-toolbtn {
 	align-items: center;
 	cursor: pointer;

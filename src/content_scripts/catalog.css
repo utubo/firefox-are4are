@@ -98,6 +98,15 @@ br+.are4are-res-count .are4are-res-count-delta {
 	color: #e00;
 }
 
+.are4are-toolbar-active {
+	animation: are4are-toolbar-active-animation 1s linear 0s infinite alternate;
+}
+@keyframes are4are-toolbar-active-animation {
+	0% { border-color:#8cf; }
+	60% { border-color:#8cf; }
+	100% { border-color:#fa8; }
+}
+
 .are4are-catalog-setting input {
 	margin-bottom: 1em;
 	margin-right: .5em;

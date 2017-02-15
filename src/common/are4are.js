@@ -123,10 +123,8 @@ Are4Are.prototype = {
 
 	// Ajax ////////////////////////////////
 	getDoc: function(href, func, funcLoadend) {
-		this.activateToolBar();
 		let xhr = new XMLHttpRequest();
 		xhr.onloadend = () => {
-			this.noactivateToolBar();
 			funcLoadend && funcLoadend.call(this);
 		};
 		xhr.onload = () => {
@@ -147,7 +145,6 @@ Are4Are.prototype = {
 			xhr.send();
 		} catch (e) {
 			this.toast(`__MSG_networkError__(${e.message})`);
-			this.noactivateToolBar();
 			funcFinally && funcFinally.call(this);
 		}
 	},
@@ -239,12 +236,6 @@ Are4Are.prototype = {
 	toolbarTouchend: function(e) {
 		if (!e.target.classList.contains('are4are-toolbtn')) return;
 		e.target.classList.remove('are4are-toolbtn-down');
-	},
-	activateToolBar: function() {
-		this.toolbar.classList.add('are4are-toolbar-active');
-	},
-	noactivateToolBar: function() {
-		this.toolbar.classList.remove('are4are-toolbar-active');
 	},
 
 	// Cover ///////////////////////////////
