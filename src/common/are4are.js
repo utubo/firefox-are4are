@@ -125,7 +125,7 @@ Are4Are.prototype = {
 	getDoc: function(href, func, funcLoadend) {
 		let xhr = new XMLHttpRequest();
 		xhr.onloadend = () => {
-			funcLoadend && funcLoadend.call(this);
+			funcLoadend && funcLoadend.call(this, xhr.status);
 		};
 		xhr.onload = () => {
 			switch (xhr.status) {

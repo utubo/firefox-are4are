@@ -94,7 +94,7 @@ showThumbnail: function() {
 	this.thumbnailLink.href = this.longtapLinkHref;
 	this.threadImgBtn.href = 'javascript: void(0);';
 	this.threadImgBtn.removeAttribute('target');
-	this.isThreadImgBtnLoaded = false;
+	this.threadImgStatus = 0;
 	let src = img.src.replace(/cat/, 'thumb').replace(/([0-9]+).?\.([a-z]+)$/, "$1s.$2");
 	if (this.thumbnailImg.src === src) {
 		this.thumbnaiImgOnLoad();
@@ -104,8 +104,9 @@ showThumbnail: function() {
 },
 
 // Thread image ////////////////////////
+threadImgStatus: 0,
 threadImgBtnOnTouchstart: function() {
-	if (this.isThreadImgBtnLoaded) return;
+	if (this.threadImgStatus) return;
 	this.threadImgBtn.focus();
 	this.getDoc(this.threadLink.href, doc => {
 		let thumbnailFilename = this.thumbnailImg.src.split('/').pop();
@@ -116,12 +117,17 @@ threadImgBtnOnTouchstart: function() {
 		}
 		this.threadImgBtn.href = img.parentNode.href;
 		this.threadImgBtn.target = '_blank';
-		this.isThreadImgBtnLoaded = true;
+	}, st => {
+		this.threadImgStatus = st;
 	});
 },
 threadImgBtnOnClick: function() {
-	if (!this.isThreadImgBtnLoaded) {
-		this.win.alert(this.format('__MSG_plzWait__'));
+	switch (this.threadImgStatus) {
+		case 0: this.win.alert(this.format('__MSG_plzWait__')); break;
+		case 200: break;
+		case 304: break;
+		case 404: this.toast('__MSG_notFound__'); break;
+		default: this.toast(`__MSG_networkError__(${this.threadImgStatus})`); break;
 	}
 },
 
