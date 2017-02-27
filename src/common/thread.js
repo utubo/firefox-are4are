@@ -103,9 +103,12 @@ doPageDown: function() {
 	let pageDownY = this.scrollY() + Math.round(this.win.innerHeight / 2);
 	this.scrollToNoMargin(pageDownY, null, 'pageDownBtn');
 },
-repeatPageDown: function() {
+repeatPageDown: function(func) { // 'func' is dummy for AMO.
 	this.doPageDown();
-	this.pageDownId = this.win.setInterval(this.bindFunc('doPageDown'), 1000);
+	// ??? "setTimeout or setInterval must have function as 1st arg"
+	//this.pageDownId = this.win.setInterval(this.bindFunc('doPageDown'), 1000);
+	func = this.bindFunc('doPageDown');
+	this.pageDownId = this.win.setInterval(func, 1000);
 },
 pageDownBtnOnTouchstart: function(e) {
 	e && e.preventDefault();
