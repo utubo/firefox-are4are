@@ -183,10 +183,11 @@ appendCatalogCountDelta: function(tablePalent) {
 	this.catalogData.splice(this.CATALOG_CACHE_SIZE);
 	// red-border
 	hrefs = hrefs.sort((a,b) => (a.length > b.length || a > b));
-	for (var i = 0; i < 5; i ++) {
+	for (let i = Math.min(4, hrefs.length); 0 <= i; i --) {
 		let href = hrefs[i];
-		if (!href) break;
-		work.querySelector(`a[href="${href}"] img`).classList.add('are4are-old');
+		let img = work.querySelector(`a[href="${href}"] img`);
+		if (!img) break;
+		img.classList.add('are4are-old');
 	}
 	// complete
 	this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
