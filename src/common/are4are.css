@@ -6,11 +6,11 @@ body {
 	align-items: stretch;
 	background-color: #ffe;
 	border-top: 1pt solid #fa8;
-	bottom:0;
+	bottom: 0;
 	display: flex;
 	justify-content: space-around;
-	left:0;
-	width:100%;
+	left: 0;
+	width: 100%;
 	position: fixed;
 	user-select: none;
 	-moz-user-select: none;
@@ -27,7 +27,7 @@ body {
 	margin: 2pt 1pt;
 	outline: none;
 	overflow: hidden;
-	position:relative;
+	position: relative;
 }
 .are4are-toolbtn-down,
 .are4are-toolbtn-hold {
@@ -58,8 +58,8 @@ body {
 .are4are-toolbtn::before {
 	height: 23pt;
 	left: 0;
-	margin:auto;
-	position:absolute;
+	margin: auto;
+	position: absolute;
 	right: 0;
 	top: 0;
 	width: 23pt;
