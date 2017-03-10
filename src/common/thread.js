@@ -61,13 +61,13 @@ appendFavicon: function() {
 	// 1stPage
 	if (this.is1stPage) return;
 
-	// make favicon
+	// make favicon and min thumbnail
 	let img = this.create('IMG', {
 		src: threadImg.src,
 		'class': 'are4are-favicon-img'
 	});
 	this.create('A', {
-		href: href,
+		href: href.replace(/\.webm$/, '.webm#'), // prevent open Webm player.
 		target: '_blank',
 		id: 'are4are_favicon',
 		'class': 'are4are-transparent'
