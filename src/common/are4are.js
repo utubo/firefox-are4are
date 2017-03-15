@@ -299,10 +299,11 @@ Are4Are.prototype = {
 		this.queue(() => {
 			this.body.style.scrollBehavior = 'smooth';
 			this.removeCover();
-			// CSS (transitions)
+		});
+		this.timeout(null, () => {
 			this.addCssFile('common/are4are_transition.css');
 			if (this.cssFileTransition) this.addCssFile(this.cssFileTransition);
-		});
+		}, 350); // after removeCover animation (.3s)
 
 		// other events
 		this.on(this.win, 'resize', 'resetScrollMax');
