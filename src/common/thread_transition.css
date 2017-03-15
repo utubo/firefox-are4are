@@ -1,3 +1,4 @@
+/* transition */
 .rtd::before {
 	transition: color;
 }
@@ -6,5 +7,16 @@ td>.del {
 }
 #are4are_newerBorder {
 	transition: width .3s, opacity;
+}
+
+/* hover */
+td:hover>.del {
+	margin: 0 4px;
+	opacity: 1;
+	width: auto;
+}
+td:hover>input[value="delete"],
+td>input:checked {
+	display: unset;
 }
 

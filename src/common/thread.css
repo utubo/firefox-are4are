@@ -93,11 +93,6 @@ td>.del {
 	opacity: 0;
 	width: 0;
 }
-td:hover>.del {
-	margin: 0 4px;
-	opacity: 1;
-	width: auto;
-}
 input[value="delete"] {
 	float: left;
 	height: 7pt;
@@ -106,10 +101,6 @@ input[value="delete"] {
 }
 td>input[value="delete"] {
 	display: none;
-}
-td:hover>input[value="delete"],
-td>input:checked {
-	display: unset;
 }
 small {
 	display: inline-block;
