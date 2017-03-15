@@ -486,7 +486,7 @@ scrollToThreadImg: function() {
 afterModified: function() {
 	if (this.scrollY() === 0) {
 		this.queue('scrollToThreadImg'); // wait for Ms.MHT
-		this.timeout(null, 'scrollToThreadImg', 500); // TODO: wait for ???
+		this.timeout(null, 'scrollToThreadImg', 320); // TODO: wait for ???
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
