@@ -65,7 +65,7 @@ blockquote {
 img[hspace="20"] {
 	display: block;
 	float: none !important; /* 'important' for futaboard */
-	margin: auto;
+	margin: auto !important; /* 'important' for 2chin */
 }
 .extendWebm {
 	margin-left: calc(50% + 2pt);
