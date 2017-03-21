@@ -3,7 +3,7 @@
 'use strict';
 
 // Start ///////////////////////////////
-chrome.storage.local.get('urls', r => {
+chrome.storage.local.get(['urls', 'logsite'], res => {
 	// Check URL
 	let href = document.location.href;
 	let is1stPage = false;
@@ -15,13 +15,14 @@ chrome.storage.local.get('urls', r => {
 		// hinanjo no hinanjo
 	} else {
 		// addtional URL
-		if (!(r.urls)) return;
-		let reg = new RegExp(r.urls.replace(/\n/g, '|'));
+		if (!(res.urls)) return;
+		let reg = new RegExp(res.urls.replace(/\n/g, '|'));
 		if (!href.replace(/[#\?].*$/, '').match(reg)) return;
 	}
 	// url matched
 	let myExt = new Are4AreThread();
 	myExt.is1stPage = is1stPage;
+	myExt.ini = { logsite: res.logsite };
 	myExt.start(window);
 });
 })();

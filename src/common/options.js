@@ -63,12 +63,14 @@ function correctValues() {
 function saveOptions(e) {
 	correctValues();
 	chrome.storage.local.set({
-		urls: form.urls.value
+		urls: form.urls.value,
+		logsite: form.logsite.value
 	});
 }
 function restoreOptions() {
-	chrome.storage.local.get('urls', res => {
+	chrome.storage.local.get(['urls', 'logsite'], res => {
 		form.urls.value = res.urls ? `${res.urls}\n` : '';
+		form.logsite.value = res.logsite ? res.logsite : '';
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
 		(e, i, a) => { e.textContent = chrome.i18n.getMessage(e.getAttribute('data-message-id')); }
@@ -149,6 +151,22 @@ function tabsBtnOnClick(e) {
 	});
 }
 
+// logsite ///////////////////////////
+function logsiteOnPaste(e) {
+	let text = e.clipboardData.getData('text');
+	if (text.indexOf('$') !== -1) return true;
+	if (text.indexOf('http') !== 0) return true;
+	if (! /\d{5,}/.test(text)) return true;
+	e.preventDefault();
+	text = text.replace(/\d{5,}/, '\$r');
+	if (text.indexOf('.magipoka.') === -1) { // mgpk!
+		text = text.replace(/(\b|_)([a-z]|\d{2})(\b|_)/, '$1\$b$3');
+	}
+	text = text.replace(/(\b|_)(may|nov|img|jun|dec)(_|\b)/g, '$1\$s$3');
+	form.logsite.value = text;
+}
+
+// main //////////////////////////////
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('myForm').addEventListener('submit', saveOptions);
 form.urls.addEventListener('change', validate);
@@ -162,4 +180,5 @@ if (document.location.hash === '#tabpage') {
 if (!chrome.tabs) {
 	form.tabsBtn.setAttribute('disabled', 'disabled');
 }
+form.logsite.addEventListener('paste', logsiteOnPaste);
 

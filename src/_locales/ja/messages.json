@@ -1,72 +1,26 @@
 {
-	"extensionName": {
-		"message": "アレを見やすくするアレ",
-		"description": "Name of the extension."
-	},
-	"extensionDescription": {
-		"message": "ふたばっぽいページを見やすくします",
-		"description": "Description of the extension."
-	},
+	"extensionName": { "message": "アレを見やすくするアレ" },
+	"extensionDescription": { "message": "ふたばっぽいページを見やすくします" },
 
-	"nNewReplies": {
-		"message": "新着 {0} 件",
-		"description": "refresh message"
-	},
-	"notFound": {
-		"message": "ファイルが無いよ",
-		"description": "404 error"
-	},
-	"notModified": {
-		"message": "更新なし",
-		"description": "304 error"
-	},
-	"networkError": {
-		"message": "なんかエラー",
-		"description": "other network error"
-	},
+	"nNewReplies": { "message": "新着 {0} 件" },
+	"notFound": { "message": "ファイルが無いよ" },
+	"notModified": { "message": "更新なし" },
+	"networkError": { "message": "なんかエラー" },
 
-	"writeError": {
-		"message": "書き込み失敗",
-		"description": ""
-	},
+	"writeError": { "message": "書き込み失敗" },
 
-	"threadImg": {
-		"message": "スレ画",
-		"description": ""
-	},
-	"plzWait": {
-		"message": "ちょっとまってね",
-		"description": ""
-	},
+	"threadImg": { "message": "スレ画" },
+	"plzWait": { "message": "ちょっとまってね" },
 
-	"options": {
-		"message": "設定",
-		"description": ""
-	},
-	"saveOptions": {
-		"message": "設定を保存",
-		"description": ""
-	},
-	"urlsTextAreaLabel": {
-		"message": "外部板",
-		"description": ""
-	},
-	"urlsTextAreaNote": {
-		"message": "(スレッドのURLを正規表現で指定, 改行で複数指定)",
-		"description": ""
-	},
-	"uriRegexWrong": {
-		"message": "外部板の正規表現が間違ってるよ<br>{0}<br>{1}",
-		"description": ""
-	},
-
-	"addFromTabs": {
-		"message": "開いてるタブから追加",
-		"description": ""
-	},
-	"selectTargetUrlTab": {
-		"message": "追加するタブを選択...",
-		"description": ""
-	}
+	"options": { "message": "設定" },
+	"saveOptions": { "message": "設定を保存" },
+	"urlsTextAreaLabel": { "message": "外部板" },
+	"urlsTextAreaNote": { "message": "(スレッドのURLを正規表現で指定, 改行で複数指定)" },
+	"uriRegexWrong": { "message": "外部板の正規表現が間違ってるよ<br>{0}<br>{1}" },
+	"addFromTabs": { "message": "開いてるタブから追加" },
+	"selectTargetUrlTab": { "message": "追加するタブを選択..." },
+	"logsiteInputLabel": { "message": "スレッドが落ちたときに更新ボタンの代わりに開くURL" },
+	"logsiteInputNote": { "message": "($s=サーバ名, $b=板, $r=レス番号)" },
+	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm → http://img.example.net/b/res/12345.htm)" }
 }
 

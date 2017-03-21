@@ -204,12 +204,33 @@ onReloaded: function(newDoc) {
 	}
 },
 reloadBtnOnClick: function(e) {
+	if (this.reloadBtn.classList.contains('are4are-toolbtn--logsite')) {
+		this.doc.location.href = this.reloadBtn.getAttribute('data-href');
+		return;
+	}
 	this.hideNewerBorder();
 	this.reloadBtn.classList.add('are4are-spin', 'are4are-spinend');
 	this.getDoc(
 		this.doc.location.href.replace(/#.*$/, ''),
-		this.onReloaded, () => { this.reloadBtn.classList.remove('are4are-spin'); }
+		this.onReloaded,
+		st => {
+			this.reloadBtn.classList.remove('are4are-spin');
+			if (st === 404) {
+				changeToLogsiteButton();
+			}
+		}
 	);
+},
+changeToLogsiteButton: function(e) {
+	if (!this.ini) return;
+	if (!this.ini.logsite) return;
+	if (! /https?:\/\/(.+)\.2chan\.net\/(.+)\/res\/(\d+).htm/.test(this.doc.location.href)) return;
+	let href = this.ini.logsite
+			.replace('$s', RegExp.$1)
+			.replace('$b', RegExp.$2)
+			.replace('$r', RegExp.$3);
+	this.reloadBtn.setAttribute('data-href', href);
+	this.reloadBtn.className = 'are4are-toolbtn are4are-toolbtn--logsite';
 },
 
 // FindRes /////////////////////////////
@@ -514,6 +535,9 @@ exec: function() {
 		this.addToolButton('reload', null, 'are4are-disable');
 	} else {
 		this.reloadBtn = this.addToolButton('reload', 'reloadBtnOnClick');
+	}
+	if (this.doc.title === '404 File Not Found') {
+		this.changeToLogsiteButton();
 	}
 	this.pageDownBtn = this.addToolButton('pagedown');
 	this.on(this.pageDownBtn, 'touchstart', 'pageDownBtnOnTouchstart');

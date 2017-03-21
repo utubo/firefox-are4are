@@ -20,6 +20,10 @@ fieldset {
 	border-top: solid;
 }
 
+label {
+	font-weight: bold;
+}
+
 button {
 	margin: .5em 0;
 	padding: .5em;
@@ -29,7 +33,7 @@ select {
 	padding: .5em 0;
 }
 
-#save {
+submit {
 	margin: 1em 0;
 	padding: .5em 2em;
 }

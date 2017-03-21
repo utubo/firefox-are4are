@@ -1,71 +1,26 @@
 {
-	"extensionName": {
-		"message": "Are4Are",
-		"description": "Name of the extension."
-	},
-	"extensionDescription": {
-		"message": "modifi fuaba pages.",
-		"description": "Description of the extension."
-	},
+	"extensionName": { "message": "Are4Are" },
+	"extensionDescription": { "message": "modifi fuaba pages." },
 
-	"nNewReplies": {
-		"message": "{0} new replies.",
-		"description": "refresh message"
-	},
-	"notFound": {
-		"message": "not found.",
-		"description": "404 error"
-	},
-	"notModified": {
-		"message": "not midified.",
-		"description": "304 error"
-	},
-	"networkError": {
-		"message": "network error.",
-		"description": "other network error"
-	},
+	"nNewReplies": { "message": "{0} new replies." },
+	"notFound": { "message": "not found." },
+	"notModified": { "message": "not midified." },
+	"networkError": { "message": "network error." },
 
-	"writeError": {
-		"message": "write error.",
-		"description": ""
-	},
+	"writeError": { "message": "write error." },
 
-	"threadImg": {
-		"message": "Image",
-		"description": ""
-	},
-	"plzWait": {
-		"message": "Please wait a little",
-		"description": ""
-	},
+	"threadImg": { "message": "Image" },
+	"plzWait": { "message": "Please wait a little" },
 
-	"options": {
-		"message": "Options",
-		"description": ""
-	},
-	"saveOptions": {
-		"message": "Save",
-		"description": ""
-	},
-	"urlsTextAreaLabel": {
-		"message": "Target-URI",
-		"description": ""
-	},
-	"urlsTextAreaNote": {
-		"message": "(regex)",
-		"description": ""
-	},
-	"uriRegexWrong": {
-		"message": "target-uri-regex is worong.<br>{0}<br>{1}",
-		"description": ""
-	},
-	"addFromTabs": {
-		"message": "add from opened tabs",
-		"description": ""
-	},
-	"selectTargetUrlTab": {
-		"message": "select tab ...",
-		"description": ""
-	}
+	"options": { "message": "Options" },
+	"saveOptions": { "message": "Save" },
+	"urlsTextAreaLabel": { "message": "Target-URI" },
+	"urlsTextAreaNote": { "message": "(regex)" },
+	"uriRegexWrong": { "message": "target-uri-regex is worong.<br>{0}<br>{1}" },
+	"addFromTabs": { "message": "add from opened tabs" },
+	"selectTargetUrlTab": { "message": "select tab ..." },
+	"logsiteInputLabel" : { "message": "Logsite when 404" },
+	"logsiteInputNote" : { "message": "($s=Server,$b=board,$r=ResNumber)" },
+	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm -> http://img.example.net/b/res/12345.htm)" }
 }
 

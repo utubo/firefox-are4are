@@ -271,4 +271,7 @@ div[style^="width:680px"] {
 .are4are-toolbtn--reload::before {
 	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="hsl(0,38%,57%)"><path d="M14.5 5a11 11 0 1 0 10 4l-4 3a6 6 0 1 1-5-2v3l7-6-7-6v4z"/></svg>');
 }
+.are4are-toolbtn--logsite::before {
+	content: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="ivory"><path fill="hsl(0,38%,57%)" d="M4 2h24v22l-6 6h-18"/><path d="M26 23h-5v5"/><text x="16" y="19" font-size="9" text-anchor="middle">LOG</text></svg>');
+}
 
