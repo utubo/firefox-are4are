@@ -7,8 +7,9 @@
 		font-size: 80%;
 	}
 	.invalid {
-		border: 2px solid #f55;
-		border-radius: 4px;
+		background: #fdd !important;
+		border: 2px solid #f55 !important;
+		color: #f55 !important;
 	}
 	.text {
 		width: 100%;
@@ -18,7 +19,7 @@
 		height: 8em;
 		white-space: pre;
 	}
-	submit {
+	.submit {
 		right: 0;
 	}
 	</style>
@@ -31,10 +32,10 @@
 				<label for="urls" data-message-id="urlsTextAreaLabel">外部板</label>
 				<div class="note" data-message-id="urlsTextAreaNote">(正規表現で指定, 改行で複数指定)</div>
 				<textarea id="urls" class="textarea"></textarea>
-				<br>
+				<div id="tabsContainer" style="display:none;">
 				<button id="tabsBtn" data-message-id="addFromTabs">開いてるタブから追加</button>
-				<select id="tabs" style="display:none;"></select>
-				<br>
+				<select id="tabs" style="display:none;"></select><br>
+				</div>
 				<br>
 				<label for="logsite" data-message-id="logsiteInputLabel">スレッドが落ちたときに開くURL</label>
 				<div class="note" data-message-id="logsiteInputNote">($s=サーバ名, $d=ディレクトリ, $p=パス)</div>
@@ -43,7 +44,7 @@
 				<br>
 			</div>
 			<div>
-				<button id="save" type="submit" data-message-id="saveOptions">設定を保存</button>
+				<button id="save" class="submit" type="submit" data-message-id="saveOptions">設定を保存</button>
 			</div>
 		</fieldset>
 	</form>

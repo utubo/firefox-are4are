@@ -177,8 +177,8 @@ form.tabs.addEventListener('change', tabsOnChange);
 if (document.location.hash === '#tabpage') {
 	setupAsNewTab();
 }
-if (!chrome.tabs) {
-	form.tabsBtn.setAttribute('disabled', 'disabled');
+if (chrome.tabs) {
+	document.getElementById('tabsContainer').style.display = '';
 }
 form.logsite.addEventListener('paste', logsiteOnPaste);
 
