@@ -216,7 +216,7 @@ reloadBtnOnClick: function(e) {
 		st => {
 			this.reloadBtn.classList.remove('are4are-spin');
 			if (st === 404) {
-				changeToLogsiteButton();
+				this.changeToLogsiteButton();
 			}
 		}
 	);
