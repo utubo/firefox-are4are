@@ -357,6 +357,7 @@ autoLink: function(elm) {
 	}
 },
 modifyFirstHeader: function(bq) {
+	if (!bq) return;
 	let e = bq;
 	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
 		e = e.previousSibling;
