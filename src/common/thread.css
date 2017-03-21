@@ -83,24 +83,27 @@ img[hspace="20"] {
 .del {
 	color: #B66 !important;
 	display: inline-block;
-	margin: 0 4px;
+	margin: 0;
+	opacity: 0;
 	overflow: hidden;
 	text-decoration: none;
 	vertical-align: bottom;
-}
-td>.del {
-	margin: 0;
-	opacity: 0;
 	width: 0;
 }
+.are4are-del-1st {
+	margin: 0 4px;
+	opacity: 1;
+	width: unset;
+}
 input[value="delete"] {
+	display: none;
 	float: left;
 	height: 7pt;
 	margin: 1pt;
 	width: 7pt;
 }
-td>input[value="delete"] {
-	display: none;
+.are4are-delete-1st {
+	display: inline-block !important;
 }
 small {
 	display: inline-block;

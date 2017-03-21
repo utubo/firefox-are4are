@@ -356,6 +356,26 @@ autoLink: function(elm) {
 		textNode = prev;
 	}
 },
+modifyFirstHeader: function(bq) {
+	let e = bq;
+	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
+		e = e.previousSibling;
+		if (!e) {
+			break; // loop end
+		} else if (e.nodeType === 1) {
+			// delete-checkbox
+			if (e.value === 'delete') {
+				e.classList.add('are4are-delete-1st');
+				break; // loop end
+			}
+			// del
+			if (e.classList.contains('del')) {
+					e.classList.add('are4are-del-1st');
+				continue;
+			}
+		}
+	}
+},
 modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
@@ -550,6 +570,7 @@ exec: function() {
 	// Modify Blockquotes (visible)
 	let b = this.allBQ(this.doc);
 	this.modifyBQ(b[0]);
+	this.modifyFirstHeader(b[0]);
 	this.modifyTables(this.findTableOrBQ(b[1]));
 
 	// Newer Border
