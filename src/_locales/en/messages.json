@@ -20,7 +20,7 @@
 	"addFromTabs": { "message": "add from opened tabs" },
 	"selectTargetUrlTab": { "message": "select tab ..." },
 	"logsiteInputLabel" : { "message": "Logsite when 404" },
-	"logsiteInputNote" : { "message": "($s=Server,$b=board,$r=ResNumber)" },
+	"logsiteInputNote" : { "message": "($s=Server,$b=Board,$r=ResNumber)" },
 	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm -> http://img.example.net/b/res/12345.htm)" }
 }
 
