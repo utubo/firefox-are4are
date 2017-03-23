@@ -14,9 +14,9 @@
 
 	"options": { "message": "Options" },
 	"saveOptions": { "message": "Save" },
-	"urlsTextAreaLabel": { "message": "Target-URI" },
+	"urlsTextAreaLabel": { "message": "Target-URLs" },
 	"urlsTextAreaNote": { "message": "(regex)" },
-	"uriRegexWrong": { "message": "target-uri-regex is worong.<br>{0}<br>{1}" },
+	"regexSyntaxError": { "message": "regex syntax-error\n[{0}]" },
 	"addFromTabs": { "message": "add from opened tabs" },
 	"selectTargetUrlTab": { "message": "select tab ..." },
 	"logsiteInputLabel" : { "message": "Logsite when 404" },

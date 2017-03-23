@@ -26,28 +26,35 @@ function setupAsNewTab() {
 	document.body.insertBefore(h1, document.body.firstChild);
 }
 // validator /////////////////////////
-function isValidUrls() {
+function validateUrls() {
 	let t = form.urls;
 	let targetUrls = t.value.replace(/\n+/g, "\n").replace(/^\s+|\s+$/, '');
-	if (!targetUrls) return true;
+	if (!targetUrls) return;
 	try {
 		targetUrls = targetUrls.replace(/\n/g, '|').replace(/(^\s+|\s+$)/, '');
-		if (targetUrls.match(/^\|*$/)) return true;
+		if (targetUrls.match(/^\|*$/)) return;
 		reg = new RegExp(targetUrls);
-		return true;
+		return;
 	} catch (e) {
+		return chrome.i18n.getMessage('regexSyntaxError').replace('{0}', e.message);
 	}
-	return false;
 }
 function validateTarget(id, func) {
-	if (func()) {
-		document.getElementById(id).classList.remove('invalid');
-	} else {
+	let msg = func();
+	let elm = document.getElementById(id + '_err');
+	if (msg) {
 		document.getElementById(id).classList.add('invalid');
+		if (elm) {
+			elm.textContent = msg;
+			elm.style.display = 'block';
+		}
+	} else {
+		document.getElementById(id).classList.remove('invalid');
+		if (elm) elm.style.display = 'none';
 	}
 }
 function validate() {
-	validateTarget('urls', isValidUrls);
+	validateTarget('urls', validateUrls);
 	if (document.querySelector('.invalid')) {
 		form.save.setAttribute('disabled', 'true');
 	} else {

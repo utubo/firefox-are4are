@@ -11,6 +11,11 @@
 		border: 2px solid #f55 !important;
 		color: #f55 !important;
 	}
+	.err {
+		color: #f55;
+		display: none;
+		white-space: pre;
+	}
 	.text {
 		width: 100%;
 	}
@@ -32,9 +37,10 @@
 				<label for="urls" data-message-id="urlsTextAreaLabel">外部板</label>
 				<div class="note" data-message-id="urlsTextAreaNote">(正規表現で指定, 改行で複数指定)</div>
 				<textarea id="urls" class="textarea"></textarea>
+				<div id="urls_err" class="err"></div>
 				<div id="tabsContainer" style="display:none;">
-				<button id="tabsBtn" data-message-id="addFromTabs">開いてるタブから追加</button>
-				<select id="tabs" style="display:none;"></select><br>
+					<button id="tabsBtn" data-message-id="addFromTabs">開いてるタブから追加</button>
+					<select id="tabs" style="display:none;"></select><br>
 				</div>
 				<br>
 				<label for="logsite" data-message-id="logsiteInputLabel">スレッドが落ちたときに開くURL</label>

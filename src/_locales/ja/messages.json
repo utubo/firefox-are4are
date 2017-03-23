@@ -16,7 +16,7 @@
 	"saveOptions": { "message": "設定を保存" },
 	"urlsTextAreaLabel": { "message": "外部板" },
 	"urlsTextAreaNote": { "message": "(スレッドのURLを正規表現で指定, 改行で複数指定)" },
-	"uriRegexWrong": { "message": "外部板の正規表現が間違ってるよ<br>{0}<br>{1}" },
+	"regexSyntaxError": { "message": "正規表現が間違ってるよ\n{0}" },
 	"addFromTabs": { "message": "開いてるタブから追加" },
 	"selectTargetUrlTab": { "message": "追加するタブを選択..." },
 	"logsiteInputLabel": { "message": "スレッドが落ちたときに更新ボタンの代わりに開くURL" },
