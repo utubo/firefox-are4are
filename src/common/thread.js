@@ -361,57 +361,54 @@ modifyFirstHeader: function(bq) {
 	let e = bq;
 	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
 		e = e.previousSibling;
-		if (!e) {
-			break; // loop end
-		} else if (e.nodeType === 1) {
-			// delete-checkbox
-			if (e.value === 'delete') {
-				e.classList.add('are4are-delete-1st');
-				break; // loop end
-			}
-			// del
-			if (e.classList.contains('del')) {
-					e.classList.add('are4are-del-1st');
-				continue;
-			}
+		if (!e) break;
+		if (e.nodeType !== 1) continue;
+		// delete-checkbox
+		if (e.value === 'delete') {
+			e.classList.add('are4are-delete-1st');
+			break;
+		}
+		// del
+		if (e.classList.contains('del')) {
+			e.classList.add('are4are-del-1st');
 		}
 	}
 },
 modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
-	// auto link
+	// auto-link
 	this.autoLink(bq);
 	Array.forEach(bq.getElementsByTagName('FONT'), font => { this.autoLink(font); });
-	// res header
+	// header
 	let e = bq;
+	loop:
 	for (let i = 0; i < 15; i ++) { // when over 15, it's may be HOKANKO...
 		e = e.previousSibling;
-		if (!e) {
-			break; // loop end
-		} else if (e.nodeType === 3) {
-			// id
-			let p = e.nodeValue.indexOf('ID:');
-			if (p === -1) continue;
-			let node = this.doc.createDocumentFragment();
-			node.appendChild(this.create('SPAN', { 'class': 'are4are-id' }, e.nodeValue.substring(p, p + 11)));
-			node.appendChild(this.doc.createTextNode(e.nodeValue.substring(p + 11, e.nodeValue.length)));
-			e.nodeValue = e.nodeValue.substring(0, p);
-			e.parentNode.insertBefore(node, e.nextSibling);
-		} else if (e.nodeType === 1) {
-			// delete-checkbox
-			if (e.value === 'delete') {
-				break; // loop end
-			}
-			// mail
-			let a = e.tagName !== 'FONT' ? e : e.getElementsByTagName('A')[0];
-			if (a && a.href && a.href.indexOf('mailto:') === 0) {
+		if (!e) break loop;
+		switch (e.nodeType) {
+			case 3:
+				// id
+				let p = e.nodeValue.indexOf('ID:');
+				if (p === -1) break;
+				let node = this.doc.createDocumentFragment();
+				node.appendChild(this.create('SPAN', { 'class': 'are4are-id' }, e.nodeValue.substring(p, p + 11)));
+				node.appendChild(this.doc.createTextNode(e.nodeValue.substring(p + 11, e.nodeValue.length)));
+				e.nodeValue = e.nodeValue.substring(0, p);
+				e.parentNode.insertBefore(node, e.nextSibling);
+				break;
+			case 1:
+				// delete-checkbox
+				if (e.value === 'delete') break loop;
+				// mail
+				let a = e.tagName !== 'FONT' ? e : e.getElementsByTagName('A')[0];
+				if (!a || !a.href) break;
+				if (a.href.indexOf('mailto:') !== 0) break;
 				a.classList.add('are4are-mail');
 				let s = this.create('SPAN', { 'class': 'are4are-shown-mail' }, a.getAttribute('href').replace(/^mailto:/, ''));
 				s = this.autoLink(s) || s;
 				a.parentNode.insertBefore(s, a.nextSibling);
-				break; // loop end
-			}
+				break loop;
 		}
 	}
 },
