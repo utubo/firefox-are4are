@@ -243,7 +243,7 @@ exec: function() {
 		let td = this.parentTag(this.first('INPUT[name="mode"]'), 'TD') || this.body;
 		td.appendChild(this.create(
 			'A', {
-			href: chrome.extension.getURL('common/options.html#tabpage'),
+			href: chrome.extension.getURL('common/options.html'),
 			'class': 'are4are-options-page-link'
 			},
 			this.format('__MSG_extensionName__ - __MSG_options__')

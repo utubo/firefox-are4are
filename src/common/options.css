@@ -36,15 +36,36 @@ select {
 
 .note {
 	color: #b77;
+	font-size: 80%;
+}
+
+.err {
+	color: #f55;
+	display: none;
+	white-space: pre;
+}
+
+.invalid {
+	background: #fdd !important;
+	border: 2px solid #f55 !important;
+	color: #f55 !important;
 }
 
 .submit {
 	margin: .5em 0;
 	padding: .5em 2em;
+	right: 0;
 }
 
 .text {
 	height: 2em;
+	width: 100%;
+}
+
+.textarea {
+	width: 100%;
+	height: 8em;
+	white-space: pre;
 }
 
 .text,

@@ -3,28 +3,6 @@ for (let i of document.getElementById('myForm').elements) {
 	if (i.id) { form[i.id] = document.getElementById(i.id); }
 }
 
-// with new tab //////////////////////
-function setupAsNewTab() {
-	// ViewPort
-	let viewPort = document.createElement('meta');
-	viewPort.name = 'viewport';
-	viewPort.content = 'width=device-width';
-	document.head.insertBefore(viewPort, document.head.firstChild);
-	// CSS
-	let cssLink = document.createElement('link');
-	cssLink.rel = 'stylesheet';
-	cssLink.type = 'text/css';
-	cssLink.href = chrome.extension.getURL('common/options.css');
-	document.head.appendChild(cssLink);
-	// Title
-	let extensionName = chrome.i18n.getMessage('extensionName');
-	let title = document.createElement('title');
-	title.textContent = extensionName;
-	document.head.appendChild(title);
-	let h1 = document.createElement('h1');
-	h1.textContent = extensionName;
-	document.body.insertBefore(h1, document.body.firstChild);
-}
 // validator /////////////////////////
 function validateUrls() {
 	let t = form.urls;
@@ -181,9 +159,6 @@ form.urls.addEventListener('keyup', validate);
 form.urls.addEventListener('paste', urlsOnPaste);
 form.tabsBtn.addEventListener('click', tabsBtnOnClick);
 form.tabs.addEventListener('change', tabsOnChange);
-if (document.location.hash === '#tabpage') {
-	setupAsNewTab();
-}
 if (chrome.tabs) {
 	document.getElementById('tabsContainer').style.display = '';
 }
