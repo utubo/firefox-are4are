@@ -387,16 +387,6 @@ modifyBQ: function(bq) {
 		e = e.previousSibling;
 		if (!e) break loop;
 		switch (e.nodeType) {
-			case 3:
-				// id
-				let p = e.nodeValue.indexOf('ID:');
-				if (p === -1) break;
-				let node = this.doc.createDocumentFragment();
-				node.appendChild(this.create('SPAN', { 'class': 'are4are-id' }, e.nodeValue.substring(p, p + 11)));
-				node.appendChild(this.doc.createTextNode(e.nodeValue.substring(p + 11, e.nodeValue.length)));
-				e.nodeValue = e.nodeValue.substring(0, p);
-				e.parentNode.insertBefore(node, e.nextSibling);
-				break;
 			case 1:
 				// delete-checkbox
 				if (e.value === 'delete') break loop;
@@ -409,6 +399,16 @@ modifyBQ: function(bq) {
 				s = this.autoLink(s) || s;
 				a.parentNode.insertBefore(s, a.nextSibling);
 				break loop;
+			case 3:
+				// id
+				let p = e.nodeValue.indexOf('ID:');
+				if (p === -1) break;
+				let node = this.doc.createDocumentFragment();
+				node.appendChild(this.create('SPAN', { 'class': 'are4are-id' }, e.nodeValue.substring(p, p + 11)));
+				node.appendChild(this.doc.createTextNode(e.nodeValue.substring(p + 11, e.nodeValue.length)));
+				e.nodeValue = e.nodeValue.substring(0, p);
+				e.parentNode.insertBefore(node, e.nextSibling);
+				break;
 		}
 	}
 },
