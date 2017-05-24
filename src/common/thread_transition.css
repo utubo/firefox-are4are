@@ -20,3 +20,26 @@ td>input:checked {
 	display: unset;
 }
 
+/* animation */
+.are4are-bookmark::before {
+	animation: are4are-fade-in-animation 1s;
+}
+.are4are-bookmark-fadeout::before {
+	animation: are4are-fade-out-animation 1s;
+}
+@keyframes are4are-fade-in-animation {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+@keyframes are4are-fade-out-animation {
+	0% { opacity: 1; left:-5pt;}
+	100% { opacity: 0; left: -10pt;}
+}
+.are4are-found {
+	animation: are4are-found-animation 5s ease-in 0s 1 normal;
+}
+@keyframes are4are-found-animation {
+	0% { background: #ce9; }
+	90% { background: #ce9; }
+	100% { background: transparent; }
+}

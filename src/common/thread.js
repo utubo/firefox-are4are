@@ -143,7 +143,7 @@ resetBottomBtn: function(force) {
 	}
 },
 backBtnOnClick: function() {
-	this.scrollTo(this.backY, () => { this.hideBackBtn({force: true}); });
+	this.scrollTo(this.history[1].y, () => { this.hideBackBtn({force: true}); });
 },
 
 // Newer Border ////////////////////////
@@ -234,10 +234,15 @@ changeToLogsiteButton: function(e) {
 },
 
 // FindRes /////////////////////////////
+history: [], // Index starts 1. history[0] is now position.
 hideBackBtn: function(e) {
-	if (e.force || this.backY && this.backY <= this.scrollY()) {
-		this.backY = 0;
-		this.flexOut(this.backBtn);
+	if (e.force || this.history[1] && this.history[1].y <= this.scrollY()) {
+		this.fadeoutBookmark(this.history[0]);
+		this.showBookmark(this.history[1]);
+		this.history.shift();
+		if (!this.history[1]) {
+			this.flexOut(this.backBtn);
+		}
 	}
 },
 findRes: function(reg, from) {
@@ -254,15 +259,34 @@ findRes: function(reg, from) {
 	}
 	return false;
 },
+// fadeout bookmak -> (animation 1s.) -> remove bookmark
+bookmarkRemoveQueue: [],
+fadeoutBookmark: function(b) {
+	if (!b || !b.found) return;
+	b.foundFrom.classList.add('are4are-bookmark-fadeout');
+	b.found.classList.add('are4are-bookmark-fadeout');
+	this.bookmarkRemoveQueue.push(b);
+	this.timeout(null, 'removeBookmark', 1000);
+},
+removeBookmark: function() {
+	let b = this.bookmarkRemoveQueue.shift();
+	b.foundFrom.classList.remove('are4are-bookmark', 'are4are-bookmark-fadeout');
+	b.found.classList.remove('are4are-bookmark', 'are4are-bookmark-fadeout', 'are4are-found', 'are4are-found-fuzzy', 'are4are-not-fuzzy');
+},
+showBookmark: function(b) {
+	if (!b || !b.found) return;
+	b.foundFrom.classList.add('are4are-bookmark');
+	b.found.classList.add('are4are-bookmark', 'are4are-found', b.isFuzzy ? 'are4are-found-fuzzy' : 'are4are-not-fuzzy');
+},
 quoteTextOnClick: function(e) {
 	if (e.target.tagName === 'A') return;
 	// find res
-	let fuzzyClass = 'not-fuzzy';
+	let isFuzzy = false;
 	let text = e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', '');
 	let found = this.findRes(new RegExp(this.regEscape(text)), e.target);
 	// fuzzy
 	if (!found && 10 < text.length) {
-		fuzzyClass = 'are4are-found-fuzzy';
+		isFuzzy = true;
 		let halfLength = Math.round(text.length / 2);
 		let fuzzy = `.{${halfLength - 3},${halfLength + 3}}`;
 		let fuzzyReg = new RegExp(
@@ -281,27 +305,24 @@ quoteTextOnClick: function(e) {
 		y = this.y(this.prev(found, 'INPUT'));
 	}
 	// bookmark
-	if (this.found) {
-		this.found.classList.remove('are4are-bookmark', 'are4are-found', 'are4are-found-fuzzy', 'are4are-not-fuzzy');
+	if (!this.history[1]) {
+		this.history[0] = { y: this.scrollY() };
 	}
-	this.found = found;
-	if (this.backY < this.y(this.parentTag(e.target, 'TABLE'))) {
-		this.hideBackBtn({force: true});
-	}
-	if (!this.backY) {
-		this.foundFrom && this.foundFrom.classList.remove('are4are-bookmark');
-		this.foundFrom = this.parentBQ(e.target);
-		this.foundFrom.classList.add('are4are-bookmark');
-	}
-	// scroll
+	let b = {
+		y: y,
+		found: found,
+		foundFrom: this.parentBQ(e.target),
+		isFuzzy: isFuzzy
+	};
 	if (y < this.scrollY()) {
-		this.backY = this.backY || this.win.scrollY;
 		this.scrollTo(y, () => {
-			found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
+			this.showBookmark(b);
 			this.flexIn(this.backBtn);
+			this.history.unshift(b);
 		}, 'quoteText');
 	} else {
-		found.classList.add('are4are-bookmark', 'are4are-found', fuzzyClass);
+		this.showBookmark(b);
+		this.history.unshift(b);
 	}
 },
 
