@@ -29,10 +29,12 @@ td>input:checked {
 }
 @keyframes are4are-fade-in-animation {
 	0% { opacity: 0; }
+	20% { opacity: 0; }
 	100% { opacity: 1; }
 }
 @keyframes are4are-fade-out-animation {
 	0% { opacity: 1; left:-5pt;}
+	50% { opacity: 1; left:-5pt;}
 	100% { opacity: 0; left: -10pt;}
 }
 .are4are-found {

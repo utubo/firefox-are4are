@@ -237,9 +237,9 @@ changeToLogsiteButton: function(e) {
 history: [], // Index starts 1. history[0] is now position.
 hideBackBtn: function(e) {
 	if (e.force || this.history[1] && this.history[1].y <= this.scrollY()) {
-		this.fadeoutBookmark(this.history[0]);
-		this.showBookmark(this.history[1]);
-		this.history.shift();
+		let b = this.history.shift();
+		this.fadeoutBookmark(b);
+		this.showBookmark(this.history[0]);
 		if (!this.history[1]) {
 			this.flexOut(this.backBtn);
 		}
@@ -271,7 +271,9 @@ fadeoutBookmark: function(b) {
 removeBookmark: function() {
 	let b = this.bookmarkRemoveQueue.shift();
 	b.foundFrom.classList.remove('are4are-bookmark', 'are4are-bookmark-fadeout');
+	b.foundFrom = null;
 	b.found.classList.remove('are4are-bookmark', 'are4are-bookmark-fadeout', 'are4are-found', 'are4are-found-fuzzy', 'are4are-not-fuzzy');
+	b.found = null;
 },
 showBookmark: function(b) {
 	if (!b || !b.found) return;
@@ -305,8 +307,11 @@ quoteTextOnClick: function(e) {
 		y = this.y(this.prev(found, 'INPUT'));
 	}
 	// bookmark
+	let sy = this.scrollY();
 	if (!this.history[1]) {
-		this.history[0] = { y: this.scrollY() };
+		this.history[0] = { y: sy };
+	} else if (sy != this.history[0].y) {
+		this.history.unshift({ y: sy });
 	}
 	let b = {
 		y: y,
@@ -314,10 +319,11 @@ quoteTextOnClick: function(e) {
 		foundFrom: this.parentBQ(e.target),
 		isFuzzy: isFuzzy
 	};
-	if (y < this.scrollY()) {
+	if (y < sy) {
 		this.scrollTo(y, () => {
 			this.showBookmark(b);
 			this.flexIn(this.backBtn);
+			b.y = this.scrollendDetail.y; // actually scrollY
 			this.history.unshift(b);
 		}, 'quoteText');
 	} else {
