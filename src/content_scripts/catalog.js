@@ -145,9 +145,17 @@ autoFixWidth: function() {
 },
 
 // RefreshCatalog //////////////////////
+findCatalog: function(tablePalent) {
+	return tablePalent.querySelector('TABLE[border="1"][align="center"]');
+},
+addCatalogClass: function(table) {
+	table.classList.add('are4are-catalog-table');
+	table.setAttribute('border', '0');
+},
 appendCatalogCountDelta: function(tablePalent) {
-	let work = tablePalent.querySelector('TABLE[border="1"][align="center"]');
-	work.classList.add('are4are-catalog-table');
+	let work = this.findCatalog(tablePalent);
+	if (!work) { return; }
+	this.addCatalogClass(work);
 	this.autoFix(work);
 	// add count delta
 	let threadCount = 0;
@@ -191,7 +199,7 @@ appendCatalogCountDelta: function(tablePalent) {
 	}
 	// complete
 	this.catalogTable.parentNode.replaceChild(work, this.catalogTable);
-	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
+	this.catalogTable = this.firstClass('are4are-catalog-table');
 },
 setupCatalogData: function(href) {
 	this.catalogData = href.indexOf('sort=8') !== -1 ? this.catalogDataSodCount : this.catalogDataResCount;
@@ -210,7 +218,7 @@ refreshCatalog: function(href) {
 // Main ////////////////////////////////
 exec: function() {
 	this.firstTag('BODY').classList.add('are4are-initialized');
-	this.catalogTable = this.first('TABLE[border="1"][align="center"]');
+	this.catalogTable = this.findCatalog(this.body);
 	this.catalogDataResCount = [];
 	this.catalogDataSodCount = [];
 	this.setupCatalogData(this.doc.location.href);
@@ -259,7 +267,7 @@ exec: function() {
 	this.on(this.threadImgBtn, 'click', 'threadImgBtnOnClick');
 	this.toolbar.insertBefore(this.threadImgBtn, this.toolbar.firstChild);
 	// modify catalog
-	this.catalogTable.classList.add('are4are-catalog-table');
+	this.addCatalogClass(this.catalogTable);
 	this.isAutoFix =  this.win.innerWidth < this.catalogTable.clientWidth;
 	this.autoFix(this.catalogTable);
 	this.autoFixWidth();
