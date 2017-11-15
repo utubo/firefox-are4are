@@ -141,7 +141,15 @@ autoFixWidth: function() {
 	let img = this.first('.are4are-auto-fix>TBODY>TR>TD>A>IMG');
 	if (!img) return;
 	let s = `${Math.max(img.width, img.height) + 4}px`;
-	this.arrayLast(this.doc.styleSheets).insertRule(`.are4are-auto-fix>tbody>tr>td>a:first-child { width:${s}; height:${s}; }`, 0);
+	let f = () => {
+		this.arrayLast(this.doc.styleSheets).insertRule(`.are4are-auto-fix>tbody>tr>td>a:first-child { width:${s}; height:${s}; }`, 0);
+	};
+	try {
+		f();
+	} catch (e) {
+		// when there is not <head>.
+		this.queue(f);
+	}
 },
 
 // RefreshCatalog //////////////////////
