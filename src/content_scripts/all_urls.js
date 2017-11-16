@@ -3,7 +3,7 @@
 'use strict';
 
 // Start ///////////////////////////////
-chrome.storage.local.get(['urls', 'logsite'], res => {
+chrome.storage.local.get(['urls', 'logsite', 'desktopStyle', 'inlineImage'], res => {
 	// Check URL
 	let href = document.location.href;
 	let is1stPage = false;
@@ -22,7 +22,7 @@ chrome.storage.local.get(['urls', 'logsite'], res => {
 	// url matched
 	let myExt = new Are4AreThread();
 	myExt.is1stPage = is1stPage;
-	myExt.ini = { logsite: res.logsite };
+	myExt.ini = { logsite: res.logsite, desktopStyle: res.desktopStyle, inlineImage: res.inlineImage };
 	myExt.start(window);
 });
 })();

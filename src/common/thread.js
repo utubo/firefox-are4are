@@ -361,9 +361,9 @@ autoLinkTextNode: function(node, nextText) {
 	node.appendChild(this.doc.createTextNode(text.substring(0, m.index)));
 	// link
 	if (m[1]) {
-		node.appendChild(this.create('A', { href: m[1], target: '_blank', 'rel': 'noreferrer' }, m[1]));
+		node.appendChild(this.create('A', { href: m[1], target: '_blank', 'rel': 'noreferrer', 'class': 'are4are-auto-link' }, m[1]));
 	} else {
-		node.appendChild(this.create('A', { href: this.SIO_PREFIX[m[3]] + m[2], target: '_blank' }, m[2]));
+		node.appendChild(this.create('A', { href: this.SIO_PREFIX[m[3]] + m[2], target: '_blank', 'class': 'are4are-auto-link' }, m[2]));
 	}
 	// nextText
 	this.autoLinkTextNode(node, text.substring(m.index + m[0].length));
@@ -382,6 +382,19 @@ autoLink: function(elm) {
 		}
 		textNode = prev;
 	}
+},
+toggleInlineImage: function(elm) {
+	if (elm.previousSibling &&
+		elm.previousSibling.classList &&
+		elm.previousSibling.classList.contains('are4are-inline-image')
+	) {
+		elm.parentNode.removeChild(elm.previousSibling);
+	} else {
+		let a = this.create('A', { href: elm.href, target: '_blank', 'class': 'are4are-inline-image' });
+		a.appendChild(this.create('IMG', { src: elm.href, 'class': 'are4are-inline-image' }));
+		elm.parentNode.insertBefore(a, elm);
+	}
+	return false;
 },
 modifyFirstHeader: function(bq) {
 	if (!bq) return;
@@ -565,10 +578,11 @@ scrollend: function(e) {
 },
 
 // Main ////////////////////////////////
-cssFile: 'common/thread.css',
+cssFile: null,
 cssFileTransition: 'common/thread_transition.css',
 exec: function() {
 	// CSS
+	this.addCssFile(this.ini.desktopStyle ? 'common/thread_desktop.css' : 'common/thread.css');
 	if (!this.firstClass('rts')) {
 		this.addCssFile('content_scripts/legacy_thread.css');
 	}
@@ -610,6 +624,15 @@ exec: function() {
 		if (!e.target) return;
 		if (e.target.textContent && e.target.textContent.startsWith('>')) {
 			this.quoteTextOnClick(e);
+		}
+		if (this.ini.inlineImage &&
+			e.target.classList.contains('are4are-auto-link') &&
+			e.target.href.match(/\.(jpg|jpeg|png|gif|svg)$/)
+		) {
+			if (!this.toggleInlineImage(e.target)) {
+				e.preventDefault();
+				return false;
+			}
 		}
 	});
 

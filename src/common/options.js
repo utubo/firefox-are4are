@@ -49,13 +49,17 @@ function saveOptions(e) {
 	correctValues();
 	chrome.storage.local.set({
 		urls: form.urls.value,
-		logsite: form.logsite.value
+		logsite: form.logsite.value,
+		inlineImage: form.inlineImage.checked,
+		desktopStyle: form.desktopStyle.checked
 	});
 }
 function restoreOptions() {
-	chrome.storage.local.get(['urls', 'logsite'], res => {
+	chrome.storage.local.get(['urls', 'logsite', 'desktopStyle', 'inlineImage'], res => {
 		form.urls.value = res.urls ? `${res.urls}\n` : '';
 		form.logsite.value = res.logsite ? res.logsite : '';
+		form.inlineImage.checked = res.inlineImage;
+		form.desktopStyle.checked = res.desktopStyle;
 	});
 	Array.prototype.forEach.apply(document.querySelectorAll('*[data-message-id]'), [
 		(e, i, a) => { e.textContent = chrome.i18n.getMessage(e.getAttribute('data-message-id')); }

@@ -21,6 +21,9 @@
 	"selectTargetUrlTab": { "message": "select tab ..." },
 	"logsiteInputLabel" : { "message": "Logsite when 404" },
 	"logsiteInputNote" : { "message": "($s=Server,$b=Board,$r=ResNumber)" },
-	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm -> http://img.example.net/b/res/12345.htm)" }
+	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm -> http://img.example.net/b/res/12345.htm)" },
+	"others": { "message": "others" },
+	"inlineImageLabel": { "message": "Open Image in thread page." },
+	"desktopStyleLabel": { "message": "Desktop-style" }
 }
 

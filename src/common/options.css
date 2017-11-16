@@ -24,6 +24,9 @@ fieldset {
 label {
 	font-weight: bold;
 }
+.label4item {
+	font-weight: normal;
+}
 
 button {
 	margin: .5em 0;

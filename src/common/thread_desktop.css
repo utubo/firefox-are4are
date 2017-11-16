@@ -1,51 +1,4 @@
-/* font-size */
-body, tr, td, th, .del {
-	font-size: 7pt;
-}
-small, #ddel, .chui, #contdisp {
-	font-size: 6pt;
-}
-blockquote {
-	font-size: 10pt;
-}
-
-/* width */
-table, blockquote, .ama, .ftbl {
-	max-width: 100%;
-	width: 100%;
-}
-td, {
-	max-width: 100%;
-}
-textarea {
-	width: 90% !important;
-}
-
-/* form */
-#ufm {
-	display: none;
-}
-#ftbl {
-	display: none;
-	opacity: 0 !important;
-}
-#ftxa {
-	max-height: 6em;
-}
-
-/* "..." */
-.rts {
-	display: none;
-}
-
 /* res */
-.thre>table {
-	min-width: 0 !important;
-}
-td {
-	/* border-radius: 3pt; */
-	color:#B66;
-}
 hr {
 	counter-reset: resnumber;
 }
@@ -55,85 +8,10 @@ hr {
 	padding: 0 1pt;
 }
 blockquote {
-	color: #800000;
-	margin: .9em 2pt !important;
-	overflow-wrap: break-word;
 	position: relative;
-	white-space: normal;
-	word-break: break-all;
 }
-img[hspace="20"] {
-	display: block;
-	float: none !important; /* 'important' for futaboard */
-	margin: auto !important; /* 'important' for 2chin */
-}
-.extendWebm {
-	margin-left: calc(50% + 2pt);
-	max-width: calc(100% - 9pt);
-	transform: translateX(-50%);
-}
-.cancelbk {
-	margin-left: calc(50% - 13px);
-}
-.sod {
-	color: #B66 !important;
-	margin: 0 !important;
-	padding: 0 !important;
-}
-.del {
-	color: #B66 !important;
-	display: inline-block;
-	margin: 0;
-	opacity: 0;
-	overflow: hidden;
-	text-decoration: none;
-	vertical-align: bottom;
-	width: 0;
-}
-.are4are-del-1st {
-	margin: 0 4px;
-	opacity: 1;
-	width: unset;
-}
-input[value="delete"] {
-	display: none;
-	float: left;
-	height: 7pt;
-	margin: 1pt;
-	width: 7pt;
-}
-.are4are-delete-1st {
-	display: inline-block !important;
-}
-small {
-	display: inline-block;
-}
-
-/* others */
-img {
-	border-style: none;
-	max-width: 250px;
-}
-#ddel {
-	float: left;
-}
-.delform {
-	position: static;
-	text-align: right;
-}
-
-/* AD (resize for device-width) */
-.tue,
-#rightad,
-iframe[width="728"],
-div[style^="width:728px"],
-div[style^="width:468px"],
-div[style^="width:336px"],
-div[style^="width:680px"] {
-	margin: 0 auto;
-	max-height: 2em;
-	max-width: 90%;
-	overflow: scroll;
+td:hover>.del {
+	margin: unset !important;
 }
 
 /* ------------------------ */
@@ -142,10 +20,6 @@ div[style^="width:680px"] {
 /* tsumanne */
 .are4are-bookmark {
 	overflow: visible;
-}
-/* 2chin */
-.col-xs-12 {
-	padding: 0;
 }
 
 /* ------------------------ */
@@ -166,7 +40,7 @@ div[style^="width:680px"] {
 .are4are-inline-image {
 	max-width: 150px;
 	max-height: 150px;
-	display: block;
+	vertical-align: bottom;
 }
 
 /* find res */
@@ -230,13 +104,11 @@ div[style^="width:680px"] {
 	height: unset;
 	left: 0;
 	margin: 0 auto;
-	max-height: calc(100% - 26pt);
-	max-width: 100%;
-	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow: auto;
 	padding-bottom: 1em;
 	position: fixed !important;
 	top: 0;
+	width: 100%;
 	z-index: 4;
 }
 .are4are-ftblFixed-tbody {

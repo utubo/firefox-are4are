@@ -21,6 +21,9 @@
 	"selectTargetUrlTab": { "message": "追加するタブを選択..." },
 	"logsiteInputLabel": { "message": "スレッドが落ちたときに更新ボタンの代わりに開くURL" },
 	"logsiteInputNote": { "message": "($s=サーバ名, $b=板, $r=レス番号)" },
-	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm → http://img.example.net/b/res/12345.htm)" }
+	"logsiteInputExample": { "message": "(http://$s.example.net/$b/res/$r.htm → http://img.example.net/b/res/12345.htm)" },
+	"others": { "message": "その他" },
+	"inlineImageLabel": { "message": "画像リンクをページ内で表示する" },
+	"desktopStyleLabel": { "message": "デスクトップ版のスタイルを使用する" }
 }
 
