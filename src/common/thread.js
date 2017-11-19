@@ -248,6 +248,9 @@ hideBackBtn: function(e) {
 findRes: function(reg, from) {
 	from = from && (from.tagName === 'TABLE' ? from : this.parentTag(from, 'TABLE'));
 	if (!from) return;
+	if (from.classList.contains('are4are-quote-org')) {
+		from = this.first(`table[data-are4are-res-number="${from.getAttribute('data-are4are-res-number')}"`);
+	}
 	for (let table = this.prev(from, 'TABLE'); table; table = this.prev(table, 'TABLE')) {
 		if (reg.test(table.textContent)) {
 			return table;
@@ -280,12 +283,12 @@ showBookmark: function(b) {
 	b.foundFrom.classList.add('are4are-bookmark');
 	b.found.classList.add('are4are-bookmark', 'are4are-found', b.isFuzzy ? 'are4are-found-fuzzy' : 'are4are-not-fuzzy');
 },
-quoteTextOnClick: function(e) {
-	if (e.target.tagName === 'A') return;
+searchQuoteOrg: function(e) {
+	if (e.target.tagName === 'A') return null;
 	// find res
 	let isFuzzy = false;
 	let text = e.target.textContent.replace(/^\s+|\s+$/g, '').replace('>', '');
-	let found = this.findRes(new RegExp(this.regEscape(text)), e.target);
+	let found = this.findRes(new RegExp('(^|[^>])' + this.regEscape(text)), e.target);
 	// fuzzy
 	if (!found && 10 < text.length) {
 		isFuzzy = true;
@@ -297,7 +300,21 @@ quoteTextOnClick: function(e) {
 		);
 		found = this.findRes(fuzzyReg, e.target);
 	}
-	if (!found) return;
+	if (!found) return null;
+	return { isFuzzy: isFuzzy, text: text, found: found };
+},
+quoteTextOnClick: function(e) {
+	if (this.ini.desktopStyle) {
+		let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
+		if (quoteOrg) {
+			e.target.removeChild(quoteOrg);
+		}
+	}
+	let org = this.searchQuoteOrg(e);
+	if (!org) return;
+	let isFuzzy = org.isFuzzy;
+	let text = org.text;
+	let found = org.found;
 	let y;
 	if (found.tagName === 'TABLE') {
 		this.modifyTables(found);
@@ -329,6 +346,36 @@ quoteTextOnClick: function(e) {
 	} else {
 		this.showBookmark(b);
 		this.history.unshift(b);
+	}
+},
+quoteTextOnEnter: function(e) {
+	let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
+	if (quoteOrg) {
+		this.fadeIn(quoteOrg);
+		return;
+	}
+	let org = this.searchQuoteOrg(e);
+	if (!org) return;
+	if (org.found.tagName === 'TABLE') {
+		org.found = this.firstBQ(org.found);
+	}
+	this.modifyBQ(org.found);
+	let td = this.parentTag(org.found, 'TD').cloneNode(true);
+	td.classList.remove('rtd');
+	td.classList.add('are4are-quote-org-rtd');
+	let n = td.textContent.match(/No\.(\d+)/)[1];
+	this.parentTag(org.found, 'TABLE').setAttribute('data-are4are-res-number', n);
+	quoteOrg = this.create('TABLE', { 'data-are4are-res-number': n, 'class': 'are4are-quote-org are4are-transparent' });
+	quoteOrg.appendChild(td, quoteOrg.firstChild);
+	e.target.appendChild(quoteOrg);
+	this.setupBQEvent(this.firstBQ(td));
+	quoteOrg.style.top = '' + (0 - this.computedPx(quoteOrg, 'height')) + 'px';
+	this.queue(() => { this.fadeIn(quoteOrg); });
+},
+quoteTextOnLeave: function(e) {
+	let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
+	if (quoteOrg) {
+		this.fadeOut(quoteOrg);
 	}
 },
 
@@ -414,6 +461,22 @@ modifyFirstHeader: function(bq) {
 		}
 	}
 },
+setupBQEvent: function(bq) {
+	if (!this.ini.desktopStyle) return;
+	Array.forEach(bq.getElementsByTagName('FONT'), font => {
+		this.on(font, 'mouseenter', e => {
+		if (!e.target) return;
+			if (e.target.textContent && e.target.textContent.startsWith('>')) {
+				this.quoteTextOnEnter(e);
+			}
+		});
+		this.on(font, 'mouseleave', e => {
+			if (e.target.textContent && e.target.textContent.startsWith('>')) {
+				this.quoteTextOnLeave(e);
+			}
+		});
+	});
+},
 modifyBQ: function(bq) {
 	if (!bq || bq.getAttribute('data-are4are')) return;
 	bq.setAttribute('data-are4are', '1');
@@ -451,6 +514,7 @@ modifyBQ: function(bq) {
 				break;
 		}
 	}
+	this.setupBQEvent(bq);
 },
 modifyTables: function(table) {
 	if (!table) return;
@@ -619,7 +683,7 @@ exec: function() {
 	// Modify Form
 	this.modifyForm();
 
-	// Click Events
+	// Click events
 	this.on(this.body, 'click', e => {
 		if (!e.target) return;
 		if (e.target.textContent && e.target.textContent.startsWith('>')) {

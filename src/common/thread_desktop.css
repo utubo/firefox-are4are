@@ -26,6 +26,9 @@ td:hover>.del {
 /*       my extension       */
 /* ------------------------ */
 /* res */
+.are4are-thread-img {
+    display: block;
+}
 .are4are-mail {
 	color: inherit;
 	text-decoration: none;
@@ -41,6 +44,14 @@ td:hover>.del {
 	max-width: 150px;
 	max-height: 150px;
 	vertical-align: bottom;
+}
+.are4are-quote-org {
+	background: #F0e0d6;
+	border: 2px solid #ffe !important;
+	color:#800;
+	margin-left: 4em;
+	position: absolute;
+	z-index: 1;
 }
 
 /* find res */
