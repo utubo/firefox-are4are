@@ -1,5 +1,5 @@
 td>a>img {
-	border: 2pt solid #f0e0d6;
+	border: 2px solid #f0e0d6;
 }
 td>a:visited>img {
 	border-color: #800;
@@ -61,7 +61,7 @@ br+.are4are-res-count {
 }
 br+.are4are-res-count .are4are-res-count-delta {
 	position: absolute;
-	right: 1pt;
+	right: 1px;
 }
 
 .are4are-thumbnail {
@@ -97,7 +97,7 @@ br+.are4are-res-count .are4are-res-count-delta {
 	max-width: 80%;
 	position: absolute;
 	text-align: center;
-	top: calc(50% - 13pt);
+	top: calc(50% - 17px);
 	transform: translate(-50%, -50%) scale(1.2);
 }
 .are4are-thumbnail-img {

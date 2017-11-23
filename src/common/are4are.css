@@ -1,11 +1,11 @@
 /* toolbar */
 body {
-	padding-bottom: 25pt;
+	padding-bottom: 33px;
 }
 .are4are-toolbar {
 	align-items: stretch;
 	background-color: #ffe;
-	border-top: 1pt solid #fa8;
+	border-top: 2px solid #fa8;
 	bottom: 0;
 	display: flex;
 	justify-content: space-around;
@@ -22,9 +22,9 @@ body {
 	cursor: pointer;
 	display: flex;
 	flex: 1;
-	font-size: 12pt;
-	height: 23pt;
-	margin: 2pt 1pt;
+	font-size: 16px;
+	height: 30px;
+	margin: 2px 1px;
 	outline: none;
 	overflow: hidden;
 	position: relative;
@@ -36,9 +36,9 @@ body {
 	transition: none;
 }
 .are4are-toolbtn-tab {
-	border-radius: 0 0 8pt 8pt;
+	border-radius: 0 0 10px 10px;
 	margin-top: 0;
-	padding-top: 2pt;
+	padding-top: 2px;
 	transition: none;
 }
 .are4are-toolbtn.are4are-disable {
@@ -56,13 +56,13 @@ body {
 	transform: rotate(1deg);
 }
 .are4are-toolbtn::before {
-	height: 23pt;
+	height: 30px;
 	left: 0;
 	margin: auto;
 	position: absolute;
 	right: 0;
 	top: 0;
-	width: 23pt;
+	width: 30px;
 }
 
 /* hide */
@@ -74,7 +74,7 @@ body {
 	pointer-events: none;
 }
 .are4are-flexout {
-	margin: 2pt 0 !important;
+	margin: 3px 0 !important;
 	flex: .00001 !important;
 }
 
@@ -92,12 +92,12 @@ body {
 	background-position: 0.3em center;
 	background-repeat: no-repeat;
 	background-size: 1.5em;
-	border-radius: 3pt;
+	border-radius: 4px;
 	bottom: 20%;
-	box-shadow: 0 0 3pt 3pt #ffe;
+	box-shadow: 0 0 4px 4px #ffe;
 	color: #ffe;
 	display: inline-block;
-	font-size: 10pt;
+	font-size: 13px;
 	left: 0;
 	margin-left: 5%;
 	margin-right: 5%;

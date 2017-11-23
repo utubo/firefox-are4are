@@ -33,9 +33,9 @@ td>input:checked {
 	100% { opacity: 1; }
 }
 @keyframes are4are-fade-out-animation {
-	0% { opacity: 1; left:-5pt;}
-	50% { opacity: 1; left:-5pt;}
-	100% { opacity: 0; left: -10pt;}
+	0% { opacity: 1; left:-6px;}
+	50% { opacity: 1; left:-6px;}
+	100% { opacity: 0; left: -13px;}
 }
 .are4are-found {
 	animation: are4are-found-animation 5s ease-in 0s 1 normal;
