@@ -245,6 +245,10 @@ Are4Are.prototype = {
 			let cover = `body::before {
 				background: #fff;
 				content: " ";
+				background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27" height="12"><g stroke="%2366dd88" fill="%2366dd88"><path fill="none" d="M22 8s-4 0-3-5"/><path d="M19 3s-4 2-5 0s4-2 5 0M19 3s4 2 5 0s-4-2-5 0"/><circle cx="2" cy="5" r="1"/><circle cx="6" cy="5" r="1"/><circle cx="10" cy="5" r="1"/></g></svg>');
+				background-position: right bottom;
+				background-repeat: no-repeat;
+				background-size: auto 32px;
 				display: block;
 				height: 100%;
 				left: 0;
@@ -272,6 +276,7 @@ Are4Are.prototype = {
 
 	// Init ////////////////////////////////
 	onDOMContentLoaded: function() {
+		console.timeEnd('DomcontentLoad');
 		this.win.removeEventListener('DOMContentLoaded', this.bindFunc('onDOMContentLoaded'));
 		this.body = this.doc.body;
 
@@ -297,8 +302,8 @@ Are4Are.prototype = {
 		// after modfied
 		this.body.appendChild(this.toolbar);
 		this.queue(() => {
-			this.body.style.scrollBehavior = 'smooth';
 			this.removeCover();
+			this.body.style.scrollBehavior = 'smooth';
 		});
 		this.timeout(null, () => {
 			this.addCssFile('common/are4are_transition.css');
@@ -329,7 +334,14 @@ Are4Are.prototype = {
 		}
 		// CSS
 		this.addCssFile('common/are4are.css');
-		if (this.cssFile) this.addCssFile(this.cssFile);
+		if (this.cssFile) {
+			if (typeof this.cssFile === 'string') {
+				this.addCssFile(this.cssFile);
+			} else {
+				this.addCssFile(this.cssFile());
+			}
+		}
+		console.time('DomcontentLoad');
 		// Modify futaba
 		if (this.doc.readyState === 'interactive' || this.doc.readyState === 'complete') {
 			this.onDOMContentLoaded();

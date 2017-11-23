@@ -624,12 +624,20 @@ scrollToThreadImg: function() {
 	let i = this.firstClass('are4are-thread-img');
 	// 'SMALL' is for Ms.MHT
 	i = i && (this.prev(i.parentNode, 'A') || this.prev(i.parentNode, 'SMALL') || i) || this.first('INPUT[value="delete"]');
-	if (i) { this.win.scrollTo(0, this.y(i)); }
+	if (!i) return;
+	let y = this.y(i);
+	this.win.scrollTo(0, y);
+	// TODO: nnnnnn !!!!11
+	this.timeout(null, () => {
+		let y2 = this.y(i);
+		if (y != y2) {
+			this.win.scrollTo(0, y2);
+		}
+	}, 500);
 },
 afterModified: function() {
 	if (this.scrollY() === 0) {
 		this.queue('scrollToThreadImg'); // wait for Ms.MHT
-		this.timeout(null, 'scrollToThreadImg', 320); // TODO: wait for ???
 	} else {
 		this.modifyTablesFromPageLeftTop();
 	}
@@ -641,47 +649,10 @@ scrollend: function(e) {
 	this.resetBottomBtn();
 },
 
-// Main ////////////////////////////////
-cssFile: null,
-cssFileTransition: 'common/thread_transition.css',
-exec: function() {
-	// CSS
-	this.addCssFile(this.ini.desktopStyle ? 'common/thread_desktop.css' : 'common/thread.css');
-	if (!this.firstClass('rts')) {
-		this.addCssFile('content_scripts/legacy_thread.css');
-	}
-
-	// ToolButtons
-	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-flexout');
-	this.writeBtn = this.addToolButton('write', null, 'are4are-disable', 'are4are-toolbtn-tab');
-	if (this.is1stPage) {
-		this.addToolButton('reload', null, 'are4are-disable');
-	} else {
-		this.reloadBtn = this.addToolButton('reload', 'reloadBtnOnClick');
-	}
-	if (this.doc.title === '404 File Not Found') {
-		this.changeToLogsiteButton();
-	}
-	this.pageDownBtn = this.addToolButton('pagedown');
-	this.on(this.pageDownBtn, 'touchstart', 'pageDownBtnOnTouchstart');
-	this.on(this.pageDownBtn, 'touchend', 'pageDownBtnOnTouchend');
-	this.bottomBtn = this.addToolButton('bottom', 'bottomBtnOnClick');
-
-	// Favicon
-	this.appendFavicon();
-
-	// Modify Blockquotes (visible)
-	let b = this.allBQ(this.doc);
-	this.modifyBQ(b[0]);
-	this.modifyFirstHeader(b[0]);
-	this.modifyTables(this.findTableOrBQ(b[1]));
-
+lazySetup: function() {
 	// Newer Border
 	this.create('DIV', { id: 'are4are_newerBorder' });
 	this.body.appendChild(this.newerBorder);
-
-	// Modify Form
-	this.modifyForm();
 
 	// Click events
 	this.on(this.body, 'click', e => {
@@ -702,7 +673,50 @@ exec: function() {
 
 	// other events
 	this.on(this.win, 'scrollend', 'scrollend');
+},
+
+// Main ////////////////////////////////
+cssFile: function() {
+	return this.ini.desktopStyle ? 'common/thread_desktop.css' : 'common/thread.css';
+},
+cssFileTransition: 'common/thread_transition.css',
+exec: function() {
+	// CSS
+	if (!this.firstClass('rts')) {
+		this.addCssFile('content_scripts/legacy_thread.css');
+	}
+
+	// ToolButtons
+	this.backBtn = this.addToolButton('back', 'backBtnOnClick', 'are4are-flexout');
+	this.writeBtn = this.addToolButton('write', null, 'are4are-disable', 'are4are-toolbtn-tab');
+	if (this.is1stPage) {
+		this.addToolButton('reload', null, 'are4are-disable');
+	} else {
+		this.reloadBtn = this.addToolButton('reload', 'reloadBtnOnClick');
+	}
+	if (this.doc.title === '404 File Not Found') {
+		this.changeToLogsiteButton();
+	}
+	this.pageDownBtn = this.addToolButton('pagedown');
+	this.on(this.pageDownBtn, 'touchstart', 'pageDownBtnOnTouchstart');
+	this.on(this.pageDownBtn, 'touchend', 'pageDownBtnOnTouchend');
+	this.bottomBtn = this.addToolButton('bottom', 'bottomBtnOnClick');
+
+	// Thread image
+	this.appendFavicon();
+
+	// Modify Blockquotes (visible)
+	let b = this.allBQ(this.doc);
+	this.modifyBQ(b[0]);
+	this.modifyFirstHeader(b[0]);
+	this.modifyTables(this.findTableOrBQ(b[1]));
+
+	// Modify Form
+	this.modifyForm();
+
+	// end of exec
 	this.afterModified();
+	this.queue('lazySetup');
 }
 };
 })();
