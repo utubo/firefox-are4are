@@ -178,7 +178,7 @@ div[style^="width:680px"] {
 	height: 0;
 	left: -7px;
 	position: absolute;
-	top: -1em;
+	top: -13px;
 	width: 0;
 }
 .are4are-found::before {
@@ -190,8 +190,9 @@ div[style^="width:680px"] {
 	display: block;
 	font-weight: bold;
 	left: -5px;
+	line-height: 13px;
 	position: absolute;
-	top: -14px;
+	top: -13px;
 }
 
 /* favicon */
