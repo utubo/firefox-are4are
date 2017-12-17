@@ -376,6 +376,9 @@ quoteTextOnLeave: function(e) {
 	let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
 	if (quoteOrg) {
 		this.fadeOut(quoteOrg);
+		this.timeout(null, () => {
+			quoteOrg.parentNode.removeChild(quoteOrg);
+		}, 500);
 	}
 },
 
