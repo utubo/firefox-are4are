@@ -245,7 +245,7 @@ Are4Are.prototype = {
 			let cover = `body::before {
 				background: #fff;
 				content: " ";
-				background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27" height="12"><g stroke="%2366dd88" fill="%2366dd88"><path fill="none" d="M22 8s-4 0-3-5"/><path d="M19 3s-4 2-5 0s4-2 5 0M19 3s4 2 5 0s-4-2-5 0"/><circle cx="2" cy="5" r="1"/><circle cx="6" cy="5" r="1"/><circle cx="10" cy="5" r="1"/></g></svg>');
+				background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="27" height="12"><g stroke="%2366dd88" fill="%2366dd88"><path fill="none" d="M22 8s-4 0-3-5"/><path d="M19 3s-4 2-5 0s4-2 5 0M19 3s4 2 5 0s-4-2-5 0"/><circle cx="2" cy="5" r="1"/><circle cx="6" cy="5" r="1"/><circle cx="10" cy="5" r="1"/></g></svg>');
 				background-position: right bottom;
 				background-repeat: no-repeat;
 				background-size: auto 32px;
