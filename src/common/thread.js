@@ -307,7 +307,7 @@ quoteTextOnClick: function(e) {
 	if (this.ini.desktopStyle) {
 		let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
 		if (quoteOrg) {
-			e.target.removeChild(quoteOrg);
+			quoteOrg.remove();
 		}
 	}
 	let org = this.searchQuoteOrg(e);
@@ -376,9 +376,7 @@ quoteTextOnLeave: function(e) {
 	let quoteOrg = this.firstClass(e.target, 'are4are-quote-org');
 	if (quoteOrg) {
 		this.fadeOut(quoteOrg);
-		this.timeout(null, () => {
-			quoteOrg.parentNode.removeChild(quoteOrg);
-		}, 500);
+		this.timeout(null, () => { quoteOrg.remove(); }, 500);
 	}
 },
 
@@ -438,7 +436,7 @@ toggleInlineImage: function(elm) {
 		elm.previousSibling.classList &&
 		elm.previousSibling.classList.contains('are4are-inline-image')
 	) {
-		elm.parentNode.removeChild(elm.previousSibling);
+		elm.previousSibling.remove();
 	} else {
 		let a = this.create('A', { href: elm.href, target: '_blank', 'class': 'are4are-inline-image' });
 		a.appendChild(this.create('IMG', { src: elm.href, 'class': 'are4are-inline-image' }));
