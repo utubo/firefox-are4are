@@ -114,7 +114,7 @@ Are4Are.prototype = {
 	},
 	y: function(elm) {
 		let y = 0;
-		while(elm) {
+		while (elm) {
 			y += elm.offsetTop;
 			elm = elm.offsetParent;
 		}
@@ -192,7 +192,7 @@ Are4Are.prototype = {
 		if (Math.round(this.win.scrollY) === Math.round(y)) {
 			if (func) { func.call(this); }
 		} else {
-			this.win.scrollTo(0, y);
+			this.win.scrollTo({ top: y, behavior: 'smooth' });
 		}
 	},
 	// Fade
@@ -303,7 +303,6 @@ Are4Are.prototype = {
 		this.body.appendChild(this.toolbar);
 		this.queue(() => {
 			this.removeCover();
-			this.body.style.scrollBehavior = 'smooth';
 		});
 		this.timeout(null, () => {
 			this.addCssFile('common/are4are_transition.css');
