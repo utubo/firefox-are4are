@@ -41,6 +41,7 @@ textarea {
 /* res */
 .thre>table {
 	min-width: 0 !important;
+	table-layout:fixed;
 }
 td {
 	color:#B66;
