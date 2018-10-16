@@ -33,20 +33,18 @@ bodyOnTouchstart: function(e) {
 	} else if (this.parentTag(e.target, 'TD')) {
 		this.threadLink = this.parentTag(e.target, 'A');
 		if (!this.threadLink) return;
-		this.setLongtap(e, this.showThumbnail, 300);
+		this.setLongtap(e, this.showThumbnail, 250);
 	}
 },
 bodyOnTouchend: function(e) {
 	this.cancelLongtap();
 	if (this.handleTouchend) {
-		e.preventDefault();
 		this.handleTouchend = false;
 		this.body.classList.remove('are4are-user-select-none');
 	}
 },
 setLongtap: function(e, func, msec) {
 	let elm = e.target;
-	e.preventDefault();
 	this.longtapLink = elm.tagName === 'A' ? elm : this.parentTag(elm, 'A');
 	this.longtapLinkHref = this.longtapLink.href;
 	this.timeout('longtap', () => {
@@ -66,6 +64,9 @@ cancelLongtap: function() {
 			this.longtapLink = null;
 		});
 	}
+},
+documentOnContextMenu: function(e) {
+	if (this.handleTouchend) e.preventDefault();
 },
 
 // Thumbnail ///////////////////////////
@@ -285,9 +286,11 @@ exec: function() {
 	this.appendCatalogCountDelta(this.body);
 	this.body.appendChild(this.create('DIV', { id: 'are4are_loading', 'class': 'are4are-loading' }));
 	// events
-	this.on(this.body, 'touchstart', 'bodyOnTouchstart');
-	this.on(this.body, 'touchend', 'bodyOnTouchend');
+	this.on(this.win, 'touchstart', 'bodyOnTouchstart');
+	this.on(this.win, 'touchend', 'bodyOnTouchend');
+	this.on(this.win, 'touchcancel', 'bodyOnTouchend');
 	this.on(this.win, 'scroll', 'bodyOnScroll');
+	this.on(this.doc, 'contextmenu', 'documentOnContextMenu');
 	// title
 	if (this.doc.location.href.indexOf('/b/futaba.php') !== -1) {
 		let title = this.firstTag('TITLE');
