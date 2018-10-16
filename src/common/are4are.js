@@ -145,7 +145,7 @@ Are4Are.prototype = {
 			xhr.send();
 		} catch (e) {
 			this.toast(`__MSG_networkError__(${e.message})`);
-			funcFinally && funcFinally.call(this);
+			funcLoadend && funcLoadend.call(this, null);
 		}
 	},
 
