@@ -1,5 +1,6 @@
 /* toolbar */
 body {
+	min-width: 0 !important;
 	padding-bottom: 33px;
 }
 .are4are-toolbar {
