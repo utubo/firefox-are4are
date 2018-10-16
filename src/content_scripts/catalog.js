@@ -33,7 +33,7 @@ bodyOnTouchstart: function(e) {
 	} else if (this.parentTag(e.target, 'TD')) {
 		this.threadLink = this.parentTag(e.target, 'A');
 		if (!this.threadLink) return;
-		this.setLongtap(e.target, this.showThumbnail, 300);
+		this.setLongtap(e, this.showThumbnail, 300);
 	}
 },
 bodyOnTouchend: function(e) {
@@ -44,7 +44,9 @@ bodyOnTouchend: function(e) {
 		this.body.classList.remove('are4are-user-select-none');
 	}
 },
-setLongtap: function(elm, func, msec) {
+setLongtap: function(e, func, msec) {
+	let elm = e.target;
+	e.preventDefault();
 	this.longtapLink = elm.tagName === 'A' ? elm : this.parentTag(elm, 'A');
 	this.longtapLinkHref = this.longtapLink.href;
 	this.timeout('longtap', () => {
